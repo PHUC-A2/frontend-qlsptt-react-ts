@@ -5,6 +5,8 @@ import HomePage from "../pages/client/home/HomePage";
 import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import NotFoundPage from "../pages/error/NotFoundPage";
+import AdminLayout from "../layouts/AdminLayout";
+import AdminPage from "../pages/admin/AdminPage";
 
 const router = createBrowserRouter([
     // client
@@ -18,6 +20,16 @@ const router = createBrowserRouter([
             { path: "/cart", element: "" },
         ]
     },
+
+    // admin
+    {
+        path: "/admin",
+        element: <AdminLayout />,
+        children: [
+            { index: true, element: <AdminPage /> },
+        ]
+    },
+
 
     // auth
     { path: "/login", element: <LoginPage /> },
