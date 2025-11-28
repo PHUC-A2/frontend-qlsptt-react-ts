@@ -7,3 +7,4 @@ npm install --save --exact react-router@7.9.6
 npm install --save --exact framer-motion@12.23.24
 npm install --save --exact axios@1.13.2
 npm install --save --exact sass@1.94.2
+npm install --save --exact redux@5.0.1
