@@ -97,7 +97,7 @@
 
     // Input (bên trái) thanh tìm kiếm
     .ant-input-affix-wrapper {
-        background   : #dae3d5 !important;
+        background   : wheat !important;
         border-radius: 24px 0 0 24px !important;
         border       : none !important;
 
@@ -111,7 +111,7 @@
 
     // Button (bên phải) thanh tìm kiếm
     .ant-btn.css-var-root.ant-btn-default.ant-btn-color-primary.ant-btn-variant-solid.ant-btn-lg.ant-btn-compact-item.ant-btn-compact-last-item.ant-input-search-btn {
-        background   : #dae3d5;
+        background   : wheat;
         border-radius: 0 24px 24px 0; // bo tròn bên phải
         border-left  : none; // bỏ viền trái để khớp với input
     }
