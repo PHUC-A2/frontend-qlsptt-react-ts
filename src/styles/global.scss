@@ -8,11 +8,25 @@ body {
     font-family: 'Times New Roman', Times, serif;
 }
 
+// khi co lại trên mobile sẽ cho cuộn
+@media(max-width: 768px) {
+
+    html,
+    body {
+        overflow-y: auto;
+    }
+
+}
+
 /*
-Màu nền
-#1B4965
-màu Tiêu đề và icon
-#F0F4F8
-màu chữ
-#2EC4B6
+Màu nền:
+
+#1A2733
+
+Màu tiêu đề và mục lớn:
+#faad14
+
+Màu chữ
+wheat
+
 */

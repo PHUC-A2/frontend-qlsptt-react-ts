@@ -41,7 +41,7 @@ const NotFoundPage = () => {
                     width: 300,
                     height: 300,
                     borderRadius: "50%",
-                    background: "#389e0d",
+                    background: "#faad14",
                     bottom: "10%",
                     right: "10%",
                     filter: "blur(80px)",
@@ -72,7 +72,7 @@ const NotFoundPage = () => {
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.4 }}
-                            style={{ color: "#389e0d", fontWeight: 500 }}
+                            style={{ color: "#faad14", fontWeight: 500 }}
                         >
                             Ôi không! Trang bạn tìm kiếm không tồn tại.
                         </motion.div>
