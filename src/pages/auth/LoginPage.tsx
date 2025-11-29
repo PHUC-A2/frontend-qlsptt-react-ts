@@ -7,11 +7,13 @@ import { useState } from 'react';
 import type { ILogin } from '../../types/backend';
 import { login } from '../../confg/Api';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { setUserLoginInfo } from '../../redux/features/authSlice';
 
 const LoginPage = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleLogin = async (values: ILogin) => {
@@ -22,21 +24,16 @@ const LoginPage = () => {
 
             const res = await login(values.email.trim(), values.password.trim()); // trim lần cuối
 
-            console.log(">>>>>>>>>>>>.", res)
-            const ac = res.data?.access_token;
-            console.log("access_token: ", ac);
-
             await minDelay; // chạy spin 2s
 
             if (res?.data?.status) {
-                // const { access_token,user } = res.data?.access_token;
                 const access_token = res.data?.access_token;
+                const message = res.data?.message;
+
                 localStorage.setItem('access_token', access_token);
-                // dispatch(setUserLoginInfo({ access_token, user, isAuthenticated: true }));
+                dispatch(setUserLoginInfo({ access_token, message, isAuthenticated: true }));
                 form.resetFields();
                 navigate('/');
-                // const emailLogin = res?.data?.data?.user?.email;
-                // navigate(emailLogin === "admin@gmail.com" ? "/admin" : "/");
                 toast.success('Đăng nhập thành công');
             }
         } catch (error: any) {
