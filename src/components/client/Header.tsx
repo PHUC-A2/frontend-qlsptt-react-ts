@@ -9,15 +9,45 @@ import { HiHome } from 'react-icons/hi';
 import { IoMdLogIn, IoMdNotifications } from 'react-icons/io';
 import { FaCircleUser, FaUserPlus } from 'react-icons/fa6';
 import { AiFillDashboard } from 'react-icons/ai';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { FaShoppingBag, FaTshirt, FaUserCircle } from 'react-icons/fa';
 import { RiInfoCardLine } from 'react-icons/ri';
 import { SiImessage } from 'react-icons/si';
 import './Header.scss'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { setLogoutUser } from '../../redux/features/authSlice';
+import { toast } from 'react-toastify';
+import { logout } from '../../confg/Api';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
 const Header = () => {
+
+    const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
+    // đăng xuất
+    const handleLogout = async () => {
+        try {
+            const res = await logout();
+            if (res?.data?.status) {
+                dispatch(setLogoutUser())
+                toast.success(res.data?.message);
+                navigate('/');
+            }
+        } catch (error: any) {
+            const m = error?.response?.data?.message ?? "unknown";
+            toast.error(
+                <div>
+                    <div><b>Có Lỗi xảy ra!</b></div>
+                    <div>{m}</div>
+                </div>
+            )
+        }
+
+    }
+
     const items: MenuItem[] = [
         {
             label: <Link className='text-decoration-none' to={"/"}>Trang Chủ</Link>,
@@ -83,11 +113,19 @@ const Header = () => {
                 {
                     type: 'group',
                     children: [
-                        { label: <Link to={'/login'} className='text-decoration-none'>Đăng nhập</Link>, key: 'signin', icon: <IoMdLogIn /> },
-                        { label: <Link to={'/register'} className='text-decoration-none'>Đăng ký</Link>, key: 'signup', icon: < FaUserPlus /> },
-                        { label: <Link to={'/admin'} className='text-decoration-none'>Trang quản trị</Link>, key: 'admin', icon: <AiFillDashboard /> },
-                        { label: <span>Tài khoản</span>, key: 'profile', icon: <FaCircleUser /> },
-                        { label: <span >Đăng xuất</span>, key: 'logout', icon: <LogoutOutlined /> },
+                        ...(isAuthenticated ?
+                            [
+                                { label: <Link to={'/admin'} className='text-decoration-none'>Trang quản trị</Link>, key: 'admin', icon: <AiFillDashboard /> },
+                                { label: <span>Tài khoản</span>, key: 'profile', icon: <FaCircleUser /> },
+                                { label: <span onClick={handleLogout}>Đăng xuất</span>, key: 'logout', icon: <LogoutOutlined /> },
+                            ]
+                            :
+                            [
+                                { label: <Link to={'/login'} className='text-decoration-none'>Đăng nhập</Link>, key: 'signin', icon: <IoMdLogIn /> },
+                                { label: <Link to={'/register'} className='text-decoration-none'>Đăng ký</Link>, key: 'signup', icon: < FaUserPlus /> },
+
+                            ])
+
                     ],
                 },
             ],

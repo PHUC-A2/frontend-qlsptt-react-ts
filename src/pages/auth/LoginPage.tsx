@@ -7,13 +7,13 @@ import { useState } from 'react';
 import type { ILogin } from '../../types/backend';
 import { login } from '../../confg/Api';
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
 import { setUserLoginInfo } from '../../redux/features/authSlice';
+import { useAppDispatch } from '../../redux/hooks';
 
 const LoginPage = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleLogin = async (values: ILogin) => {
@@ -35,7 +35,16 @@ const LoginPage = () => {
                 form.resetFields();
                 navigate('/');
                 toast.success('Đăng nhập thành công');
+            } else {
+                const m = res.data?.message;
+                toast.error(
+                    <div>
+                        <div><strong>Có lỗi xảy ra!</strong></div>
+                        <div>{m}</div>
+                    </div>
+                );
             }
+
         } catch (error: any) {
             const m = error?.response?.data?.message ?? "unknown";
             toast.error(

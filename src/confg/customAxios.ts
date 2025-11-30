@@ -1,4 +1,5 @@
 import axios from "axios";
+import { axiosRaw } from "./customRaw";
 
 const instance = axios.create({
     baseURL: import.meta.env.VITE_BACKEND_URL,
@@ -28,9 +29,15 @@ instance.interceptors.response.use(
                 const token = localStorage.getItem("access_token");
 
                 // Gọi API refresh token
-                const res = await instance.get("/api/v1/auth/refresh", {
+                // const res = await instance.get("/api/v1/auth/refresh", {
+                //     headers: { Authorization: `Bearer ${token}` },
+                // });
+
+                // Dùng axiosRaw (NO interceptor)
+                const res = await axiosRaw.get("/api/v1/auth/refresh", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
+
 
                 const newToken = res.data?.access_token;
                 if (newToken) {
