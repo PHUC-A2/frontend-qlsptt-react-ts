@@ -1,51 +1,59 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Flex, Form, Input } from 'antd';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import './Register.scss';
-import { GrPhone } from 'react-icons/gr';
+import type { IRegisterReq } from '../../types/backend';
+import { useState } from 'react';
+import { register } from '../../config/Api';
+import { toast } from 'react-toastify';
 
 
 const RegisterPage = () => {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const [form] = Form.useForm();
-    // const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    // const handleRegister = async (data: ICreateUserReq) => {
-    //     // Trim toàn bộ dữ liệu trước khi gửi API
-    //     const cleanedData: ICreateUserReq = {
-    //         ...data,
-    //         name: data.name?.trim(),
-    //         fullName: data.fullName?.trim(),
-    //         email: data.email?.trim(),
-    //         password: data.password, // password giữ nguyên
-    //         phoneNumber: data.phoneNumber?.trim()
-    //     };
+    const handleRegister = async (data: IRegisterReq) => {
+        // Trim toàn bộ dữ liệu trước khi gửi API
+        const cleanedData: IRegisterReq = {
+            ...data,
+            name: data.name?.trim(),
+            email: data.email?.trim(),
+            password: data.password, // password giữ nguyên
+        };
 
-    //     setIsLoading(true);
-    //     const minDelay = new Promise(resolve => setTimeout(resolve, 2000)); // tối thiểu 2 giây
-    //     try {
-    //         const res = await register(cleanedData);
-    //         await minDelay;
-    //         setIsLoading(false);
-    //         if (res?.data?.statusCode === 201) {
-    //             toast.success('Đăng ký tài khoản thành công');
-    //             form.resetFields();
-    //             setTimeout(() => {
-    //                 navigate('/login');
-    //             }, 2000);
-    //         }
-    //     } catch (error: any) {
-    //         const m = error?.response?.data?.message ?? "unknown";
-    //         toast.error(
-    //             <div>
-    //                 <div><strong>Có lỗi xảy ra!</strong></div>
-    //                 <div>{m}</div>
-    //             </div>
-    //         );
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // };
+        setIsLoading(true);
+        const minDelay = new Promise(resolve => setTimeout(resolve, 2000)); // tối thiểu 2 giây
+        try {
+            const res = await register(cleanedData);
+            await minDelay;
+            setIsLoading(false);
+            if (res?.data?.status) {
+                toast.success(res.data?.message);
+                form.resetFields();
+                setTimeout(() => {
+                    navigate('/login');
+                }, 2000);
+            } else {
+                toast.error(
+                    <div>
+                        <div><strong>Có lỗi xảy ra!</strong></div>
+                        <div>Đăng ký tài khoản thất bại!</div>
+                    </div>
+                );
+            }
+        } catch (error: any) {
+            const m = error?.response?.data?.message ?? "unknown";
+            toast.error(
+                <div>
+                    <div><strong>Có lỗi xảy ra!</strong></div>
+                    <div>{m}</div>
+                </div>
+            );
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <div className='register-container'>
@@ -55,7 +63,7 @@ const RegisterPage = () => {
                 className='register-form'
                 form={form}
                 style={{ maxWidth: 460 }}
-                // onFinish={handleRegister}
+                onFinish={handleRegister}
                 layout="vertical"
             >
                 <Form.Item>
@@ -90,20 +98,12 @@ const RegisterPage = () => {
                     <Input.Password prefix={<LockOutlined />} type="password" placeholder="Password" />
                 </Form.Item>
 
-                <Form.Item
-                    name="phoneNumber"
-                    normalize={(v) => v.trim()}
-                    rules={[{ required: true, message: 'Please input your phone number!' }]}
-                >
-                    <Input prefix={<GrPhone />} placeholder="Phone number" />
-                </Form.Item>
-
                 <Form.Item>
                     <Button
                         type='primary'
                         block
                         htmlType="submit"
-                        // loading={isLoading}
+                        loading={isLoading}
                         className="btn-register"
                     >
                         Register
