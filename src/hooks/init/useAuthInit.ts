@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import { getRefreshToken } from "../../confg/Api";
+import { getRefreshToken } from "../../config/Api";
 import { setUserLoginInfo } from "../../redux/features/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
 

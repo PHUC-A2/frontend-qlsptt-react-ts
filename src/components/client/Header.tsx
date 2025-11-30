@@ -17,7 +17,7 @@ import './Header.scss'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setLogoutUser } from '../../redux/features/authSlice';
 import { toast } from 'react-toastify';
-import { logout } from '../../confg/Api';
+import { logout } from '../../config/Api';
 
 type MenuItem = Required<MenuProps>['items'][number];
 

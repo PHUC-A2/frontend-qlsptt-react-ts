@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import './Login.scss';
 import { useState } from 'react';
 import type { ILogin } from '../../types/backend';
-import { login } from '../../confg/Api';
+import { login } from '../../config/Api';
 import { toast } from 'react-toastify';
 import { setUserLoginInfo } from '../../redux/features/authSlice';
 import { useAppDispatch } from '../../redux/hooks';
