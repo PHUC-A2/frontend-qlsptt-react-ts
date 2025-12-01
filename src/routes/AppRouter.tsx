@@ -7,6 +7,7 @@ import RegisterPage from "../pages/auth/RegisterPage";
 import NotFoundPage from "../pages/error/NotFoundPage";
 import AdminLayout from "../layouts/AdminLayout";
 import AdminPage from "../pages/admin/AdminPage";
+import AdminUserPage from "../pages/admin/user/AdminUserPage";
 
 const router = createBrowserRouter([
     // client
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
         element: <AdminLayout />,
         children: [
             { index: true, element: <AdminPage /> },
+            { path: "/admin/user", element: <AdminUserPage /> },
         ]
     },
 

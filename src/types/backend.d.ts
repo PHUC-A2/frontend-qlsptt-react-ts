@@ -9,3 +9,13 @@ export interface IRegisterReq {
     email: string;
     password: string;
 }
+
+// user
+export interface IUsers {
+    id: number;
+    name: string;
+    email: string;
+    emailVerifiedAt: string | null;
+    createdAt: string;
+    createdBy: string;
+}

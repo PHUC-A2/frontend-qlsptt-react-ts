@@ -6,12 +6,15 @@ import type { IRegisterReq } from '../../types/backend';
 import { useState } from 'react';
 import { register } from '../../config/Api';
 import { toast } from 'react-toastify';
+import { useAppDispatch } from '../../redux/hooks';
+import { fetchUsers } from '../../redux/thunks/userThunks';
 
 
 const RegisterPage = () => {
     const navigate = useNavigate();
     const [form] = Form.useForm();
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const dispatch = useAppDispatch();
 
     const handleRegister = async (data: IRegisterReq) => {
         // Trim toàn bộ dữ liệu trước khi gửi API
@@ -29,6 +32,7 @@ const RegisterPage = () => {
             await minDelay;
             setIsLoading(false);
             if (res?.data?.status) {
+                dispatch(fetchUsers());
                 toast.success(res.data?.message);
                 form.resetFields();
                 setTimeout(() => {
