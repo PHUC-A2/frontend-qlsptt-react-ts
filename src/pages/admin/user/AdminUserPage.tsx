@@ -5,7 +5,7 @@ import { CiEdit } from "react-icons/ci";
 import { FaRegEye } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { fetchUsers } from "../../../redux/thunks/userThunks";
+import { fetchUsers, handleRemoveUser } from "../../../redux/thunks/userThunks";
 import { useEffect, useState } from "react";
 import AdminModalAddUser from "./modal/AdminModalAddUser";
 
@@ -19,8 +19,9 @@ const AdminUserPage = () => {
     }, []);
 
     // xóa user
-    const handleDeleteUser = (id:number) => {
-        alert(`${id}`);
+    const handleDeleteUser = (id: number) => {
+        dispatch(handleRemoveUser(id));
+        dispatch(fetchUsers());
     }
 
     const cancel: PopconfirmProps['onCancel'] = () => {

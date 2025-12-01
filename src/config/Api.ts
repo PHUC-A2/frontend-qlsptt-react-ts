@@ -12,3 +12,4 @@ export const getRefreshToken = () => instance.get("/api/v1/auth/refresh");
 /* api user */
 export const getAllUsers = () => instance.get(`api/v1/users`);
 export const createUser = (data: ICreateUserReq) => instance.post(`api/v1/users`, data);
+export const deleteUser = (id: number) => instance.delete(`api/v1/users/${id}`);

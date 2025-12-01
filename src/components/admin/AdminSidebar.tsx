@@ -7,42 +7,39 @@ import {
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import { Link, Outlet, useLocation } from 'react-router';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import { MdFeaturedPlayList } from 'react-icons/md';
 import { AiOutlineProduct, AiOutlineShoppingCart } from 'react-icons/ai';
 import { FaBoxesPacking, FaCartPlus, FaCircleUser } from 'react-icons/fa6';
 import { BsFillJournalBookmarkFill } from 'react-icons/bs';
-// import { logout } from '../../config/Api';
-// import { setLogoutUser } from '../../redux/slice/authSlice';
-// import { toast } from 'react-toastify';
-// import { useDispatch, useSelector } from 'react-redux';
-// import type { RootState } from '../../redux/store';
-
+import { useAppDispatch } from '../../redux/hooks';
+import { logout } from '../../config/Api';
+import { setLogoutUser } from '../../redux/features/authSlice';
+import { toast } from 'react-toastify';
 
 const AdminSidebar = () => {
 
     // code
-    // const dispatch = useDispatch();
-    // const navigate = useNavigate();
-    // const profile = useSelector((state: RootState) => state.user.user);
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const handleLogout = async () => {
-        // try {
-        //     const res = await logout();
-        //     if (res?.data?.statusCode === 200) {
-        //         dispatch(setLogoutUser())
-        //         toast.success('Đăng xuất thành công');
-        //         navigate('/');
-        //     }
-        // } catch (error: any) {
-        //     const m = error?.response?.data?.message ?? "unknown";
-        //     toast.error(
-        //         <div>
-        //             <div><b>Có Lỗi xảy ra!</b></div>
-        //             <div>{m}</div>
-        //         </div>
-        //     )
-        // }
+        try {
+            const res = await logout();
+            if (res?.data?.status) {
+                dispatch(setLogoutUser())
+                toast.success('Đăng xuất thành công');
+                navigate('/');
+            }
+        } catch (error: any) {
+            const m = error?.response?.data?.message ?? "unknown";
+            toast.error(
+                <div>
+                    <div><b>Có Lỗi xảy ra!</b></div>
+                    <div>{m}</div>
+                </div>
+            )
+        }
 
     }
 
