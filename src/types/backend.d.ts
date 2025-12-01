@@ -19,3 +19,10 @@ export interface IUsers {
     createdAt: string;
     createdBy: string;
 }
+
+// create user
+export interface ICreateUserReq {
+    name: string;
+    email: string;
+    password: string;
+}

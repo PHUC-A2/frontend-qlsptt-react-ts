@@ -6,14 +6,23 @@ import { FaRegEye } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { fetchUsers } from "../../../redux/thunks/userThunks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import AdminModalAddUser from "./modal/AdminModalAddUser";
 
 const AdminUserPage = () => {
     const listUsers = useAppSelector(state => state.user.data) || [];
     const dispatch = useAppDispatch();
+    const [openModalAddUser, setOpenModalAddUser] = useState<boolean>(false);
+
     useEffect(() => {
         dispatch(fetchUsers());
     }, []);
+
+    // xóa user
+    const handleDeleteUser = (id:number) => {
+        alert(`${id}`);
+    }
+
     const cancel: PopconfirmProps['onCancel'] = () => {
         message.error('Click on No');
     };
@@ -25,7 +34,7 @@ const AdminUserPage = () => {
                 <div>
                     <Button className="d-flex align-items-center"
                         variant="outline-primary"
-                    // onClick={() => setOpenModalAddUser(true)}
+                        onClick={() => setOpenModalAddUser(true)}
                     >
                         <AiOutlineUserAdd /> Thêm mới
                     </Button>
@@ -68,7 +77,7 @@ const AdminUserPage = () => {
                                             <Popconfirm
                                                 title="Delete the user"
                                                 description="Are you sure to delete this user?"
-                                                // onConfirm={() => handleDeleteUser(item.id)}
+                                                onConfirm={() => handleDeleteUser(item.id)}
                                                 onCancel={cancel}
                                                 okText="Yes"
                                                 cancelText="No"
@@ -92,6 +101,12 @@ const AdminUserPage = () => {
 
                 </tbody>
             </Table>
+
+            {/* add */}
+            <AdminModalAddUser
+                openModalAddUser={openModalAddUser}
+                setOpenModalAddUser={setOpenModalAddUser}
+            />
         </>
     )
 }

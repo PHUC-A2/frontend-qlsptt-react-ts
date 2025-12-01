@@ -1,24 +1,17 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { IUsers } from '../../types/backend';
-import { fetchUsers } from '../thunks/userThunks';
+import { fetchUsers, handleCreateUser } from '../thunks/userThunks';
 
-/*
-{
-    "status": true,
-    "message": "Login successfully",
-    "access_token": "47|7hDiJCpJkVRcuycCLsJzynwS9rCxGo6zXgP0KngAa8130a81"
-}
-*/
 interface UserState {
-    data: IUsers[] | [];
+    data: IUsers[];
     loading: boolean;
     error?: string;
 }
 
 
 const initialState: UserState = {
-    data: [],
-    loading: false
+    data: [] as IUsers[],
+    loading: false,
 };
 
 const authSlice = createSlice({
@@ -36,6 +29,8 @@ const authSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+
+            // fetch
             .addCase(fetchUsers.pending, (state) => {
                 state.loading = true;
             })
@@ -46,7 +41,18 @@ const authSlice = createSlice({
             .addCase(fetchUsers.rejected, (state, action) => {
                 state.loading = false;
                 state.error = (action.payload as string) ?? "Lỗi không xác định"; // đảm bảo cho rejected luôn trả string
+            })
+
+            // create
+            .addCase(handleCreateUser.fulfilled, (state, action) => {
+                state.data.push(action.payload);  // thêm user mới
+            })
+            // nếu lỗi
+            .addCase(handleCreateUser.rejected, (state, action) => {
+                state.error = (action.payload as string) ?? "Lỗi không xác định";
             });
+
+            ;
     }
 });
 
