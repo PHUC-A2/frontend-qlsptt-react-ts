@@ -54,7 +54,7 @@ const authSlice = createSlice({
 
             // delete
             .addCase(handleRemoveUser.fulfilled, (state, action) => {
-                state.data.filter(user => user.id !== action.payload);  // xáo user theo id
+                state.data = state.data.filter(user => user.id !== action.payload);  // xáo user theo id
             })
             // nếu lỗi
             .addCase(handleRemoveUser.rejected, (state, action) => {
