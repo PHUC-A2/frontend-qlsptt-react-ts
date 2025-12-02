@@ -11,7 +11,7 @@ export interface IRegisterReq {
 }
 
 // user
-export interface IUsers {
+export interface IUser {
     id: number;
     name: string;
     email: string;

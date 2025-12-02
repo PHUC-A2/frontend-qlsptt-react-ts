@@ -1,17 +1,17 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { IUsers } from '../../types/backend';
+import type { IUser } from '../../types/backend';
 import { fetchUsers, handleCreateUser, handleFindUserById, handleRemoveUser } from '../thunks/userThunks';
 
 interface UserState {
-    data: IUsers[];
-    selecedUser?: IUsers;
+    data: IUser[];
+    selecedUser?: IUser;
     loading: boolean;
     error?: string;
 }
 
 
 const initialState: UserState = {
-    data: [] as IUsers[],
+    data: [] as IUser[],
     selecedUser: undefined,
     loading: false,
     error: undefined
