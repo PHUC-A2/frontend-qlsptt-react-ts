@@ -5,7 +5,7 @@ import { CiEdit } from "react-icons/ci";
 import { FaRegEye } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { fetchUsers, handleRemoveUser } from "../../../redux/thunks/userThunks";
+import { fetchUsers, handleFindUserById, handleRemoveUser } from "../../../redux/thunks/userThunks";
 import { useEffect, useState } from "react";
 import AdminModalAddUser from "./modal/AdminModalAddUser";
 
@@ -21,8 +21,18 @@ const AdminUserPage = () => {
     // xóa user
     const handleDeleteUser = (id: number) => {
         dispatch(handleRemoveUser(id));
-        dispatch(fetchUsers());
     }
+
+    // lấy user 
+    const handleGetUserDetails = async (id: number) => {
+        try {
+            const user = await dispatch(handleFindUserById(id)).unwrap();
+            console.log("User vừa lấy:", user);
+        } catch (error) {
+            console.error("Lấy user thất bại:", error);
+        }
+    }
+
 
     const cancel: PopconfirmProps['onCancel'] = () => {
         message.error('Click on No');
@@ -65,7 +75,7 @@ const AdminUserPage = () => {
                                         <div className="d-flex justify-content-evenly">
                                             <Button
                                                 variant="outline-success"
-                                            // onClick={() => handleGetUserDetails(item.id)}
+                                                onClick={() => handleGetUserDetails(item.id)}
                                             >
                                                 <FaRegEye />
                                             </Button>

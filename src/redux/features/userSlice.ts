@@ -1,9 +1,10 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { IUsers } from '../../types/backend';
-import { fetchUsers, handleCreateUser, handleRemoveUser } from '../thunks/userThunks';
+import { fetchUsers, handleCreateUser, handleFindUserById, handleRemoveUser } from '../thunks/userThunks';
 
 interface UserState {
     data: IUsers[];
+    selecedUser?: IUsers;
     loading: boolean;
     error?: string;
 }
@@ -11,7 +12,9 @@ interface UserState {
 
 const initialState: UserState = {
     data: [] as IUsers[],
+    selecedUser: undefined,
     loading: false,
+    error: undefined
 };
 
 const authSlice = createSlice({
@@ -58,6 +61,14 @@ const authSlice = createSlice({
             })
             // nếu lỗi
             .addCase(handleRemoveUser.rejected, (state, action) => {
+                state.error = (action.payload as string) ?? "Lỗi không xác định";
+            })
+            // find by ID
+            .addCase(handleFindUserById.fulfilled, (state, action) => {
+                state.selecedUser = action.payload;
+            })
+            // nếu lỗi
+            .addCase(handleFindUserById.rejected, (state, action) => {
                 state.error = (action.payload as string) ?? "Lỗi không xác định";
             })
     }

@@ -1,6 +1,6 @@
 // src/redux/thunks/userThunk.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createUser, deleteUser, getAllUsers } from "../../config/Api";
+import { createUser, deleteUser, getAllUsers, getUserById } from "../../config/Api";
 import type { ICreateUserReq } from "../../types/backend";
 import { toast } from "react-toastify";
 
@@ -46,9 +46,27 @@ export const handleRemoveUser = createAsyncThunk(
             const res = await deleteUser(id);
             if (res.data?.status === 200) {
                 toast.success(res.data?.message);
+                return id;;
+            }
+            return rejectWithValue("Xóa người dùng thất bại");
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message);
+            return rejectWithValue(error?.response?.data?.message);
+            console.log("Lỗi hệ thống: ", error);
+        }
+    }
+)
+
+export const handleFindUserById = createAsyncThunk(
+    'user/findUserById',
+    async (id: number, { rejectWithValue }) => {
+        try {
+            const res = await getUserById(id);
+            if (res.data?.status === 200) {
+                toast.success(res.data?.message);
                 return res.data?.data;
             }
-            return rejectWithValue("xóa người dùng thất bại");
+            return rejectWithValue("Lây người dùng thất bại");
         } catch (error: any) {
             toast.error(error?.response?.data?.message);
             return rejectWithValue(error?.response?.data?.message);
