@@ -10,11 +10,15 @@ import { useEffect, useState } from "react";
 import AdminModalAddUser from "./modal/AdminModalAddUser";
 import { userSelectors } from "../../../redux/selectors/userSelectors";
 import { toast } from "react-toastify";
+import AdminModalGetUserDetails from "./modal/AdminModalGetUserDetails";
+import type { IUser } from "../../../types/backend";
 
 const AdminUserPage = () => {
     const listUsers = useAppSelector(userSelectors.selectAll);
     const dispatch = useAppDispatch();
     const [openModalAddUser, setOpenModalAddUser] = useState<boolean>(false);
+    const [openModalGetUserDetails, setOpenModalGetUserDetails] = useState<boolean>(false);
+    const [user, setUser] = useState<IUser | null>(null);
 
     useEffect(() => {
         dispatch(fetchUsers());
@@ -33,8 +37,10 @@ const AdminUserPage = () => {
     // lấy user 
     const handleGetUserDetails = async (id: number) => {
         try {
-            const user = await dispatch(handleFindUserById(id)).unwrap();
-            console.log("User vừa lấy:", user);
+            setOpenModalGetUserDetails(true);
+            const data = await dispatch(handleFindUserById(id)).unwrap();
+            setUser(data);
+            // console.log("User vừa lấy:", data);
         } catch (error: any) {
             toast.error(error || "Lỗi khi lấy người dùng")
             console.error("Lấy user thất bại:", error);
@@ -125,6 +131,12 @@ const AdminUserPage = () => {
             <AdminModalAddUser
                 openModalAddUser={openModalAddUser}
                 setOpenModalAddUser={setOpenModalAddUser}
+            />
+            {/* details */}
+            <AdminModalGetUserDetails
+                openModalGetUserDetails={openModalGetUserDetails}
+                setOpenModalGetUserDetails={setOpenModalGetUserDetails}
+                user={user}
             />
         </>
     )

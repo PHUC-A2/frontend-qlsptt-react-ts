@@ -15,9 +15,9 @@ export interface IUser {
     id: number;
     name: string;
     email: string;
-    emailVerifiedAt: string | null;
-    createdAt: string;
-    createdBy: string;
+    email_verified_at: string | null;
+    created_at: string;
+    updated_at: string;
 }
 
 // create user
