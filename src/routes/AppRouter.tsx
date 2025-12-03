@@ -8,6 +8,7 @@ import NotFoundPage from "../pages/error/NotFoundPage";
 import AdminLayout from "../layouts/AdminLayout";
 import AdminPage from "../pages/admin/AdminPage";
 import AdminUserPage from "../pages/admin/user/AdminUserPage";
+import AdminProductPage from "../pages/admin/product/AdminProductPage";
 
 const router = createBrowserRouter([
     // client
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
         children: [
             { index: true, element: <AdminPage /> },
             { path: "/admin/user", element: <AdminUserPage /> },
+            { path: "/admin/product", element: <AdminProductPage /> },
         ]
     },
 

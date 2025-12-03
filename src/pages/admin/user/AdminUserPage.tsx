@@ -50,7 +50,7 @@ const AdminUserPage = () => {
         }
     }
 
-    const handleEditUser = (data:IUser) => {
+    const handleEditUser = (data: IUser) => {
         setUserUpdate(data);
         setOpenModalUpdateUser(true);
     }
@@ -61,20 +61,24 @@ const AdminUserPage = () => {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center">
-                <h2>Bảng Người Dùng</h2>
-                <div>
-                    <Button className="d-flex align-items-center"
-                        variant="outline-primary"
-                        onClick={() => setOpenModalAddUser(true)}
-                    >
-                        <AiOutlineUserAdd /> Thêm mới
-                    </Button>
-                </div>
-            </div>
-            <hr />
             <Table striped bordered hover size="sm">
                 <thead>
+                    <tr>
+                        <th colSpan={5}>
+                            <div className="d-flex justify-content-between align-items-center">
+                                <h2>Bảng Người Dùng</h2>
+                                <div>
+                                    <Button className="d-flex align-items-center"
+                                        variant="outline-primary"
+                                        onClick={() => setOpenModalAddUser(true)}
+                                    >
+                                        <AiOutlineUserAdd /> Thêm mới
+                                    </Button>
+                                </div>
+                            </div>
+                            <hr />
+                        </th>
+                    </tr>
                     <tr>
                         <th>STT</th>
                         <th>ID</th>

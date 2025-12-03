@@ -8,14 +8,14 @@ import {
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
-import { MdFeaturedPlayList } from 'react-icons/md';
-import { AiOutlineProduct, AiOutlineShoppingCart } from 'react-icons/ai';
-import { FaBoxesPacking, FaCartPlus, FaCircleUser } from 'react-icons/fa6';
-import { BsFillJournalBookmarkFill } from 'react-icons/bs';
+import { MdFeaturedPlayList, MdOutlineSecurity } from 'react-icons/md';
+import { FaCircleUser } from 'react-icons/fa6';
 import { useAppDispatch } from '../../redux/hooks';
 import { logout } from '../../config/Api';
 import { setLogoutUser } from '../../redux/features/authSlice';
 import { toast } from 'react-toastify';
+import { FaUserCog } from 'react-icons/fa';
+import { AiOutlineProduct } from 'react-icons/ai';
 
 const AdminSidebar = () => {
 
@@ -67,12 +67,10 @@ const AdminSidebar = () => {
     const items: MenuItem[] = [
         getItem(<Link to="/admin" style={{ color: "white", textDecoration: "none" }}>Dashboard</Link>, '1', <DashboardOutlined />),
         getItem('Feature', 'sub1', <MdFeaturedPlayList />, [
-            getItem(<Link to="/admin/user" style={{ color: "white", textDecoration: "none" }}>QL User</Link>, '2', <UserOutlined />),
-            getItem(<Link to="/admin/product" style={{ color: "white", textDecoration: "none" }}>QL Product</Link>, '3', <AiOutlineProduct />),
-            getItem(<Link to="/admin/cart" style={{ color: "white", textDecoration: "none" }}>QL Cart</Link>, '4', <FaCartPlus />),
-            getItem(<Link to="/admin/cart-item" style={{ color: "white", textDecoration: "none" }}>QL Cart Item</Link>, '5', <AiOutlineShoppingCart />),
-            getItem(<Link to="/admin/order" style={{ color: "white", textDecoration: "none" }}>QL Order</Link>, '6', <BsFillJournalBookmarkFill />),
-            getItem(<Link to="/admin/order-item" style={{ color: "white", textDecoration: "none" }}>QL Order Item</Link>, '7', <FaBoxesPacking />),
+            getItem(<Link to="/admin/user" style={{ color: "white", textDecoration: "none" }}>QL Người Dùng</Link>, '2', <UserOutlined />),
+            getItem(<Link to="/admin/product" style={{ color: "white", textDecoration: "none" }}>QL Sản Phẩm</Link>, '3', <AiOutlineProduct />),
+            getItem(<Link to="/admin/role" style={{ color: "white", textDecoration: "none" }}>QL Vai Trò</Link>, '4', <FaUserCog />),
+            getItem(<Link to="/admin/permission" style={{ color: "white", textDecoration: "none" }}>QL Quyền Hạn</Link>, '5', <MdOutlineSecurity />),
 
         ]),
         getItem('Settings', 'sub2', <SettingOutlined />, [
