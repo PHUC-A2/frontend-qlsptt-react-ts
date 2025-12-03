@@ -4,11 +4,11 @@ import { Link, useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import './Login.scss';
 import { useState } from 'react';
-import type { ILogin } from '../../types/backend';
 import { login } from '../../config/Api';
 import { toast } from 'react-toastify';
 import { setUserLoginInfo } from '../../redux/features/authSlice';
 import { useAppDispatch } from '../../redux/hooks';
+import type { ILogin } from '../../types/auth';
 
 const LoginPage = () => {
     const [form] = Form.useForm();

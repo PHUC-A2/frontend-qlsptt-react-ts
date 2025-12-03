@@ -2,7 +2,7 @@
 import { Modal } from 'antd';
 import { toast } from 'react-toastify';
 import { Form, Input } from 'antd';
-import type { ICreateUserReq } from '../../../../types/backend';
+import type { ICreateUserReq } from '../../../../types/user';
 import { useAppDispatch } from '../../../../redux/hooks';
 import { handleCreateUser } from '../../../../redux/thunks/userThunks';
 

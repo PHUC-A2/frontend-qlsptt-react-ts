@@ -11,7 +11,7 @@ import AdminModalAddUser from "./modal/AdminModalAddUser";
 import { userSelectors } from "../../../redux/selectors/userSelectors";
 import { toast } from "react-toastify";
 import AdminModalGetUserDetails from "./modal/AdminModalGetUserDetails";
-import type { IUser } from "../../../types/backend";
+import type { IUser } from "../../../types/user";
 import AdminModalUpdateUser from "./modal/AdminModalUpdateUser";
 
 const AdminUserPage = () => {

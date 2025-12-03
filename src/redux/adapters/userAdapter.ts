@@ -1,5 +1,5 @@
 import { createEntityAdapter, type EntityState } from "@reduxjs/toolkit";
-import type { IUser } from "../../types/backend";
+import type { IUser } from "../../types/user";
 
 // EntityState cần 2 generic: <T, Id>
 export interface UserState extends EntityState<IUser, number> {

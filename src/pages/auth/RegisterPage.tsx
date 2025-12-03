@@ -2,12 +2,12 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Flex, Form, Input } from 'antd';
 import { Link, useNavigate } from 'react-router';
 import './Register.scss';
-import type { IRegisterReq } from '../../types/backend';
 import { useState } from 'react';
 import { register } from '../../config/Api';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from '../../redux/hooks';
 import { fetchUsers } from '../../redux/thunks/userThunks';
+import type { IRegisterReq } from '../../types/auth';
 
 
 const RegisterPage = () => {

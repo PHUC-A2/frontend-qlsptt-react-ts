@@ -1,7 +1,7 @@
 // src/redux/thunks/userThunk.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "../../config/Api";
-import type { ICreateUserReq, IUpdateUserReq } from "../../types/backend";
+import type { ICreateUserReq, IUpdateUserReq } from "../../types/user";
 
 export const fetchUsers = createAsyncThunk(
     'user/fetchUsers',

@@ -2,7 +2,7 @@
 import { Modal } from 'antd';
 import { toast } from 'react-toastify';
 import { Form, Input } from 'antd';
-import type { IUser } from '../../../../types/backend';
+import type { IUser } from '../../../../types/user';
 import { useAppDispatch } from '../../../../redux/hooks';
 import { handleUpdateUser } from '../../../../redux/thunks/userThunks';
 import { useEffect } from 'react';

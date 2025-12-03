@@ -1,4 +1,4 @@
-import type { ICreateUserReq, IRegisterReq, IUpdateUserReq } from "../types/backend";
+import type { ICreateUserReq, IRegisterReq, IUpdateUserReq } from "../types/user";
 import instance from "./customAxios";
 
 /* api auth  */

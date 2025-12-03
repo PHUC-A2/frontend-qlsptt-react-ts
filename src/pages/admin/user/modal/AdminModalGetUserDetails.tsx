@@ -1,5 +1,5 @@
 import { Descriptions, Drawer } from "antd";
-import type { IUser } from "../../../../types/backend";
+import type { IUser } from "../../../../types/user";
 import dayjs from "dayjs";
 interface IProps {
     setOpenModalGetUserDetails: (v: boolean) => void;
