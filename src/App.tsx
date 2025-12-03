@@ -3,13 +3,15 @@ import AppRouter from "./routes/AppRouter";
 import { useAuthInit } from "./hooks/init/useAuthInit";
 import { useUserInit } from "./hooks/init/useUserInit";
 import { useProductInit } from "./hooks/init/useProductInit";
+import { useProfileInit } from "./hooks/init/useProfileInit";
 
 const App = () => {
 
 
   useAuthInit();// xử lý khi F5 với auth (authSlice)
+  useProfileInit();// xử lý khi F5 với profile (profileSlice)
   useUserInit();// xử lý khi F5 với user (userSlice)
-  useProductInit()// xử lý khi F5 với user (productSlice)
+  useProductInit()// xử lý khi F5 với product (productSlice)
 
 
   return (
