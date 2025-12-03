@@ -12,13 +12,16 @@ import { userSelectors } from "../../../redux/selectors/userSelectors";
 import { toast } from "react-toastify";
 import AdminModalGetUserDetails from "./modal/AdminModalGetUserDetails";
 import type { IUser } from "../../../types/backend";
+import AdminModalUpdateUser from "./modal/AdminModalUpdateUser";
 
 const AdminUserPage = () => {
     const listUsers = useAppSelector(userSelectors.selectAll);
     const dispatch = useAppDispatch();
     const [openModalAddUser, setOpenModalAddUser] = useState<boolean>(false);
+    const [openModalUpdateUser, setOpenModalUpdateUser] = useState<boolean>(false);
     const [openModalGetUserDetails, setOpenModalGetUserDetails] = useState<boolean>(false);
     const [user, setUser] = useState<IUser | null>(null);
+    const [userUpdate, setUserUpdate] = useState<IUser | null>(null);
 
     useEffect(() => {
         dispatch(fetchUsers());
@@ -47,6 +50,10 @@ const AdminUserPage = () => {
         }
     }
 
+    const handleEditUser = (data:IUser) => {
+        setUserUpdate(data);
+        setOpenModalUpdateUser(true);
+    }
 
     const cancel: PopconfirmProps['onCancel'] = () => {
         message.error('Click on No');
@@ -95,7 +102,7 @@ const AdminUserPage = () => {
                                             </Button>
                                             <Button
                                                 variant="outline-dark"
-                                            // onClick={() => handleEditUser(item)}
+                                                onClick={() => handleEditUser(item)}
                                             >
                                                 <CiEdit />
                                             </Button>
@@ -137,6 +144,12 @@ const AdminUserPage = () => {
                 openModalGetUserDetails={openModalGetUserDetails}
                 setOpenModalGetUserDetails={setOpenModalGetUserDetails}
                 user={user}
+            />
+
+            <AdminModalUpdateUser
+                openModalUpdateUser={openModalUpdateUser}
+                setOpenModalUpdateUser={setOpenModalUpdateUser}
+                userUpdate={userUpdate}
             />
         </>
     )

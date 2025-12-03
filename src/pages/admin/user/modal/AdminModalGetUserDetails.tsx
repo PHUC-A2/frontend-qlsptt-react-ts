@@ -10,7 +10,6 @@ interface IProps {
 const AdminModalGetUserDetails = (props: IProps) => {
 
     const { openModalGetUserDetails, setOpenModalGetUserDetails, user } = props;
-    console.log(user);
     return (
         <Drawer
             title="User Details"

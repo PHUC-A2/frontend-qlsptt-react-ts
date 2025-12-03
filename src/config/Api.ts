@@ -1,4 +1,4 @@
-import type { ICreateUserReq, IRegisterReq } from "../types/backend";
+import type { ICreateUserReq, IRegisterReq, IUpdateUserReq } from "../types/backend";
 import instance from "./customAxios";
 
 /* api auth  */
@@ -14,3 +14,4 @@ export const getAllUsers = () => instance.get(`api/v1/users`);
 export const createUser = (data: ICreateUserReq) => instance.post(`api/v1/users`, data);
 export const deleteUser = (id: number) => instance.delete(`api/v1/users/${id}`);
 export const getUserById = (id: number) => instance.get(`api/v1/users/${id}`);
+export const updateUser = (id: number, data: IUpdateUserReq) => instance.put(`api/v1/users/${id}`, data);

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { usersAdapter, initialState } from "../adapters/userAdapter";
-import { fetchUsers, handleCreateUser, handleFindUserById, handleRemoveUser } from "../thunks/userThunks";
+import { fetchUsers, handleCreateUser, handleFindUserById, handleRemoveUser, handleUpdateUser } from "../thunks/userThunks";
 
 const userSlice = createSlice({
     name: "user",
@@ -50,6 +50,18 @@ const userSlice = createSlice({
             })
             .addCase(handleFindUserById.rejected, (state, action) => {
                 state.error = action.payload as string ?? "Lấy user thất bại";
+            })
+
+            // --- PUT UPDATE USER ---
+            .addCase(handleUpdateUser.fulfilled, (state, action) => {
+                // Cập nhật vào danh sách user
+                usersAdapter.upsertOne(state, action.payload);
+
+                // Nếu đang xem chi tiết user -> cập nhật luôn
+                state.selectedUser = action.payload;
+            })
+            .addCase(handleUpdateUser.rejected, (state, action) => {
+                state.error = (action.payload as string) ?? "Cập nhật người dùng thất bại";
             });
     }
 });

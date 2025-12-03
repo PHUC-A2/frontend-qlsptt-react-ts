@@ -1,7 +1,7 @@
 // src/redux/thunks/userThunk.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createUser, deleteUser, getAllUsers, getUserById } from "../../config/Api";
-import type { ICreateUserReq } from "../../types/backend";
+import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "../../config/Api";
+import type { ICreateUserReq, IUpdateUserReq } from "../../types/backend";
 
 export const fetchUsers = createAsyncThunk(
     'user/fetchUsers',
@@ -61,6 +61,22 @@ export const handleFindUserById = createAsyncThunk(
                 return res.data?.data;
             }
             return rejectWithValue("Lấy người dùng thất bại");
+        } catch (error: any) {
+            console.log("Lỗi hệ thống: ", error);
+            return rejectWithValue(error?.response?.data?.message);
+        }
+    }
+)
+
+export const handleUpdateUser = createAsyncThunk(
+    'user/updateUser',
+    async ({ id, data }: { id: number; data: IUpdateUserReq }, { rejectWithValue }) => {
+        try {
+            const res = await updateUser(id, data);
+            if (res.data?.status === 200) {
+                return res.data?.data;
+            }
+            return rejectWithValue("Cập nhật người dùng thất bại");
         } catch (error: any) {
             console.log("Lỗi hệ thống: ", error);
             return rejectWithValue(error?.response?.data?.message);

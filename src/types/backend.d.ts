@@ -26,3 +26,9 @@ export interface ICreateUserReq {
     email: string;
     password: string;
 }
+
+// update user
+export interface IUpdateUserReq {
+    name: string;
+    email: string;
+}
