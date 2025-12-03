@@ -92,7 +92,7 @@ const AdminUserPage = () => {
                         (
                             listUsers.map((item, index) => (
                                 <tr key={item.id + 1}>
-                                    <td>{index}</td>
+                                    <th>{index}</th>
                                     <td>{item.id}</td>
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>

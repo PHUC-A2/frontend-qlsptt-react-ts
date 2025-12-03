@@ -1,17 +1,21 @@
-import { message, Popconfirm, type PopconfirmProps } from "antd";
+import { Empty, message, Popconfirm, type PopconfirmProps } from "antd";
 import { Button, Table } from "react-bootstrap";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { FaRegEye } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { productSelectors } from "../../../redux/selectors/productSelectors";
+import { useEffect } from "react";
+import { fetchProducts } from "../../../redux/thunks/productThunks";
 
 const AdminProductPage = () => {
-    // const listUsers = useAppSelector(userSelectors.selectAll);
-    // const dispatch = useAppDispatch();
+    const listProducts = useAppSelector(productSelectors.selectAll);
+    const dispatch = useAppDispatch();
 
-    // useEffect(() => {
-    //     dispatch(fetchUsers());
-    // }, []);
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, []);
 
     // xóa user
     // const handleDeleteUser = async (id: number) => {
@@ -77,28 +81,33 @@ const AdminProductPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {/* {listUsers.length > 0 ?
+                    {listProducts.length > 0 ?
                         (
-                            listUsers.map((item, index) => ( */}
-                                <tr>
-                                    <td>s</td>
-                                    <td>s</td>
-                                    <td>s</td>
-                                    <td>s</td>
-                                    <td>s</td>
-                                    <td>s</td>
-                                    <td>s</td>
+                            listProducts.map((item, index) => (
+                                <tr key={item.id}>
+                                    <th>{index + 1}</th>
+                                    <td>{item.id}</td>
+                                    <td>{item.name}</td>
+                                    <td>{item.image_url}</td>
+                                    <td>{item.type}</td>
+                                    <td>
+                                        {new Intl.NumberFormat("vi-VN", {
+                                            style: "currency",
+                                            currency: "VND",
+                                        }).format(item.price)}
+                                    </td>
+                                    <td>{item.quantity}</td>
                                     <td>
                                         <div className="d-flex justify-content-evenly">
                                             <Button
                                                 variant="outline-success"
-                                                // onClick={() => handleGetUserDetails(item.id)}
+                                            // onClick={() => handleGetUserDetails(item.id)}
                                             >
                                                 <FaRegEye />
                                             </Button>
                                             <Button
                                                 variant="outline-dark"
-                                                // onClick={() => handleEditUser(item)}
+                                            // onClick={() => handleEditUser(item)}
                                             >
                                                 <CiEdit />
                                             </Button>
@@ -117,7 +126,7 @@ const AdminProductPage = () => {
                                         </div>
                                     </td>
                                 </tr>
-                            {/* ))
+                            ))
                         )
                         : (
                             <tr>
@@ -125,7 +134,7 @@ const AdminProductPage = () => {
                                     <Empty description="Không có người dùng nào" />
                                 </td>
                             </tr>
-                        )} */}
+                        )}
 
                 </tbody>
             </Table>

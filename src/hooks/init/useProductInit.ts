@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import { getAllUsers } from "../../config/Api";
+import { getAllProducts } from "../../config/Api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { fetchUsers } from "../../redux/thunks/userThunks";
-import { setClearUsersInfo } from "../../redux/features/userSlice";
+import { setClearProductsInfo } from "../../redux/features/productSlice";
+import { fetchProducts } from "../../redux/thunks/productThunks";
 
-export const useUserInit = () => {
+export const useProductInit = () => {
     const dispatch = useAppDispatch();
     const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
     useEffect(() => {
@@ -14,15 +14,15 @@ export const useUserInit = () => {
             try {
                 // nếu đã login
                 if (isAuthenticated) {
-                    const res = await getAllUsers();
+                    const res = await getAllProducts();
                     if (res.data?.status === 200) {
-                        await dispatch(fetchUsers()).unwrap();
+                        await dispatch(fetchProducts()).unwrap();
                     }
                 }
 
-                // nếu logout thì xóa user
+                // nếu logout thì xóa product
                 if (!isAuthenticated) {
-                    dispatch(setClearUsersInfo());
+                    dispatch(setClearProductsInfo());
                 }
 
             } catch (error: any) {

@@ -2,12 +2,15 @@ import { ToastContainer, Slide } from "react-toastify"; // thêm Slide
 import AppRouter from "./routes/AppRouter";
 import { useAuthInit } from "./hooks/init/useAuthInit";
 import { useUserInit } from "./hooks/init/useUserInit";
+import { useProductInit } from "./hooks/init/useProductInit";
 
 const App = () => {
 
-  // xử lý khi F5 với auth (authSlice)
-  useAuthInit();
+
+  useAuthInit();// xử lý khi F5 với auth (authSlice)
   useUserInit();// xử lý khi F5 với user (userSlice)
+  useProductInit()// xử lý khi F5 với user (productSlice)
+
 
   return (
     <>
