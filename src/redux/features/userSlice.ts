@@ -1,78 +1,58 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { IUser } from '../../types/backend';
-import { fetchUsers, handleCreateUser, handleFindUserById, handleRemoveUser } from '../thunks/userThunks';
+import { createSlice } from "@reduxjs/toolkit";
+import { usersAdapter, initialState } from "../adapters/userAdapter";
+import { fetchUsers, handleCreateUser, handleFindUserById, handleRemoveUser } from "../thunks/userThunks";
 
-interface UserState {
-    data: IUser[];
-    selecedUser?: IUser;
-    loading: boolean;
-    error?: string;
-}
-
-
-const initialState: UserState = {
-    data: [] as IUser[],
-    selecedUser: undefined,
-    loading: false,
-    error: undefined
-};
-
-const authSlice = createSlice({
-    name: 'user',
+const userSlice = createSlice({
+    name: "user",
     initialState,
     reducers: {
-        setUsersInfo: (state, action: PayloadAction<UserState>) => {
-            // console.log(action.payload);
-            state.data = action.payload.data;
-        },
-        setClearUsersInfo: (state) => {
-            state.data = [];
+        setClearUsersInfo(state) {
+            usersAdapter.removeAll(state); // xóa toàn bộ users trong state
+            state.selectedUser = undefined;
             state.loading = false;
-        },
+            state.error = undefined;
+        }
     },
     extraReducers: (builder) => {
         builder
-
-            // fetch
+            // --- FETCH ALL USERS ---
             .addCase(fetchUsers.pending, (state) => {
                 state.loading = true;
             })
             .addCase(fetchUsers.fulfilled, (state, action) => {
                 state.loading = false;
-                state.data = action.payload ?? [];
+                usersAdapter.setAll(state, action.payload); // set tất cả users
             })
             .addCase(fetchUsers.rejected, (state, action) => {
                 state.loading = false;
-                state.error = (action.payload as string) ?? "Lỗi không xác định"; // đảm bảo cho rejected luôn trả string
+                state.error = action.payload as string ?? "Lỗi hệ thống";
             })
 
-            // create
+            // --- CREATE USER ---
             .addCase(handleCreateUser.fulfilled, (state, action) => {
-                state.data.push(action.payload);  // thêm user mới
+                usersAdapter.addOne(state, action.payload); // thêm user mới vào state
             })
-            // nếu lỗi
             .addCase(handleCreateUser.rejected, (state, action) => {
-                state.error = (action.payload as string) ?? "Lỗi không xác định";
+                state.error = action.payload as string ?? "Tạo user thất bại";
             })
 
-            // delete
+            // --- REMOVE USER ---
             .addCase(handleRemoveUser.fulfilled, (state, action) => {
-                state.data = state.data.filter(user => user.id !== action.payload);  // xáo user theo id
+                usersAdapter.removeOne(state, action.payload); // action.payload = id của user
             })
-            // nếu lỗi
             .addCase(handleRemoveUser.rejected, (state, action) => {
-                state.error = (action.payload as string) ?? "Lỗi không xác định";
+                state.error = action.payload as string ?? "Xóa user thất bại";
             })
-            // find by ID
+
+            // --- GET USER BY ID ---
             .addCase(handleFindUserById.fulfilled, (state, action) => {
-                state.selecedUser = action.payload;
+                state.selectedUser = action.payload; // lưu user chi tiết
             })
-            // nếu lỗi
             .addCase(handleFindUserById.rejected, (state, action) => {
-                state.error = (action.payload as string) ?? "Lỗi không xác định";
-            })
+                state.error = action.payload as string ?? "Lấy user thất bại";
+            });
     }
 });
 
-export const { setUsersInfo, setClearUsersInfo } = authSlice.actions;
-export default authSlice.reducer;
+export const { setClearUsersInfo } = userSlice.actions;
+export default userSlice.reducer;

@@ -8,9 +8,11 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { fetchUsers, handleFindUserById, handleRemoveUser } from "../../../redux/thunks/userThunks";
 import { useEffect, useState } from "react";
 import AdminModalAddUser from "./modal/AdminModalAddUser";
+import { userSelectors } from "../../../redux/selectors/userSelectors";
+import { toast } from "react-toastify";
 
 const AdminUserPage = () => {
-    const listUsers = useAppSelector(state => state.user.data) || [];
+    const listUsers = useAppSelector(userSelectors.selectAll);
     const dispatch = useAppDispatch();
     const [openModalAddUser, setOpenModalAddUser] = useState<boolean>(false);
 
@@ -19,8 +21,13 @@ const AdminUserPage = () => {
     }, []);
 
     // xóa user
-    const handleDeleteUser = (id: number) => {
-        dispatch(handleRemoveUser(id));
+    const handleDeleteUser = async (id: number) => {
+        try {
+            await dispatch(handleRemoveUser(id)).unwrap();
+            toast.success("Xóa người dùng thành công")
+        } catch (error: any) {
+            toast.error(error || "Lỗi khi xóa người dùng")
+        }
     }
 
     // lấy user 
@@ -28,7 +35,8 @@ const AdminUserPage = () => {
         try {
             const user = await dispatch(handleFindUserById(id)).unwrap();
             console.log("User vừa lấy:", user);
-        } catch (error) {
+        } catch (error: any) {
+            toast.error(error || "Lỗi khi lấy người dùng")
             console.error("Lấy user thất bại:", error);
         }
     }

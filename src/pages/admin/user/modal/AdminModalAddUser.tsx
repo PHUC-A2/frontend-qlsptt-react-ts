@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { Form, Input } from 'antd';
 import type { ICreateUserReq } from '../../../../types/backend';
 import { useAppDispatch } from '../../../../redux/hooks';
-import { fetchUsers, handleCreateUser } from '../../../../redux/thunks/userThunks';
+import { handleCreateUser } from '../../../../redux/thunks/userThunks';
 
 interface IProps {
     openModalAddUser: boolean;
@@ -19,19 +19,12 @@ const AdminModalAddUser = (props: IProps) => {
 
     const handleAddUser = async (data: ICreateUserReq) => {
         try {
-            dispatch(handleCreateUser(data));
-            dispatch(fetchUsers());
+            await dispatch(handleCreateUser(data)).unwrap();
+            toast.success('Thêm mới người dùng thành công')
             setOpenModalAddUser(false);
-            // toast.success('New user created successfully')
             form.resetFields(); // dùng để xóa các giá trị sau khi đã submit
         } catch (error: any) {
-            const m = error?.response?.data?.message ?? "unknown";
-            toast.error(
-                <div>
-                    <div><strong>Có lỗi xảy ra!</strong></div>
-                    <div>{m}</div>
-                </div>
-            );
+            toast.error(error || "Lỗi khi tạo người dùng");
         }
     }
 
