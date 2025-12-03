@@ -16,12 +16,14 @@ import { setLogoutUser } from '../../redux/features/authSlice';
 import { toast } from 'react-toastify';
 import { FaUserCog } from 'react-icons/fa';
 import { AiOutlineProduct } from 'react-icons/ai';
+import ModalProfile from '../../pages/auth/modal/ModalProfile';
 
 const AdminSidebar = () => {
 
     // code
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const [openModalProfile, setOpenModalProfile] = useState<boolean>(false);
 
     const handleLogout = async () => {
         try {
@@ -41,10 +43,6 @@ const AdminSidebar = () => {
             )
         }
 
-    }
-
-    const handleProfile = async () => {
-        // console.log("Profile: ", profile);
     }
 
     const { Header, Content, Footer, Sider } = Layout;
@@ -75,7 +73,7 @@ const AdminSidebar = () => {
         ]),
         getItem('Settings', 'sub2', <SettingOutlined />, [
             getItem(<Link to="/" style={{ color: "white", textDecoration: "none" }}>Client</Link>, '8', <UserOutlined />),
-            getItem(<span onClick={handleProfile}>Profile</span>, '9', <FaCircleUser />),
+            getItem(<span onClick={() => setOpenModalProfile(true)}>Profile</span>, '9', <FaCircleUser />),
             getItem(<span onClick={handleLogout}>Log out</span>, '10', <LogoutOutlined />),
         ]),
     ];
@@ -96,36 +94,42 @@ const AdminSidebar = () => {
     }));
 
     return (
-        <Layout style={{ minHeight: '100vh' }}>
-            <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                <div className="demo-logo-vertical" />
-                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
-            </Sider>
-            <Layout>
-                <Header style={{ padding: 0, background: colorBgContainer }}>
-                    <h3>Chào mừng bạn đến với trang quản trị !</h3>
-                </Header>
-                <Content style={{ margin: '0 16px' }}>
-                    {/* <Breadcrumb style={{ margin: '16px 0' }} items={[{ title: 'admin/user' }]} /> */}
-                    <Breadcrumb style={{ margin: "16px 0" }} items={breadcrumbItems} />
-                    <div
-                        style={{
-                            padding: 24,
-                            minHeight: 360,
-                            background: colorBgContainer,
-                            borderRadius: borderRadiusLG,
-                            overflowX: 'auto',
-                            // overflowY:'auto'
-                        }}
-                    >
-                        <Outlet />
-                    </div>
-                </Content>
-                <Footer style={{ textAlign: 'center' }}>
-                    Ant Design ©{new Date().getFullYear()} Created by Ant UED
-                </Footer>
+        <>
+            <Layout style={{ minHeight: '100vh' }}>
+                <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+                    <div className="demo-logo-vertical" />
+                    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+                </Sider>
+                <Layout>
+                    <Header style={{ padding: 0, background: colorBgContainer }}>
+                        <h3>Chào mừng bạn đến với trang quản trị !</h3>
+                    </Header>
+                    <Content style={{ margin: '0 16px' }}>
+                        {/* <Breadcrumb style={{ margin: '16px 0' }} items={[{ title: 'admin/user' }]} /> */}
+                        <Breadcrumb style={{ margin: "16px 0" }} items={breadcrumbItems} />
+                        <div
+                            style={{
+                                padding: 24,
+                                minHeight: 360,
+                                background: colorBgContainer,
+                                borderRadius: borderRadiusLG,
+                                overflowX: 'auto',
+                                // overflowY:'auto'
+                            }}
+                        >
+                            <Outlet />
+                        </div>
+                    </Content>
+                    <Footer style={{ textAlign: 'center' }}>
+                        Ant Design ©{new Date().getFullYear()} Created by Ant UED
+                    </Footer>
+                </Layout>
             </Layout>
-        </Layout>
+            <ModalProfile
+                openModalProfile={openModalProfile}
+                setOpenModalProfile={setOpenModalProfile}
+            />
+        </>
     )
 }
 export default AdminSidebar;

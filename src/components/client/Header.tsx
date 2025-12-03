@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setLogoutUser } from '../../redux/features/authSlice';
 import { toast } from 'react-toastify';
 import { logout } from '../../config/Api';
+import ModalProfile from '../../pages/auth/modal/ModalProfile';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -26,6 +27,7 @@ const Header = () => {
     const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const [openModalProfile, setOpenModalProfile] = useState<boolean>(false);
 
     // đăng xuất
     const handleLogout = async () => {
@@ -116,7 +118,7 @@ const Header = () => {
                         ...(isAuthenticated ?
                             [
                                 { label: <Link to={'/admin'} className='text-decoration-none'>Trang quản trị</Link>, key: 'admin', icon: <AiFillDashboard /> },
-                                { label: <span>Tài khoản</span>, key: 'profile', icon: <FaCircleUser /> },
+                                { label: <span onClick={() => setOpenModalProfile(true)}>Tài khoản</span>, key: 'profile', icon: <FaCircleUser /> },
                                 { label: <span onClick={handleLogout}>Đăng xuất</span>, key: 'logout', icon: <LogoutOutlined /> },
                             ]
                             :
@@ -161,6 +163,12 @@ const Header = () => {
                     </Col>
                 </Row>
             </Layout>
+
+            {/* profile */}
+            <ModalProfile
+                openModalProfile={openModalProfile}
+                setOpenModalProfile={setOpenModalProfile}
+            />
         </div>
     )
 }
