@@ -9,15 +9,22 @@ import {
     Row,
     Space,
     Spin,
-    Typography
+    Typography,
+    // Cập nhật Imports: Xóa InputNumber, THÊM Slider
+    Select,
+    // InputNumber, // Đã xóa
+    Slider, // Đã thêm
+    Button
 } from "antd";
 import { motion, type Variants } from "framer-motion";
 import { useEffect, useState, useMemo } from "react";
+// Sửa import Link về đúng package
 import { Link } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { productSelectors } from "../../../redux/selectors/productSelectors";
 import { fetchProducts } from "../../../redux/thunks/productThunks";
 import type { IProduct } from "../../../types/product";
+import { ClearOutlined } from "@ant-design/icons";
 
 const PRIMARY_BACKGROUND = "#a6b4c2ff";
 const TITLE_COLOR = "#faad14";
@@ -57,12 +64,33 @@ const { Title } = Typography;
 const ProductPage = () => {
     const dispatch = useAppDispatch();
     const listProducts = useAppSelector(productSelectors.selectAll);
-    const searchTerm = useAppSelector(state => state.search.term);
+    const searchTerm = useAppSelector((state: any) => state.search.searchTerm || "");
 
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(12);
-    const totalProducts = listProducts.length;
+
+    // --- XÁC ĐỊNH PHẠM VI GIÁ TUYỆT ĐỐI (Dùng cho Slider min/max) ---
+    const priceBounds = useMemo(() => {
+        if (listProducts.length === 0) return { min: 0, max: 1000000 };
+        const prices = listProducts.map(p => p.price ?? 0);
+        // Làm tròn xuống 1k gần nhất
+        const min = Math.min(...prices, 0);
+        // Làm tròn lên 100k gần nhất để có khoảng đệm
+        const max = Math.max(...prices, 1000000);
+        // Đảm bảo max > min
+        return {
+            min,
+            max: max > min ? max : min + 1000000
+        };
+    }, [listProducts]);
+
+    // --- STATE CHO BỘ LỌC MỚI ---
+    const [selectedType, setSelectedType] = useState<string | undefined>(undefined);
+    // Thay thế minPrice/maxPrice bằng Range Array [min, max]
+    const [selectedPriceRange, setSelectedPriceRange] = useState<[number, number] | null>(null);
+    // State cục bộ để quản lý giá trị Slider trong khi kéo
+    const [localPriceRange, setLocalPriceRange] = useState<[number, number] | null>(null);
 
     useEffect(() => {
         setLoading(true);
@@ -70,11 +98,100 @@ const ProductPage = () => {
             .finally(() => setLoading(false));
     }, [dispatch]);
 
+    // Khởi tạo/Reset giá trị Slider khi dữ liệu được tải hoặc bounds thay đổi
+    useEffect(() => {
+        if (priceBounds.max > priceBounds.min && selectedPriceRange === null) {
+            setSelectedPriceRange([priceBounds.min, priceBounds.max]);
+            setLocalPriceRange([priceBounds.min, priceBounds.max]);
+        }
+    }, [priceBounds, selectedPriceRange]);
+
+
+    // --- LẤY DANH SÁCH TYPE DUY NHẤT ---
+    const uniqueTypes = useMemo(() => {
+        const types = listProducts.map(p => p.type).filter(Boolean) as string[];
+        return ["Tất cả", ...Array.from(new Set(types))];
+    }, [listProducts]);
+
+    // --- HÀM CLEAR BỘ LỌC CẬP NHẬT ---
+    const handleClearFilters = () => {
+        setSelectedType(undefined);
+        // Reset phạm vi giá về min/max tuyệt đối
+        setSelectedPriceRange([priceBounds.min, priceBounds.max]);
+        setLocalPriceRange([priceBounds.min, priceBounds.max]);
+        setCurrentPage(1);
+    };
+
+    // --- HÀM XỬ LÝ KHI NGƯỜI DÙNG KẾT THÚC KÉO SLIDER ---
+    const handleSliderAfterChange = (value: number[]) => {
+        // Kiểm tra an toàn, mặc dù Range Slider luôn trả về mảng 2 phần tử
+        if (value.length === 2) {
+            // Ép kiểu mảng number[] thành tuple [number, number] để cập nhật state
+            setSelectedPriceRange(value as [number, number]);
+            setCurrentPage(1);
+        }
+    }
+
+    // Hàm format giá cho hiển thị
+    const formatPrice = (price?: number): string => {
+        if (price === undefined || price === null) return '';
+        return price.toLocaleString('vi-VN') + ' ₫';
+    }
+
+
+    // --- LOGIC LỌC (Cập nhật sử dụng selectedPriceRange) ---
+    const filteredListProducts = useMemo(() => {
+        let filtered = listProducts;
+        const term = searchTerm?.toLowerCase() || "";
+
+        // 1. Lọc theo Search Term (Name, Price, Quantity)
+        if (term) {
+            filtered = filtered.filter((p: IProduct) => {
+                return (
+                    (p.name ?? "").toLowerCase().includes(term) ||
+                    p.price?.toString().includes(term) ||
+                    p.quantity?.toString().includes(term) ||
+                    (p.type ?? "").toLowerCase().includes(term)
+                );
+            });
+        }
+
+        // 2. Lọc theo Type
+        if (selectedType && selectedType !== "Tất cả") {
+            filtered = filtered.filter(p => p.type === selectedType);
+        }
+
+        // 3. Lọc theo Price Range (Sử dụng Range Slider)
+        if (selectedPriceRange && priceBounds.min !== priceBounds.max) {
+            const [min, max] = selectedPriceRange;
+
+            // Chỉ lọc nếu phạm vi được chọn không phải là phạm vi tuyệt đối (để tránh lọc vô ích)
+            if (min > priceBounds.min || max < priceBounds.max) {
+                filtered = filtered.filter(p => {
+                    const price = p.price ?? 0;
+                    return price >= min && price <= max;
+                });
+            }
+        }
+
+        return filtered;
+    }, [listProducts, searchTerm, selectedType, selectedPriceRange, priceBounds]); // Thêm priceBounds vào dependencies
+
+    // Tổng số sản phẩm ĐÃ LỌC
+    const totalFilteredProducts = filteredListProducts.length;
+
+    // --- BƯỚC PHÂN TRANG (Sử dụng dữ liệu đã lọc) ---
     const currentProducts = useMemo(() => {
+        // Điều chỉnh trang hiện tại nếu kết quả lọc quá ít
+        if (currentPage > 1 && filteredListProducts.length <= (currentPage - 1) * pageSize) {
+            setCurrentPage(1);
+            return filteredListProducts.slice(0, pageSize);
+        }
+
         const startIndex = (currentPage - 1) * pageSize;
         const endIndex = startIndex + pageSize;
-        return listProducts.slice(startIndex, endIndex);
-    }, [listProducts, currentPage, pageSize]);
+        return filteredListProducts.slice(startIndex, endIndex);
+    }, [filteredListProducts, currentPage, pageSize]);
 
     const handlePageChange = (page: number, newSize: number) => {
         if (newSize !== pageSize) {
@@ -85,16 +202,6 @@ const ProductPage = () => {
         }
         window.scrollTo({ top: 350, behavior: 'smooth' });
     };
-
-    // tìm kiếm
-    const filteredProducts = currentProducts.filter((p: IProduct) => {
-        return (
-            (p.name ?? "").toLowerCase().includes(searchTerm) ||
-            (p.type ?? "").toLowerCase().includes(searchTerm) ||
-            p.price?.toString().includes(searchTerm) ||
-            p.quantity?.toString().includes(searchTerm)
-        );
-    });
 
     return (
         <Layout style={{
@@ -117,12 +224,77 @@ const ProductPage = () => {
                     transition={{ duration: 0.6 }}
                 >
                     <Title level={2} style={{
-                        marginBottom: 24,
+                        marginBottom: 16,
                         textTransform: "uppercase",
                         color: TITLE_COLOR
                     }}>
-                        Tất Cả Sản Phẩm
+                        {searchTerm ? `Kết Quả Tìm Kiếm (${totalFilteredProducts} sản phẩm)` : "Tất Cả Sản Phẩm"}
                     </Title>
+
+                    {/* ---------------------- KHUNG LỌC SẢN PHẨM ---------------------- */}
+                    <div style={{ marginBottom: 24, padding: 16, border: `1px solid ${TITLE_COLOR}`, borderRadius: 8, background: 'rgba(255, 255, 255, 0.1)' }}>
+                        <Row gutter={[16, 16]} align="bottom">
+                            {/* Lọc theo Loại (Type) */}
+                            <Col xs={24} sm={12} md={6}>
+                                <Typography.Text style={{ color: TITLE_COLOR, display: 'block', marginBottom: 4 }}>
+                                    Lọc theo Loại
+                                </Typography.Text>
+                                <Select
+                                    placeholder="Chọn loại sản phẩm"
+                                    style={{ width: '100%' }}
+                                    value={selectedType}
+                                    onChange={(value) => {
+                                        setSelectedType(value);
+                                        setCurrentPage(1);
+                                    }}
+                                    options={uniqueTypes.map(type => ({
+                                        value: type,
+                                        label: type
+                                    }))}
+                                />
+                            </Col>
+
+                            {/* Lọc theo Khoảng Giá (SỬ DỤNG SLIDER) */}
+                            <Col xs={24} sm={12} md={12}>
+                                <Typography.Text style={{ color: TITLE_COLOR, display: 'block', marginBottom: 4 }}>
+                                    Lọc theo Khoảng Giá:
+                                    <span style={{ fontWeight: 'bold', marginLeft: 8 }}>
+                                        {/* Hiển thị giá trị đang được chọn (localPriceRange) */}
+                                        {localPriceRange ? `${formatPrice(localPriceRange[0])} - ${formatPrice(localPriceRange[1])}` : "Đang tải..."}
+                                    </span>
+                                </Typography.Text>
+                                {
+                                    // Kiểm tra điều kiện để render Slider
+                                    localPriceRange && priceBounds.min !== priceBounds.max ? (
+                                        <Slider
+                                            range
+                                            min={priceBounds.min}
+                                            max={priceBounds.max}
+                                            step={10000}
+                                            value={localPriceRange}
+                                            onChange={(value: number[]) => {
+                                                setLocalPriceRange(value as [number, number]);
+                                            }}
+                                            onChangeComplete={handleSliderAfterChange}
+                                            tooltip={{ formatter: formatPrice }}
+                                            style={{ margin: '8px 0', color: TITLE_COLOR }}
+                                        />
+                                    ) : (
+                                        <Typography.Text style={{ color: TEXT_COLOR }}>Đang tải phạm vi giá...</Typography.Text>
+                                    )
+                                }
+                            </Col>
+
+                            {/* Nút Xóa Bộ Lọc */}
+                            <Col xs={24} md={6} style={{ textAlign: 'right', paddingTop: 8 }}>
+                                <Button icon={<ClearOutlined />} onClick={handleClearFilters}>
+                                    Xóa Bộ Lọc
+                                </Button>
+                            </Col>
+                        </Row>
+                    </div>
+                    {/* ------------------------------------------------------------------- */}
+
                 </motion.div>
 
                 <Spin spinning={loading} size="large">
@@ -132,8 +304,8 @@ const ProductPage = () => {
                         animate="visible"
                     >
                         <Row gutter={[24, 24]}>
-                            {filteredProducts.length > 0 ? (
-                                filteredProducts.map((product) => (
+                            {currentProducts.length > 0 ? (
+                                currentProducts.map((product) => (
                                     <Col xs={12} sm={12} md={8} lg={6} xl={4} key={product.id}>
                                         <motion.div
                                             variants={cardVariants}
@@ -190,7 +362,7 @@ const ProductPage = () => {
                                                                     fontSize: "18px",
                                                                     fontWeight: "bold"
                                                                 }}>
-                                                                    {product.price.toLocaleString()} ₫
+                                                                    {product.price?.toLocaleString()} ₫
                                                                 </span>
                                                             </div>
                                                         }
@@ -225,7 +397,10 @@ const ProductPage = () => {
                                         >
                                             <Empty
                                                 description={
-                                                    <span style={{ color: TEXT_COLOR }}>Không tìm thấy sản phẩm nào</span>
+                                                    <span style={{ color: TEXT_COLOR }}>
+                                                        Không tìm thấy sản phẩm nào
+                                                        {(searchTerm || selectedType || (selectedPriceRange && (selectedPriceRange[0] > priceBounds.min || selectedPriceRange[1] < priceBounds.max))) && " phù hợp với bộ lọc."}
+                                                    </span>
                                                 }
                                             />
                                         </Space>
@@ -236,17 +411,16 @@ const ProductPage = () => {
                     </motion.div>
                 </Spin>
 
-                {totalProducts > 0 && (
+                {totalFilteredProducts > 0 && (
                     <Row justify="center" style={{ marginTop: 32, marginBottom: 32 }}>
                         <Pagination
                             current={currentPage}
                             pageSize={pageSize}
-                            total={totalProducts}
+                            total={totalFilteredProducts}
                             showSizeChanger
                             pageSizeOptions={[4, 8, 12, 16, 20, 24]}
                             onChange={handlePageChange}
                             showTotal={(total, range) => `${range[0]}-${range[1]} của ${total} sản phẩm`}
-                            style={{ color: TEXT_COLOR }}
                         />
                     </Row>
                 )}
