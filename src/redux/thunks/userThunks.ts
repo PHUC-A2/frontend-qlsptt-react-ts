@@ -14,7 +14,7 @@ export const fetchUsers = createAsyncThunk(
             return rejectWithValue("Lấy người dùng thất bại");
         } catch (error: any) {
             console.log("Lỗi hệ thống: ", error);
-            return rejectWithValue("Lỗi hệ thống");
+            return rejectWithValue(error?.response?.data?.message || "Lỗi hệ thống");
         }
     }
 )
@@ -30,7 +30,7 @@ export const handleCreateUser = createAsyncThunk(
             return rejectWithValue("Tạo người dùng thất bại");
         } catch (error: any) {
             console.log("Lỗi hệ thống: ", error);
-            return rejectWithValue(error?.response?.data?.message);
+            return rejectWithValue(error?.response?.data?.message || "Lỗi hệ thống");
         }
     }
 )
@@ -47,7 +47,7 @@ export const handleRemoveUser = createAsyncThunk(
             return rejectWithValue("Xóa người dùng thất bại");
         } catch (error: any) {
             console.log("Lỗi hệ thống: ", error);
-            return rejectWithValue(error?.response?.data?.message);
+            return rejectWithValue(error?.response?.data?.message || "Lỗi hệ thống");
         }
     }
 )
@@ -63,7 +63,7 @@ export const handleFindUserById = createAsyncThunk(
             return rejectWithValue("Lấy người dùng thất bại");
         } catch (error: any) {
             console.log("Lỗi hệ thống: ", error);
-            return rejectWithValue(error?.response?.data?.message);
+            return rejectWithValue(error?.response?.data?.message || "Lỗi hệ thống");
         }
     }
 )
@@ -79,7 +79,7 @@ export const handleUpdateUser = createAsyncThunk(
             return rejectWithValue("Cập nhật người dùng thất bại");
         } catch (error: any) {
             console.log("Lỗi hệ thống: ", error);
-            return rejectWithValue(error?.response?.data?.message);
+            return rejectWithValue(error?.response?.data?.message || "Lỗi hệ thống");
         }
     }
 )

@@ -9,3 +9,12 @@ export interface IProduct {
     created_at: string;
     updated_at: string;
 }
+
+export interface ICreateProductReq {
+    name: string;
+    image_url: string;
+    description: string;
+    type: string;
+    price: number;
+    quantity: number;
+}

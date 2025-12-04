@@ -12,7 +12,7 @@ const AdminModalGetUserDetails = (props: IProps) => {
     const { openModalGetUserDetails, setOpenModalGetUserDetails, user } = props;
     return (
         <Drawer
-            title="User Details"
+            title="Chi tiết người dùng"
             placement="right"
             closable={false}
             onClose={() => setOpenModalGetUserDetails(false)}
@@ -20,12 +20,12 @@ const AdminModalGetUserDetails = (props: IProps) => {
         >
             <Descriptions bordered column={1} size="small">
                 <Descriptions.Item label="ID">{user?.id}</Descriptions.Item>
-                <Descriptions.Item label="Name">{user?.name ?? "N/A"}</Descriptions.Item>
+                <Descriptions.Item label="Tên">{user?.name ?? "N/A"}</Descriptions.Item>
                 <Descriptions.Item label="Email">{user?.email ?? "N/A"}</Descriptions.Item>
-                <Descriptions.Item label="Created At">
+                <Descriptions.Item label="Ngày tạo">
                     {user?.created_at ? dayjs(user.created_at).format("DD/MM/YYYY HH:mm:ss") : "N/A"}
                 </Descriptions.Item>
-                <Descriptions.Item label="Updated At">
+                <Descriptions.Item label="Ngày cập nhật">
                     {user?.updated_at ? dayjs(user.updated_at).format("DD/MM/YYYY HH:mm:ss") : "N/A"}
                 </Descriptions.Item>
             </Descriptions>

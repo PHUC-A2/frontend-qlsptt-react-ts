@@ -6,12 +6,14 @@ import { FaRegEye } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { productSelectors } from "../../../redux/selectors/productSelectors";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchProducts } from "../../../redux/thunks/productThunks";
+import AdminModalAddProduct from "./modal/AdminModalAddProduct";
 
 const AdminProductPage = () => {
     const listProducts = useAppSelector(productSelectors.selectAll);
     const dispatch = useAppDispatch();
+    const [openModalAddProduct, setOpenModalAddProduct] = useState<boolean>(false);
 
     useEffect(() => {
         dispatch(fetchProducts());
@@ -46,7 +48,7 @@ const AdminProductPage = () => {
     // }
 
     const cancel: PopconfirmProps['onCancel'] = () => {
-        message.error('Click on No');
+        message.error('Hủy thao tác');
     };
 
     return (
@@ -60,7 +62,7 @@ const AdminProductPage = () => {
                                 <div>
                                     <Button className="d-flex align-items-center"
                                         variant="outline-primary"
-                                    // onClick={() => setOpenModalAddUser(true)}
+                                        onClick={() => setOpenModalAddProduct(true)}
                                     >
                                         <AiOutlineUserAdd /> Thêm mới
                                     </Button>
@@ -112,8 +114,8 @@ const AdminProductPage = () => {
                                                 <CiEdit />
                                             </Button>
                                             <Popconfirm
-                                                title="Delete the user"
-                                                description="Are you sure to delete this user?"
+                                                title="Xóa sản phẩm"
+                                                description="Bạn có chắc muốn xóa sản phẩm này không?"
                                                 // onConfirm={() => handleDeleteUser(item.id)}
                                                 onCancel={cancel}
                                                 okText="Yes"
@@ -138,6 +140,12 @@ const AdminProductPage = () => {
 
                 </tbody>
             </Table>
+
+            {/* add */}
+            <AdminModalAddProduct
+                openModalAddProduct={openModalAddProduct}
+                setOpenModalAddProduct={setOpenModalAddProduct}
+            />
         </>
     )
 }

@@ -18,21 +18,6 @@ const AdminModalUpdateUser = (props: IProps) => {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
 
-
-    // const handleEditUser = async () => {
-    //     try {
-    //         if (!userUpdate?.id) {
-    //             toast.error("ID người dùng không hợp lệ");
-    //             return;
-    //         }
-    //         await dispatch(handleUpdateUser({ id: userUpdate.id, data: userUpdate })).unwrap();
-    //         toast.success('Cập nhật người dùng thành công')
-    //         setOpenModalUpdateUser(false);
-    //         form.resetFields(); // dùng để xóa các giá trị sau khi đã submit
-    //     } catch (error: any) {
-    //         toast.error(error || "Lỗi khi cập nhật người dùng");
-    //     }
-    // }
     const handleEditUser = async () => {
         try {
             if (!userUpdate?.id) {
@@ -69,7 +54,7 @@ const AdminModalUpdateUser = (props: IProps) => {
     return (
         <>
             <Modal
-                title="Create a user"
+                title="Cập nhật người dùng"
                 maskClosable={false}
                 closable={{ 'aria-label': 'Custom Close Button' }}
                 open={openModalUpdateUser}
@@ -86,9 +71,9 @@ const AdminModalUpdateUser = (props: IProps) => {
                         autoComplete="off"
                     >
                         <Form.Item
-                            label="Name"
+                            label="Tên"
                             name="name"
-                            rules={[{ required: true, message: 'Please input your name!' }]}
+                            rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
                         >
                             <Input />
                         </Form.Item>
@@ -97,8 +82,8 @@ const AdminModalUpdateUser = (props: IProps) => {
                             label="Email"
                             name="email"
                             rules={[
-                                { required: true, message: 'Please input your email!' },
-                                { type: "email", message: 'Email is not valid!' }
+                                { required: true, message: 'Vui lòng nhập email!' },
+                                { type: "email", message: 'Email không hợp lệ!' }
                             ]}
                         >
                             <Input />

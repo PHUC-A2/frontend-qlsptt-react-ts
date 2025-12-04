@@ -31,7 +31,7 @@ const AdminModalAddUser = (props: IProps) => {
     return (
         <>
             <Modal
-                title="Create a user"
+                title="Tạo mới người dùng"
                 maskClosable={false}
                 closable={{ 'aria-label': 'Custom Close Button' }}
                 open={openModalAddUser}
@@ -48,9 +48,9 @@ const AdminModalAddUser = (props: IProps) => {
                         autoComplete="off"
                     >
                         <Form.Item
-                            label="Name"
+                            label="Tên"
                             name="name"
-                            rules={[{ required: true, message: 'Please input your name!' }]}
+                            rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
                         >
                             <Input />
                         </Form.Item>
@@ -59,17 +59,17 @@ const AdminModalAddUser = (props: IProps) => {
                             label="Email"
                             name="email"
                             rules={[
-                                { required: true, message: 'Please input your email!' },
-                                { type: "email", message: 'Email is not valid!' }
+                                { required: true, message: 'Vui lòng nhập email!' },
+                                { type: "email", message: 'Email không hợp lệ!' }
                             ]}
                         >
                             <Input />
                         </Form.Item>
 
                         <Form.Item
-                            label="Password"
+                            label="Mật khẩu"
                             name="password"
-                            rules={[{ required: true, message: 'Please input your password!' }]}
+                            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
                         >
                             <Input.Password />
                         </Form.Item>

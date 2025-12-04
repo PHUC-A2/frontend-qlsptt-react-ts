@@ -56,7 +56,7 @@ const AdminUserPage = () => {
     }
 
     const cancel: PopconfirmProps['onCancel'] = () => {
-        message.error('Click on No');
+        message.error('Hủy thao tác');
     };
 
     return (
@@ -111,8 +111,8 @@ const AdminUserPage = () => {
                                                 <CiEdit />
                                             </Button>
                                             <Popconfirm
-                                                title="Delete the user"
-                                                description="Are you sure to delete this user?"
+                                                title="Xóa người dùng"
+                                                description="Bạn có chắc muốn xóa người dùng này không?"
                                                 onConfirm={() => handleDeleteUser(item.id)}
                                                 onCancel={cancel}
                                                 okText="Yes"

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { initialState } from "../adapters/productAdapter";
-import { fetchProducts } from "../thunks/productThunks";
+import { fetchProducts, handleCreateProduct } from "../thunks/productThunks";
 import { productsAdapter } from "../adapters/productAdapter";
 
 const productSlice = createSlice({
@@ -22,20 +22,20 @@ const productSlice = createSlice({
             })
             .addCase(fetchProducts.fulfilled, (state, action) => {
                 state.loading = false;
-                productsAdapter.setAll(state, action.payload); // set tất cả users
+                productsAdapter.setAll(state, action.payload); // set tất cả products
             })
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string ?? "Lỗi hệ thống";
             })
 
-        // --- CREATE USER ---
-        // .addCase(handleCreateUser.fulfilled, (state, action) => {
-        //     usersAdapter.addOne(state, action.payload); // thêm user mới vào state
-        // })
-        // .addCase(handleCreateUser.rejected, (state, action) => {
-        //     state.error = action.payload as string ?? "Tạo user thất bại";
-        // })
+            // --- CREATE PRODUCT ---
+            .addCase(handleCreateProduct.fulfilled, (state, action) => {
+                productsAdapter.addOne(state, action.payload); // thêm product mới vào state
+            })
+            .addCase(handleCreateProduct.rejected, (state, action) => {
+                state.error = action.payload as string ?? "Tạo sản phẩm thất bại";
+            })
 
         // // --- REMOVE USER ---
         // .addCase(handleRemoveUser.fulfilled, (state, action) => {
