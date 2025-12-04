@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { initialState } from "../adapters/productAdapter";
-import { fetchProducts, handleCreateProduct } from "../thunks/productThunks";
+import { fetchProducts, handleCreateProduct, handleRemoveProduct } from "../thunks/productThunks";
 import { productsAdapter } from "../adapters/productAdapter";
 
 const productSlice = createSlice({
@@ -37,19 +37,19 @@ const productSlice = createSlice({
                 state.error = action.payload as string ?? "Tạo sản phẩm thất bại";
             })
 
-        // // --- REMOVE USER ---
-        // .addCase(handleRemoveUser.fulfilled, (state, action) => {
-        //     usersAdapter.removeOne(state, action.payload); // action.payload = id của user
-        // })
-        // .addCase(handleRemoveUser.rejected, (state, action) => {
-        //     state.error = action.payload as string ?? "Xóa user thất bại";
-        // })
+            // --- REMOVE PRODUCT ---
+            .addCase(handleRemoveProduct.fulfilled, (state, action) => {
+                productsAdapter.removeOne(state, action.payload); // action.payload = id của user
+            })
+            .addCase(handleRemoveProduct.rejected, (state, action) => {
+                state.error = action.payload as string ?? "Xóa sản phẩm thất bại";
+            })
 
-        // // --- GET USER BY ID ---
-        // .addCase(handleFindUserById.fulfilled, (state, action) => {
+        // --- GET PRODUCT BY ID ---
+        // .addCase(handleFindProductById.fulfilled, (state, action) => {
         //     state.selectedUser = action.payload; // lưu user chi tiết
         // })
-        // .addCase(handleFindUserById.rejected, (state, action) => {
+        // .addCase(handleFindProductById.rejected, (state, action) => {
         //     state.error = action.payload as string ?? "Lấy user thất bại";
         // })
 

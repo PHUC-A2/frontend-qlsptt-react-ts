@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createProduct, getAllProducts } from "../../config/Api";
+import { createProduct, deleteProduct, getAllProducts } from "../../config/Api";
 import type { ICreateProductReq } from "../../types/product";
 
 export const fetchProducts = createAsyncThunk(
@@ -10,7 +10,7 @@ export const fetchProducts = createAsyncThunk(
             if (res.data?.status === 200) {
                 return res.data?.data || [];
             }
-            return rejectWithValue("Lấy người dùng thất bại");
+            return rejectWithValue("Lấy sản phẩm thất bại");
         } catch (error: any) {
             console.log("Lỗi hệ thống: ", error);
             return rejectWithValue(error?.response?.data?.message || "Lỗi hệ thống");
@@ -26,10 +26,42 @@ export const handleCreateProduct = createAsyncThunk(
             if (res.data?.status === 201) {
                 return res.data?.data;
             }
-            return rejectWithValue("Lấy người dùng thất bại");
+            return rejectWithValue("Tạo mới sản phẩm thất bại");
         } catch (error: any) {
             console.log("Lỗi hệ thống: ", error);
             return rejectWithValue(error?.response?.data?.message || "Lỗi hệ thống");
         }
     }
 );
+
+export const handleRemoveProduct = createAsyncThunk(
+    'product/deleteProduct',
+    async (id: number, { rejectWithValue }) => {
+        try {
+            const res = await deleteProduct(id);
+            if (res.data?.status === 200) {
+                return id;
+            }
+            return rejectWithValue("Xóa sản phẩm thất bại");
+        } catch (error: any) {
+            console.log("Lỗi hệ thống: ", error);
+            return rejectWithValue(error?.response?.data?.message || "Lỗi hệ thống");
+        }
+    }
+);
+
+// export const handleFindProductById = createAsyncThunk(
+//     'product/findProductById',
+//     async (id: number, { rejectWithValue }) => {
+//         try {
+//             const res = await getProductById(id);
+//             if (res.data?.status === 200) {
+//                 return id;
+//             }
+//             return rejectWithValue("Lấy sản phẩm thất bại");
+//         } catch (error: any) {
+//             console.log("Lỗi hệ thống: ", error);
+//             return rejectWithValue(error?.response?.data?.message || "Lỗi hệ thống");
+//         }
+//     }
+// );

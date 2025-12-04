@@ -7,8 +7,9 @@ import { MdDelete } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { productSelectors } from "../../../redux/selectors/productSelectors";
 import { useEffect, useState } from "react";
-import { fetchProducts } from "../../../redux/thunks/productThunks";
+import { fetchProducts, handleRemoveProduct } from "../../../redux/thunks/productThunks";
 import AdminModalAddProduct from "./modal/AdminModalAddProduct";
+import { toast } from "react-toastify";
 
 const AdminProductPage = () => {
     const listProducts = useAppSelector(productSelectors.selectAll);
@@ -19,15 +20,15 @@ const AdminProductPage = () => {
         dispatch(fetchProducts());
     }, []);
 
-    // xóa user
-    // const handleDeleteUser = async (id: number) => {
-    //     try {
-    //         await dispatch(handleRemoveUser(id)).unwrap();
-    //         toast.success("Xóa người dùng thành công")
-    //     } catch (error: any) {
-    //         toast.error(error || "Lỗi khi xóa người dùng")
-    //     }
-    // }
+    // xóa product
+    const handleDeleteProduct = async (id: number) => {
+        try {
+            await dispatch(handleRemoveProduct(id)).unwrap();
+            toast.success("Xóa sản phẩm thành công")
+        } catch (error: any) {
+            toast.error(error || "Lỗi khi xóa sản phẩm")
+        }
+    }
 
     // // lấy user 
     // const handleGetUserDetails = async (id: number) => {
@@ -116,7 +117,7 @@ const AdminProductPage = () => {
                                             <Popconfirm
                                                 title="Xóa sản phẩm"
                                                 description="Bạn có chắc muốn xóa sản phẩm này không?"
-                                                // onConfirm={() => handleDeleteUser(item.id)}
+                                                onConfirm={() => handleDeleteProduct(item.id)}
                                                 onCancel={cancel}
                                                 okText="Yes"
                                                 cancelText="No"

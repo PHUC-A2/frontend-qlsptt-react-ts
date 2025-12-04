@@ -22,3 +22,4 @@ export const updateUser = (id: number, data: IUpdateUserReq) => instance.put(`ap
 /* api product */
 export const getAllProducts = () => instance.get(`api/v1/products`);
 export const createProduct = (data: ICreateProductReq) => instance.post(`api/v1/products`, data);
+export const deleteProduct = (id: number) => instance.delete(`api/v1/products/${id}`);
