@@ -17,6 +17,7 @@ import { Link } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { productSelectors } from "../../../redux/selectors/productSelectors";
 import { fetchProducts } from "../../../redux/thunks/productThunks";
+import type { IProduct } from "../../../types/product";
 
 const PRIMARY_BACKGROUND = "#a6b4c2ff";
 const TITLE_COLOR = "#faad14";
@@ -56,6 +57,7 @@ const { Title } = Typography;
 const ProductPage = () => {
     const dispatch = useAppDispatch();
     const listProducts = useAppSelector(productSelectors.selectAll);
+    const searchTerm = useAppSelector(state => state.search.term);
 
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -83,6 +85,16 @@ const ProductPage = () => {
         }
         window.scrollTo({ top: 350, behavior: 'smooth' });
     };
+
+    // tìm kiếm
+    const filteredProducts = currentProducts.filter((p: IProduct) => {
+        return (
+            (p.name ?? "").toLowerCase().includes(searchTerm) ||
+            (p.type ?? "").toLowerCase().includes(searchTerm) ||
+            p.price?.toString().includes(searchTerm) ||
+            p.quantity?.toString().includes(searchTerm)
+        );
+    });
 
     return (
         <Layout style={{
@@ -120,8 +132,8 @@ const ProductPage = () => {
                         animate="visible"
                     >
                         <Row gutter={[24, 24]}>
-                            {currentProducts.length > 0 ? (
-                                currentProducts.map((product) => (
+                            {filteredProducts.length > 0 ? (
+                                filteredProducts.map((product) => (
                                     <Col xs={12} sm={12} md={8} lg={6} xl={4} key={product.id}>
                                         <motion.div
                                             variants={cardVariants}

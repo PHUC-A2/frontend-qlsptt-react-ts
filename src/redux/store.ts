@@ -3,12 +3,14 @@ import authReducer from './features/authSlice'
 import userReducer from './features/userSlice'
 import productReducer from './features/productSlice'
 import profileReducer from './features/profileSlice'
+import searchReducer from './features/searchSlice'
 export const store = configureStore({
     reducer: {
         auth: authReducer,
         profile: profileReducer,
         user: userReducer,
         product: productReducer,
+        search: searchReducer,
     }
 })
 

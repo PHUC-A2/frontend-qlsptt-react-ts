@@ -19,15 +19,23 @@ import { setLogoutUser } from '../../redux/features/authSlice';
 import { toast } from 'react-toastify';
 import { logout } from '../../config/Api';
 import ModalProfile from '../../pages/auth/modal/ModalProfile';
+import { setSearchTerm } from '../../redux/features/searchSlice';
+import type { SearchProps } from 'antd/es/input';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
 const Header = () => {
 
     const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
+    const searchTerm = useAppSelector((state) => state.search.term);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [openModalProfile, setOpenModalProfile] = useState<boolean>(false);
+
+    const onSearch: SearchProps['onSearch'] = () => {
+        const targetPath = location.pathname === '/product' ? '/product' : '/';
+        navigate(targetPath);
+    };
 
     // đăng xuất
     const handleLogout = async () => {
@@ -157,7 +165,9 @@ const Header = () => {
                             placeholder="Tìm kiếm sản phẩm..."
                             allowClear
                             size='large'
-                            // onSearch={onSearch}
+                            onSearch={onSearch}
+                            value={searchTerm}
+                            onChange={(e) => dispatch(setSearchTerm(e.target.value))}
                             enterButton={<SearchOutlined />}
                         />
                     </Col>
