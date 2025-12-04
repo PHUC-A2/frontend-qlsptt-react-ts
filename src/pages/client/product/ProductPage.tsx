@@ -1,6 +1,5 @@
 import {
     Card,
-    Carousel,
     Col,
     Empty,
     Image,
@@ -14,33 +13,15 @@ import {
 } from "antd";
 import { motion, type Variants } from "framer-motion";
 import { useEffect, useState, useMemo } from "react";
-import { Link } from "react-router"; // Đã sửa Link từ "react-router" sang "react-router-dom"
+import { Link } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { productSelectors } from "../../../redux/selectors/productSelectors";
 import { fetchProducts } from "../../../redux/thunks/productThunks";
 
 const PRIMARY_BACKGROUND = "#a6b4c2ff";
 const TITLE_COLOR = "#faad14";
-const TEXT_COLOR = "#faad14"; // Màu vàng cam (sẽ dùng cho giá)
+const TEXT_COLOR = "#faad14";
 
-// --- Hàm tiện ích: Tạo số nguyên ngẫu nhiên trong khoảng [min, max] ---
-const createRandomInt = (min: number, max: number): number => {
-    const minCeiled = Math.ceil(min);
-    const maxFloored = Math.floor(max);
-    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
-};
-
-// --- Hàm tiện ích: Tạo mảng N số ngẫu nhiên ---
-const generateRandomArray = (length: number, min: number, max: number): number[] => {
-    return Array.from({ length }, () => createRandomInt(min, max));
-};
-
-
-const { Content } = Layout;
-const { Meta } = Card;
-const { Title } = Typography;
-
-// --- 1. Định nghĩa các Variants cho Animation ---
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -66,7 +47,13 @@ const cardVariants: Variants = {
     },
 };
 
-const HomePage = () => {
+
+const { Content } = Layout;
+const { Meta } = Card;
+const { Title } = Typography;
+
+
+const ProductPage = () => {
     const dispatch = useAppDispatch();
     const listProducts = useAppSelector(productSelectors.selectAll);
 
@@ -75,25 +62,18 @@ const HomePage = () => {
     const [pageSize, setPageSize] = useState(12);
     const totalProducts = listProducts.length;
 
-    // --- TẠO MẢNG NGẪU NHIÊN CHO CAROUSEL ---
-    const randomCarouselIndexes = useMemo(() => {
-        return generateRandomArray(10, 1, 50);
-    }, []);
-
     useEffect(() => {
         setLoading(true);
         dispatch(fetchProducts())
             .finally(() => setLoading(false));
     }, [dispatch]);
 
-    // --- Tính toán dữ liệu hiển thị trên trang hiện tại ---
     const currentProducts = useMemo(() => {
         const startIndex = (currentPage - 1) * pageSize;
         const endIndex = startIndex + pageSize;
         return listProducts.slice(startIndex, endIndex);
     }, [listProducts, currentPage, pageSize]);
 
-    // --- Hàm xử lý thay đổi trang/pageSize ---
     const handlePageChange = (page: number, newSize: number) => {
         if (newSize !== pageSize) {
             setPageSize(newSize);
@@ -108,59 +88,31 @@ const HomePage = () => {
         <Layout style={{
             marginTop: 103,
             minHeight: "100vh",
-            background: PRIMARY_BACKGROUND // ÁP DỤNG MÀU NỀN CHÍNH
+            background: PRIMARY_BACKGROUND
         }}>
             <Content
                 style={{
                     padding: "24px 15px 15px 15px",
                     maxWidth: 1500,
                     margin: "0 auto",
-                    width: "100%"
+                    width: "100%",
+                    color: TEXT_COLOR
                 }}
             >
-
-                {/* ---------------------- CAROUSEL ---------------------- */}
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                >
-                    <Carousel autoplay arrows autoplaySpeed={2500} style={{ marginBottom: 24 }}>
-                        {randomCarouselIndexes.map((i) => (
-                            <div key={i}>
-                                <img
-                                    src={`https://picsum.photos/seed/slide${i}/1200/600`}
-                                    alt={`slide-${i}`}
-                                    style={{
-                                        width: "100%",
-                                        height: "50vh",
-                                        maxHeight: "400px",
-                                        minHeight: "200px",
-                                        objectFit: "cover",
-                                        borderRadius: 12,
-                                    }}
-                                />
-                            </div>
-                        ))}
-                    </Carousel>
-                </motion.div>
-
-                {/* ---------------------- TIÊU ĐỀ SẢN PHẨM ---------------------- */}
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
+                    transition={{ duration: 0.6 }}
                 >
-                    <Title level={3} style={{
+                    <Title level={2} style={{
                         marginBottom: 24,
                         textTransform: "uppercase",
-                        color: TITLE_COLOR // ÁP DỤNG MÀU TIÊU ĐỀ
+                        color: TITLE_COLOR
                     }}>
-                        Danh Mục Sản Phẩm
+                        Tất Cả Sản Phẩm
                     </Title>
                 </motion.div>
 
-                {/* ---------------------- DANH SÁCH SẢN PHẨM ---------------------- */}
                 <Spin spinning={loading} size="large">
                     <motion.div
                         variants={containerVariants}
@@ -189,20 +141,18 @@ const HomePage = () => {
                                                     height: "100%",
                                                     borderRadius: 16,
                                                     overflow: "hidden",
-                                                    // Giữ màu nền Card là trắng/sáng nếu PRIMARY_BACKGROUND là màu trung tính
+                                                    background: "#2C3E50"
                                                 }}
                                                 styles={{ body: { padding: "16px" } }}
                                                 cover={
-                                                    <div style={{ overflow: "hidden", height: 200, padding: 12 }}>
+                                                    <div style={{ overflow: "hidden", height: 200, padding: 12, background: 'white' }}>
                                                         <Image
                                                             src={product.image_url}
                                                             alt={product.name}
                                                             preview={{ mask: "Xem chi tiết" }}
                                                             height={"100%"}
                                                             width={"100%"}
-                                                            style={{
-                                                                objectFit: "contain",
-                                                            }}
+                                                            style={{ objectFit: "contain" }}
                                                         />
                                                     </div>
                                                 }
@@ -216,7 +166,7 @@ const HomePage = () => {
                                                                 whiteSpace: "nowrap",
                                                                 overflow: "hidden",
                                                                 textOverflow: "ellipsis",
-                                                                color: "#2c3e50" // Giữ màu chữ sản phẩm tối nếu nền Card sáng
+                                                                color: TEXT_COLOR
                                                             }}>
                                                                 {product.name}
                                                             </div>
@@ -224,7 +174,7 @@ const HomePage = () => {
                                                         description={
                                                             <div style={{ marginTop: 8 }}>
                                                                 <span style={{
-                                                                    color: TEXT_COLOR, // ÁP DỤNG MÀU TEXT_COLOR cho GIÁ
+                                                                    color: TITLE_COLOR,
                                                                     fontSize: "18px",
                                                                     fontWeight: "bold"
                                                                 }}>
@@ -236,8 +186,12 @@ const HomePage = () => {
                                                 </Link>
 
                                                 <div style={{ marginTop: 12, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                                    <Rate disabled defaultValue={4} style={{ fontSize: 12, color: TEXT_COLOR }} /> {/* ÁP DỤNG MÀU TEXT_COLOR cho Rate */}
-                                                    <span style={{ fontSize: 12, color: "#888" }}>Đã bán 1k+</span>
+                                                    <Rate
+                                                        disabled
+                                                        defaultValue={4}
+                                                        style={{ fontSize: 12, color: TITLE_COLOR }}
+                                                    />
+                                                    <span style={{ fontSize: 12, color: TEXT_COLOR }}>Đã bán 1k+</span>
                                                 </div>
                                             </Card>
                                         </motion.div>
@@ -257,7 +211,11 @@ const HomePage = () => {
                                                 justifyContent: "center",
                                             }}
                                         >
-                                            <Empty description="Không tìm thấy sản phẩm nào" />
+                                            <Empty
+                                                description={
+                                                    <span style={{ color: TEXT_COLOR }}>Không tìm thấy sản phẩm nào</span>
+                                                }
+                                            />
                                         </Space>
                                     </motion.div>
                                 </Col>
@@ -266,7 +224,6 @@ const HomePage = () => {
                     </motion.div>
                 </Spin>
 
-                {/* ---------------------- PHÂN TRANG ---------------------- */}
                 {totalProducts > 0 && (
                     <Row justify="center" style={{ marginTop: 32, marginBottom: 32 }}>
                         <Pagination
@@ -277,6 +234,7 @@ const HomePage = () => {
                             pageSizeOptions={[4, 8, 12, 16, 20, 24]}
                             onChange={handlePageChange}
                             showTotal={(total, range) => `${range[0]}-${range[1]} của ${total} sản phẩm`}
+                            style={{ color: TEXT_COLOR }}
                         />
                     </Row>
                 )}
@@ -285,4 +243,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default ProductPage;

@@ -9,6 +9,8 @@ import AdminLayout from "../layouts/AdminLayout";
 import AdminPage from "../pages/admin/AdminPage";
 import AdminUserPage from "../pages/admin/user/AdminUserPage";
 import AdminProductPage from "../pages/admin/product/AdminProductPage";
+import ProductPage from "../pages/client/product/ProductPage";
+import AboutPage from "../pages/client/about/AboutPage";
 
 const router = createBrowserRouter([
     // client
@@ -17,7 +19,8 @@ const router = createBrowserRouter([
         element: <ClientLayout />,
         children: [
             { index: true, element: <HomePage /> },
-            { path: "/news", element: "" },
+            { path: "/product", element: <ProductPage /> },
+            { path: "/about", element: <AboutPage /> },
             { path: "/feedback", element: "" },
             { path: "/cart", element: "" },
         ]

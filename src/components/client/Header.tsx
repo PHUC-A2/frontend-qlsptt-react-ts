@@ -57,12 +57,12 @@ const Header = () => {
             icon: <HiHome className='header-home-icon' style={{ fontSize: 16 }} />,
         },
         {
-            label: <Link className='text-decoration-none' to={"#product"}>Sản Phẩm</Link>,
+            label: <Link className='text-decoration-none' to={"product"}>Sản Phẩm</Link>,
             key: 'product',
             icon: <FaTshirt className='header-product-icon' style={{ fontSize: 16 }} />,
         },
         {
-            label: <Link className='text-decoration-none' to={"#about"}>Giới thiệu</Link>,
+            label: <Link className='text-decoration-none' to={"about"}>Giới thiệu</Link>,
             key: 'about',
             icon: <RiInfoCardLine className='header-about-icon' style={{ fontSize: 16 }} />,
         },
