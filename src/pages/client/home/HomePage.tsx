@@ -5,7 +5,7 @@ import {
     Empty,
     Image,
     Layout,
-    Pagination, // Đã import
+    Pagination,
     Rate,
     Row,
     Space,
@@ -13,18 +13,31 @@ import {
     Typography
 } from "antd";
 import { motion, type Variants } from "framer-motion";
-import { useEffect, useState, useMemo } from "react"; // Thêm useMemo
+import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { productSelectors } from "../../../redux/selectors/productSelectors";
 import { fetchProducts } from "../../../redux/thunks/productThunks";
+
+// --- Hàm tiện ích: Tạo số nguyên ngẫu nhiên trong khoảng [min, max] ---
+const createRandomInt = (min: number, max: number): number => {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    // Công thức tạo số nguyên ngẫu nhiên
+    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+};
+
+// --- Hàm tiện ích: Tạo mảng N số ngẫu nhiên ---
+const generateRandomArray = (length: number, min: number, max: number): number[] => {
+    return Array.from({ length }, () => createRandomInt(min, max));
+};
+
 
 const { Content } = Layout;
 const { Meta } = Card;
 const { Title } = Typography;
 
 // --- 1. Định nghĩa các Variants cho Animation ---
-
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -54,11 +67,18 @@ const HomePage = () => {
     const dispatch = useAppDispatch();
     const listProducts = useAppSelector(productSelectors.selectAll);
 
-    // --- Bổ sung State cho Phân trang ---
+    // --- Bổ sung State cho Phân trang (Giữ nguyên) ---
     const [loading, setLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại, mặc định là 1
-    const [pageSize, setPageSize] = useState(12); // Số lượng sản phẩm trên mỗi trang, mặc định 12 (2 dòng x 6 cột)
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(12);
     const totalProducts = listProducts.length;
+
+    // --- TẠO MẢNG NGẪU NHIÊN CHO CAROUSEL ---
+    const randomCarouselIndexes = useMemo(() => {
+        // Tạo mảng 10 số ngẫu nhiên, ví dụ từ 1 đến 50 (để đảm bảo đa dạng ảnh)
+        // Bạn có thể điều chỉnh phạm vi (min, max) này.
+        return generateRandomArray(10, 1, 50);
+    }, []); // Dependency rỗng: chỉ chạy MỘT LẦN khi component được mount
 
     useEffect(() => {
         setLoading(true);
@@ -66,60 +86,63 @@ const HomePage = () => {
             .finally(() => setLoading(false));
     }, [dispatch]);
 
-    // --- Tính toán dữ liệu hiển thị trên trang hiện tại ---
+    // --- Tính toán dữ liệu hiển thị trên trang hiện tại (Giữ nguyên) ---
     const currentProducts = useMemo(() => {
         const startIndex = (currentPage - 1) * pageSize;
         const endIndex = startIndex + pageSize;
         return listProducts.slice(startIndex, endIndex);
     }, [listProducts, currentPage, pageSize]);
 
-    // --- Hàm xử lý thay đổi trang/pageSize ---
+    // --- Hàm xử lý thay đổi trang/pageSize (Giữ nguyên) ---
     const handlePageChange = (page: number, newSize: number) => {
-        // Nếu pageSize thay đổi, đặt lại trang về 1
         if (newSize !== pageSize) {
             setPageSize(newSize);
             setCurrentPage(1);
         } else {
             setCurrentPage(page);
         }
-        // Cuộn lên đầu danh sách sản phẩm (tùy chọn)
         window.scrollTo({ top: 350, behavior: 'smooth' });
     };
 
     return (
         <Layout style={{ marginTop: 103, minHeight: "100vh", background: "#f5f5f5" }}>
-            <Content style={{ padding: "24px", maxWidth: 1400, margin: "0 auto", width: "100%" }}>
+            <Content
+                style={{
+                    padding: "24px 15px 15px 15px",
+                    maxWidth: 1500,
+                    margin: "0 auto",
+                    width: "100%"
+                }}
+            >
 
-                {/* ---------------------- CAROUSEL ---------------------- */}
+                {/* ---------------------- CAROUSEL (ĐÃ DÙNG MẢNG NGẪU NHIÊN) ---------------------- */}
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <Carousel autoplay arrows autoplaySpeed={3000} style={{ marginBottom: 32 }}>
-                        {[1, 2, 3, 5, 33].map((i) => (
+                    <Carousel autoplay arrows autoplaySpeed={2500} style={{ marginBottom: 24 }}>
+                        {/* SỬ DỤNG MẢNG NGẪU NHIÊN Ở ĐÂY */}
+                        {randomCarouselIndexes.map((i) => (
                             <div key={i}>
-                                <div style={{ padding: "0 4px" }}>
-                                    <img
-                                        src={`https://picsum.photos/seed/slide${i}/1200/600`}
-                                        alt={`slide-${i}`}
-                                        style={{
-                                            width: "100%",
-                                            height: "50vh",
-                                            maxHeight: "450px",
-                                            minHeight: "250px",
-                                            objectFit: "cover",
-                                            borderRadius: 20,
-                                            boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
-                                        }}
-                                    />
-                                </div>
+                                <img
+                                    src={`https://picsum.photos/seed/slide${i}/1200/600`}
+                                    alt={`slide-${i}`}
+                                    style={{
+                                        width: "100%",
+                                        height: "50vh",
+                                        maxHeight: "400px",
+                                        minHeight: "200px",
+                                        objectFit: "cover",
+                                        borderRadius: 12,
+                                    }}
+                                />
                             </div>
                         ))}
                     </Carousel>
                 </motion.div>
 
-                {/* ---------------------- DANH MỤC ---------------------- */}
+                {/* ---------------------- CÁC PHẦN KHÁC (Giữ nguyên) ---------------------- */}
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -137,7 +160,6 @@ const HomePage = () => {
                         animate="visible"
                     >
                         <Row gutter={[24, 24]}>
-                            {/* Dùng currentProducts thay vì listProducts */}
                             {currentProducts.length > 0 ? (
                                 currentProducts.map((product) => (
                                     <Col xs={12} sm={12} md={8} lg={6} xl={4} key={product.id}>
@@ -235,14 +257,12 @@ const HomePage = () => {
                     </motion.div>
                 </Spin>
 
-                {/* ---------------------- PHÂN TRANG ---------------------- */}
-                {/* Chỉ hiển thị Pagination nếu có sản phẩm */}
                 {totalProducts > 0 && (
                     <Row justify="center" style={{ marginTop: 32, marginBottom: 32 }}>
                         <Pagination
                             current={currentPage}
                             pageSize={pageSize}
-                            total={totalProducts} // Tổng số lượng sản phẩm
+                            total={totalProducts}
                             showSizeChanger
                             pageSizeOptions={[4, 8, 12, 16, 20, 24]}
                             onChange={handlePageChange}
