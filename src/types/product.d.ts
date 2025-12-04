@@ -18,3 +18,12 @@ export interface ICreateProductReq {
     price: number;
     quantity: number;
 }
+
+export interface IUpdateProductReq {
+    name: string;
+    image_url: string;
+    description: string;
+    type: string;
+    price: number;
+    quantity: number;
+}

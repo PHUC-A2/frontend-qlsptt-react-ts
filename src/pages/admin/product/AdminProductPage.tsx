@@ -7,14 +7,21 @@ import { MdDelete } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { productSelectors } from "../../../redux/selectors/productSelectors";
 import { useEffect, useState } from "react";
-import { fetchProducts, handleRemoveProduct } from "../../../redux/thunks/productThunks";
+import { fetchProducts, handleFindProductById, handleRemoveProduct } from "../../../redux/thunks/productThunks";
 import AdminModalAddProduct from "./modal/AdminModalAddProduct";
 import { toast } from "react-toastify";
+import AdminModalGetProductDetails from "./modal/AdminModalGetProductDetails";
+import type { IProduct } from "../../../types/product";
+import AdminModalUpdateProduct from "./modal/AdminModalUpdateProduct";
 
 const AdminProductPage = () => {
     const listProducts = useAppSelector(productSelectors.selectAll);
     const dispatch = useAppDispatch();
     const [openModalAddProduct, setOpenModalAddProduct] = useState<boolean>(false);
+    const [openModalGetProductDetails, setOpenModalGetProductDetails] = useState<boolean>(false);
+    const [openModalUpdateProduct, setOpenModalUpdateProduct] = useState<boolean>(false);
+    const [product, setProduct] = useState<IProduct | null>(null);
+    const [productUpdate, setProductUpdate] = useState<IProduct | null>(null);
 
     useEffect(() => {
         dispatch(fetchProducts());
@@ -30,23 +37,22 @@ const AdminProductPage = () => {
         }
     }
 
-    // // lấy user 
-    // const handleGetUserDetails = async (id: number) => {
-    //     try {
-    //         setOpenModalGetUserDetails(true);
-    //         const data = await dispatch(handleFindUserById(id)).unwrap();
-    //         setUser(data);
-    //         // console.log("User vừa lấy:", data);
-    //     } catch (error: any) {
-    //         toast.error(error || "Lỗi khi lấy người dùng")
-    //         console.error("Lấy user thất bại:", error);
-    //     }
-    // }
+    // lấy product 
+    const handleGetProductDetails = async (id: number) => {
+        try {
+            setOpenModalGetProductDetails(true);
+            const data = await dispatch(handleFindProductById(id)).unwrap();
+            setProduct(data);
+        } catch (error: any) {
+            toast.error(error || "Lỗi khi lấy sản phẩm")
+            console.error("Lấy sản phẩm thất bại:", error);
+        }
+    }
 
-    // const handleEditUser = (data:IUser) => {
-    //     setUserUpdate(data);
-    //     setOpenModalUpdateUser(true);
-    // }
+    const handleEditProduct = (data: IProduct) => {
+        setProductUpdate(data);
+        setOpenModalUpdateProduct(true);
+    }
 
     const cancel: PopconfirmProps['onCancel'] = () => {
         message.error('Hủy thao tác');
@@ -104,13 +110,13 @@ const AdminProductPage = () => {
                                         <div className="d-flex justify-content-evenly">
                                             <Button
                                                 variant="outline-success"
-                                            // onClick={() => handleGetUserDetails(item.id)}
+                                                onClick={() => handleGetProductDetails(item.id)}
                                             >
                                                 <FaRegEye />
                                             </Button>
                                             <Button
                                                 variant="outline-dark"
-                                            // onClick={() => handleEditUser(item)}
+                                                onClick={() => handleEditProduct(item)}
                                             >
                                                 <CiEdit />
                                             </Button>
@@ -146,6 +152,20 @@ const AdminProductPage = () => {
             <AdminModalAddProduct
                 openModalAddProduct={openModalAddProduct}
                 setOpenModalAddProduct={setOpenModalAddProduct}
+            />
+
+            {/* details */}
+            <AdminModalGetProductDetails
+                openModalGetProductDetails={openModalGetProductDetails}
+                setOpenModalGetProductDetails={setOpenModalGetProductDetails}
+                product={product}
+            />
+
+            {/* update */}
+            <AdminModalUpdateProduct
+                openModalUpdateProduct={openModalUpdateProduct}
+                setOpenModalUpdateProduct={setOpenModalUpdateProduct}
+                productUpdate={productUpdate}
             />
         </>
     )

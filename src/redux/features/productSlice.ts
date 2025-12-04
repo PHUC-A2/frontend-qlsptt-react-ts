@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { initialState } from "../adapters/productAdapter";
-import { fetchProducts, handleCreateProduct, handleRemoveProduct } from "../thunks/productThunks";
+import { fetchProducts, handleCreateProduct, handleFindProductById, handleRemoveProduct, handleUpdateProduct } from "../thunks/productThunks";
 import { productsAdapter } from "../adapters/productAdapter";
 
 const productSlice = createSlice({
@@ -39,31 +39,31 @@ const productSlice = createSlice({
 
             // --- REMOVE PRODUCT ---
             .addCase(handleRemoveProduct.fulfilled, (state, action) => {
-                productsAdapter.removeOne(state, action.payload); // action.payload = id của user
+                productsAdapter.removeOne(state, action.payload); // action.payload = id của product
             })
             .addCase(handleRemoveProduct.rejected, (state, action) => {
                 state.error = action.payload as string ?? "Xóa sản phẩm thất bại";
             })
 
-        // --- GET PRODUCT BY ID ---
-        // .addCase(handleFindProductById.fulfilled, (state, action) => {
-        //     state.selectedUser = action.payload; // lưu user chi tiết
-        // })
-        // .addCase(handleFindProductById.rejected, (state, action) => {
-        //     state.error = action.payload as string ?? "Lấy user thất bại";
-        // })
+            // --- GET PRODUCT BY ID ---
+            .addCase(handleFindProductById.fulfilled, (state, action) => {
+                state.selectedProduct = action.payload; // lưu product chi tiết
+            })
+            .addCase(handleFindProductById.rejected, (state, action) => {
+                state.error = action.payload as string ?? "Lấy product thất bại";
+            })
 
-        // // --- PUT UPDATE USER ---
-        // .addCase(handleUpdateUser.fulfilled, (state, action) => {
-        //     // Cập nhật vào danh sách user
-        //     usersAdapter.upsertOne(state, action.payload);
+            // --- PUT UPDATE PRODUCT ---
+            .addCase(handleUpdateProduct.fulfilled, (state, action) => {
+                // Cập nhật vào danh sách product
+                productsAdapter.upsertOne(state, action.payload);
 
-        //     // Nếu đang xem chi tiết user -> cập nhật luôn
-        //     state.selectedUser = action.payload;
-        // })
-        // .addCase(handleUpdateUser.rejected, (state, action) => {
-        //     state.error = (action.payload as string) ?? "Cập nhật người dùng thất bại";
-        // });
+                // Nếu đang xem chi tiết product -> cập nhật luôn
+                state.selectedProduct = action.payload;
+            })
+            .addCase(handleUpdateProduct.rejected, (state, action) => {
+                state.error = (action.payload as string) ?? "Cập nhật sản phẩm thất bại";
+            });
     }
 });
 

@@ -1,5 +1,5 @@
 import type { IRegisterReq } from "../types/auth";
-import type { ICreateProductReq } from "../types/product";
+import type { ICreateProductReq, IUpdateProductReq } from "../types/product";
 import type { ICreateUserReq, IUpdateUserReq } from "../types/user";
 import instance from "./customAxios";
 
@@ -23,3 +23,5 @@ export const updateUser = (id: number, data: IUpdateUserReq) => instance.put(`ap
 export const getAllProducts = () => instance.get(`api/v1/products`);
 export const createProduct = (data: ICreateProductReq) => instance.post(`api/v1/products`, data);
 export const deleteProduct = (id: number) => instance.delete(`api/v1/products/${id}`);
+export const getProductById = (id: number) => instance.get(`api/v1/products/${id}`);
+export const updateProduct = (id: number, data: IUpdateProductReq) => instance.put(`api/v1/products/${id}`,data);
