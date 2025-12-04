@@ -1,4 +1,4 @@
-import { Empty, message, Popconfirm, type PopconfirmProps } from "antd";
+import { Empty, Input, message, Popconfirm, type PopconfirmProps } from "antd";
 import { Button, Table } from "react-bootstrap";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import AdminModalGetUserDetails from "./modal/AdminModalGetUserDetails";
 import type { IUser } from "../../../types/user";
 import AdminModalUpdateUser from "./modal/AdminModalUpdateUser";
+const { TextArea } = Input;
 
 const AdminUserPage = () => {
     const listUsers = useAppSelector(userSelectors.selectAll);
@@ -22,6 +23,19 @@ const AdminUserPage = () => {
     const [openModalGetUserDetails, setOpenModalGetUserDetails] = useState<boolean>(false);
     const [user, setUser] = useState<IUser | null>(null);
     const [userUpdate, setUserUpdate] = useState<IUser | null>(null);
+
+    // tìm kiếm
+    // tìm kiếm
+    const [searchTerm, setSearchTerm] = useState("");
+    const term = searchTerm.toLowerCase();
+
+    const filteredUsers = listUsers.filter((u: IUser) => {
+        return (
+            (u.name ?? "").toLowerCase().includes(term) ||
+            (u.email ?? "").toLowerCase().includes(term)
+
+        );
+    });
 
     useEffect(() => {
         dispatch(fetchUsers());
@@ -65,6 +79,16 @@ const AdminUserPage = () => {
                 <thead>
                     <tr>
                         <th colSpan={5}>
+                            <TextArea
+                                placeholder="Tìm kiếm theo name,email..."
+                                autoSize
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colSpan={5}>
                             <div className="d-flex justify-content-between align-items-center">
                                 <h2>Bảng Người Dùng</h2>
                                 <div>
@@ -88,9 +112,9 @@ const AdminUserPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {listUsers.length > 0 ?
+                    {filteredUsers.length > 0 ?
                         (
-                            listUsers.map((item, index) => (
+                            filteredUsers.map((item: IUser, index: number) => (
                                 <tr key={item.id + 1}>
                                     <th>{index}</th>
                                     <td>{item.id}</td>

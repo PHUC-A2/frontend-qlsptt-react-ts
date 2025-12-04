@@ -1,4 +1,4 @@
-import { Empty, Image, message, Popconfirm, type PopconfirmProps } from "antd";
+import { Empty, Image, Input, message, Popconfirm, type PopconfirmProps } from "antd";
 import { Button, Table } from "react-bootstrap";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import AdminModalGetProductDetails from "./modal/AdminModalGetProductDetails";
 import type { IProduct } from "../../../types/product";
 import AdminModalUpdateProduct from "./modal/AdminModalUpdateProduct";
+const { TextArea } = Input;
 
 const AdminProductPage = () => {
     const listProducts = useAppSelector(productSelectors.selectAll);
@@ -22,6 +23,20 @@ const AdminProductPage = () => {
     const [openModalUpdateProduct, setOpenModalUpdateProduct] = useState<boolean>(false);
     const [product, setProduct] = useState<IProduct | null>(null);
     const [productUpdate, setProductUpdate] = useState<IProduct | null>(null);
+
+    // tìm kiếm
+    const [searchTerm, setSearchTerm] = useState("");
+    const term = searchTerm.toLowerCase();
+
+    const filteredProducts = listProducts.filter((p: IProduct) => {
+        return (
+            (p.name ?? "").toLowerCase().includes(term) ||
+            (p.type ?? "").toLowerCase().includes(term) ||
+            p.price?.toString().includes(term) ||
+            p.quantity?.toString().includes(term)
+        );
+    });
+
 
     useEffect(() => {
         dispatch(fetchProducts());
@@ -58,10 +73,21 @@ const AdminProductPage = () => {
         message.error('Hủy thao tác');
     };
 
+
     return (
         <>
             <Table striped bordered hover size="sm">
                 <thead>
+                    <tr>
+                        <th colSpan={8}>
+                            <TextArea
+                                placeholder="Tìm kiếm theo name, type, price, quantity..."
+                                autoSize
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </th>
+                    </tr>
                     <tr>
                         <th colSpan={8}>
                             <div className="d-flex justify-content-between align-items-center">
@@ -90,9 +116,9 @@ const AdminProductPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {listProducts.length > 0 ?
+                    {filteredProducts.length > 0 ?
                         (
-                            listProducts.map((item, index) => (
+                            filteredProducts.map((item: IProduct, index: number) => (
                                 <tr key={item.id}>
                                     <th>{index + 1}</th>
                                     <td>{item.id}</td>
@@ -151,7 +177,7 @@ const AdminProductPage = () => {
                         )
                         : (
                             <tr>
-                                <td colSpan={5} style={{ textAlign: "center", fontStyle: "italic" }}>
+                                <td colSpan={8} style={{ textAlign: "center", fontStyle: "italic" }}>
                                     <Empty description="Không có người dùng nào" />
                                 </td>
                             </tr>
