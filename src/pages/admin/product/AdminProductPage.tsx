@@ -1,4 +1,4 @@
-import { Empty, message, Popconfirm, type PopconfirmProps } from "antd";
+import { Empty, Image, message, Popconfirm, type PopconfirmProps } from "antd";
 import { Button, Table } from "react-bootstrap";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
@@ -97,7 +97,19 @@ const AdminProductPage = () => {
                                     <th>{index + 1}</th>
                                     <td>{item.id}</td>
                                     <td>{item.name}</td>
-                                    <td>{item.image_url}</td>
+                                    <td>
+                                        {item?.image_url ? (
+                                            <Image
+                                                src={item?.image_url}
+                                                alt={item.name}
+                                                width={60}
+                                                height={60}
+                                                style={{ objectFit: "cover", borderRadius: 8 }}
+                                            />
+                                        ) : (
+                                            "N/A"
+                                        )}
+                                    </td>
                                     <td>{item.type}</td>
                                     <td>
                                         {new Intl.NumberFormat("vi-VN", {

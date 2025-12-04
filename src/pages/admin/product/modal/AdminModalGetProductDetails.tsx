@@ -1,4 +1,4 @@
-import { Descriptions, Drawer } from "antd";
+import { Descriptions, Drawer, Image } from "antd";
 import dayjs from "dayjs";
 import type { IProduct } from "../../../../types/product";
 interface IProps {
@@ -22,6 +22,19 @@ const AdminModalGetProductDetails = (props: IProps) => {
                 <Descriptions.Item label="ID">{product?.id}</Descriptions.Item>
                 <Descriptions.Item label="Tên">{product?.name ?? "N/A"}</Descriptions.Item>
                 <Descriptions.Item label="Ảnh">{product?.image_url ?? "N/A"}</Descriptions.Item>
+                <Descriptions.Item label="Ảnh">
+                    {product?.image_url ? (
+                        <Image
+                            src={product?.image_url}
+                            alt={product.name}
+                            width={60}
+                            height={60}
+                            style={{ objectFit: "cover", borderRadius: 8 }}
+                        />
+                    ) : (
+                        "N/A"
+                    )}
+                </Descriptions.Item>
                 <Descriptions.Item label="Mô tả">{product?.description ?? "N/A"}</Descriptions.Item>
                 <Descriptions.Item label="Giá">{product?.price ?? "N/A"}</Descriptions.Item>
                 <Descriptions.Item label="Phân loại">{product?.type ?? "N/A"}</Descriptions.Item>

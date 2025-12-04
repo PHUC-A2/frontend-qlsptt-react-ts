@@ -1,5 +1,6 @@
 import type { IRegisterReq } from "../types/auth";
 import type { ICreateProductReq, IUpdateProductReq } from "../types/product";
+import type { IUploadFile, IUploadResponse } from "../types/upload";
 import type { ICreateUserReq, IUpdateUserReq } from "../types/user";
 import instance from "./customAxios";
 
@@ -25,3 +26,20 @@ export const createProduct = (data: ICreateProductReq) => instance.post(`api/v1/
 export const deleteProduct = (id: number) => instance.delete(`api/v1/products/${id}`);
 export const getProductById = (id: number) => instance.get(`api/v1/products/${id}`);
 export const updateProduct = (id: number, data: IUpdateProductReq) => instance.put(`api/v1/products/${id}`,data);
+
+/* upload */
+export const uploadImageProduct = async (file: File): Promise<IUploadFile> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("folder", "products");
+
+    const { data } = await instance.post<IUploadResponse>(
+        "/api/v1/files/upload",
+        formData,
+        {
+            headers: { "Content-Type": "multipart/form-data" }
+        }
+    );
+
+    return data.data; // chỉ lấy phần data
+};
