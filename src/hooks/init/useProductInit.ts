@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { getAllProducts } from "../../config/Api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setClearProductsInfo } from "../../redux/features/productSlice";
+// import { setClearProductsInfo } from "../../redux/features/productSlice";
 import { fetchProducts } from "../../redux/thunks/productThunks";
 
 export const useProductInit = () => {
@@ -21,9 +21,9 @@ export const useProductInit = () => {
                 }
 
                 // nếu logout thì xóa product
-                if (!isAuthenticated) {
-                    dispatch(setClearProductsInfo());
-                }
+                // if (!isAuthenticated) {
+                //     dispatch(setClearProductsInfo());
+                // }
 
             } catch (error: any) {
                 toast.error('Chưa đăng nhập')

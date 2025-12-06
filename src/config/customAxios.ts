@@ -24,9 +24,16 @@ instance.interceptors.response.use(
 
         // Nếu API trả về 401 (token hết hạn) và chưa retry
         if (error.response?.status === 401 && !originalRequest._retry) {
+
+            const token = localStorage.getItem("access_token");
+            if (!token) {
+                // User đã logout, không refresh nữa
+                return Promise.reject(error);
+            }
+
             originalRequest._retry = true;
             try {
-                const token = localStorage.getItem("access_token");
+                // const token = localStorage.getItem("access_token");
 
                 // Gọi API refresh token
                 // const res = await instance.get("/api/v1/auth/refresh", {
