@@ -1,8 +1,19 @@
+import PermissionWrapper from "../../components/wrapper/PermissionWrapper";
 
 const AdminPage = () => {
     return (
         <>
-            <h1>Welcom admin</h1>
+            <div>
+                {/* Nút Thêm sản phẩm chỉ hiển thị nếu user có quyền CREATE_PRODUCT */}
+                <PermissionWrapper required="CREATE_PRODUCT">
+                    <button className="btn btn-primary">Thêm sản phẩm</button>
+                </PermissionWrapper>
+
+                {/* Nút Xóa người dùng chỉ hiển thị nếu user có quyền DELETE_USER */}
+                <PermissionWrapper required="DELETE_USER">
+                    <button className="btn btn-danger">Xóa người dùng</button>
+                </PermissionWrapper>
+            </div>
         </>
     )
 }

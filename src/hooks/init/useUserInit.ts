@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import { getAllUsers } from "../../config/Api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { fetchUsers } from "../../redux/thunks/userThunks";
 import { setClearUsersInfo } from "../../redux/features/userSlice";
@@ -14,10 +13,7 @@ export const useUserInit = () => {
             try {
                 // nếu đã login
                 if (isAuthenticated) {
-                    const res = await getAllUsers();
-                    if (res.data?.status === 200) {
-                        await dispatch(fetchUsers()).unwrap();
-                    }
+                    await dispatch(fetchUsers()).unwrap();
                 }
 
                 // nếu logout thì xóa user
@@ -26,7 +22,9 @@ export const useUserInit = () => {
                 }
 
             } catch (error: any) {
-                toast.error('Chưa đăng nhập')
+                const m = error?.response?.data?.message;
+                console.log(m);
+                toast.error(m || "Chưa đăng nhập");
             }
         }
 
