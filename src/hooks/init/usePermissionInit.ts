@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-// import { setClearProductsInfo } from "../../redux/features/productSlice";
-import { fetchProducts } from "../../redux/thunks/productThunks";
+import { fetchPermissions } from "../../redux/thunks/permissionThunk";
 
-export const useProductInit = () => {
+export const usePermissionInit = () => {
     const dispatch = useAppDispatch();
     const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
     useEffect(() => {
@@ -13,12 +12,12 @@ export const useProductInit = () => {
             try {
                 // nếu đã login
                 if (isAuthenticated) {
-                    await dispatch(fetchProducts()).unwrap();
+                    await dispatch(fetchPermissions()).unwrap();
                 }
 
-                // nếu logout thì xóa product
+                // nếu logout thì xóa permission
                 // if (!isAuthenticated) {
-                //     dispatch(setClearProductsInfo());
+                //     dispatch(setClearPermissionsInfo());
                 // }
 
             } catch (error: any) {

@@ -1,4 +1,5 @@
 import type { IRegisterReq } from "../types/auth";
+import type { ICreatePermissionReq, IUpdatePermissionReq } from "../types/permission";
 import type { ICreateProductReq, IUpdateProductReq } from "../types/product";
 import type { IUploadFile, IUploadResponse } from "../types/upload";
 import type { ICreateUserReq, IUpdateUserReq } from "../types/user";
@@ -25,7 +26,15 @@ export const getAllProducts = () => instance.get(`api/v1/products`);
 export const createProduct = (data: ICreateProductReq) => instance.post(`api/v1/products`, data);
 export const deleteProduct = (id: number) => instance.delete(`api/v1/products/${id}`);
 export const getProductById = (id: number) => instance.get(`api/v1/products/${id}`);
-export const updateProduct = (id: number, data: IUpdateProductReq) => instance.put(`api/v1/products/${id}`,data);
+export const updateProduct = (id: number, data: IUpdateProductReq) => instance.put(`api/v1/products/${id}`, data);
+
+/* api permission */
+export const getAllPermissions = () => instance.get(`api/v1/permissions`);
+export const createPermission = (data: ICreatePermissionReq) => instance.post(`api/v1/permissions`, data);
+export const updatePermission = (id: number, data: IUpdatePermissionReq) => instance.put(`api/v1/permissions/${id}`, data);
+export const deletePermission = (id: number) => instance.delete(`api/v1/permissions/${id}`);
+export const getPermissionById = (id: number) => instance.get(`api/v1/permissions/${id}`);
+
 
 /* upload */
 export const uploadImageProduct = async (file: File): Promise<IUploadFile> => {
