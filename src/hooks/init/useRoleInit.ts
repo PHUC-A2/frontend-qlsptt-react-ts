@@ -2,17 +2,22 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { fetchRoles } from "../../redux/thunks/roleThunks";
+import { usePermission } from "../common/usePermission";
 
 export const useRoleInit = () => {
     const dispatch = useAppDispatch();
     const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
+    const canGetRole = usePermission("GET_ROLE");
     useEffect(() => {
         const init = async () => {
 
             try {
                 // nếu đã login
                 if (isAuthenticated) {
-                    await dispatch(fetchRoles()).unwrap();
+                    // nếu có quyền GET_ROLE mới fetch
+                    if (canGetRole) {
+                        await dispatch(fetchRoles()).unwrap();
+                    }
                 }
 
                 // nếu logout thì xóa role

@@ -15,6 +15,7 @@ import type { IUser } from "../../../types/user";
 import AdminModalUpdateUser from "./modal/AdminModalUpdateUser";
 import { CgAdd } from "react-icons/cg";
 import AdminModalAssignRole from "./modal/AdminModalAssignRole";
+import { fetchRoles } from "../../../redux/thunks/roleThunks";
 const { TextArea } = Input;
 
 const AdminUserPage = () => {
@@ -29,9 +30,10 @@ const AdminUserPage = () => {
     const [roleAssignRole, setRoleAssignRole] = useState<IUser | null>(null);
 
     // assign role
-    const handleAssignRole = (data: IUser) => {
+    const handleAssignRole = async (data: IUser) => {
         setRoleAssignRole(data);
         setOpenModalAssignRole(true);
+        await dispatch(fetchRoles()).unwrap();
     }
 
     // tìm kiếm

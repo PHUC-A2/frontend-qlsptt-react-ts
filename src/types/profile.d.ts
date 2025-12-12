@@ -48,6 +48,7 @@ export interface IProfile {
     roles?: string[];
     permissions?: string[];
     roles_detail?: IRoleDetail[];
+    is_full_access?: boolean;
     created_at?: string;
     updated_at?: string;
 }

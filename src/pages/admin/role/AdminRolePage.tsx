@@ -15,6 +15,7 @@ import AdminModalAddRole from "./modal/AdminModalAddRole";
 import AdminModalUpdateRole from "./modal/AdminModalUpdateRole";
 import AdminModalAssignPermission from "./modal/AdminModalAssignPermisison";
 import { CgAdd } from "react-icons/cg";
+import { fetchPermissions } from "../../../redux/thunks/permissionThunks";
 const { TextArea } = Input;
 
 const AdminRolePage = () => {
@@ -44,9 +45,10 @@ const AdminRolePage = () => {
     };
 
     // assign permission
-    const handleAssignPermisison = (data: IRole) => {
+    const handleAssignPermisison = async (data: IRole) => {
         setRoleAssignPermission(data);
         setOpenModalAssignPermisison(true);
+        await dispatch(fetchPermissions()).unwrap();
     }
 
     // detail
