@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { initialState, permissionsAdapter } from "../adapters/permissionAdapter";
-import { fetchPermissions, handleCreatePermission, handleFindPermissionById, handleRemovePermissison, handleUpdatePermission } from "../thunks/permissionThunk";
+import { fetchPermissions, handleCreatePermission, handleFindPermissionById, handleRemovePermissison, handleUpdatePermission } from "../thunks/permissionThunks";
 
 const permissionSlice = createSlice({
     name: "permission",

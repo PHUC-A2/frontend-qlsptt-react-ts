@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { fetchPermissions } from "../../redux/thunks/permissionThunk";
+import { fetchPermissions } from "../../redux/thunks/permissionThunks";
 
 export const usePermissionInit = () => {
     const dispatch = useAppDispatch();

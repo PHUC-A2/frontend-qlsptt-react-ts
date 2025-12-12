@@ -4,7 +4,7 @@ import { Form, Input } from 'antd';
 import type { IPermission } from '../../../../types/permission';
 import { useEffect } from 'react';
 import { useAppDispatch } from '../../../../redux/hooks';
-import { handleUpdatePermission } from '../../../../redux/thunks/permissionThunk';
+import { handleUpdatePermission } from '../../../../redux/thunks/permissionThunks';
 
 interface IProps {
     openModalUpdatePermission: boolean;

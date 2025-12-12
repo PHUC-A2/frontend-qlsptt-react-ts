@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { Form, Input } from 'antd';
 import type { ICreatePermissionReq } from '../../../../types/permission';
 import { useAppDispatch } from '../../../../redux/hooks';
-import { handleCreatePermission } from '../../../../redux/thunks/permissionThunk';
+import { handleCreatePermission } from '../../../../redux/thunks/permissionThunks';
 
 interface IProps {
     openModalAddPermission: boolean;
@@ -13,7 +13,7 @@ interface IProps {
 const AdminModalAddPermission = (props: IProps) => {
     const { openModalAddPermission, setOpenModalAddPermission } = props;
     const [form] = Form.useForm();
-      const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
     // ====================== PERMISSION LIST ======================
     const LIST_PERMISSION = [

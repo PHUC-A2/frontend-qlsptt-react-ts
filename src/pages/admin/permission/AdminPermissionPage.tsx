@@ -12,7 +12,7 @@ import AdminModalUpdatePermission from "./modal/AdminModalUpdatePermission";
 import AdminModalGetPermissionDetails from "./modal/AdminModalGetPermissionDetails";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { permissionSelectors } from "../../../redux/selectors/permissionSelectors";
-import { fetchPermissions, handleFindPermissionById, handleRemovePermissison } from "../../../redux/thunks/permissionThunk";
+import { fetchPermissions, handleFindPermissionById, handleRemovePermissison } from "../../../redux/thunks/permissionThunks";
 const { TextArea } = Input;
 
 const AdminUserPage = () => {
