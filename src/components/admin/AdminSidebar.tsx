@@ -93,6 +93,9 @@ const AdminSidebar = () => {
         title: snippet, // chỉ text, không bọc Link
     }));
 
+    // Chuỗi hiển thị
+    const breadcrumbText = `path: ${breadcrumbItems.map(i => i.title).join(" / ")}`;
+
     return (
         <>
             <Layout style={{ minHeight: '100vh' }}>
@@ -105,8 +108,8 @@ const AdminSidebar = () => {
                         <h3>Chào mừng bạn đến với trang quản trị !</h3>
                     </Header>
                     <Content style={{ margin: '0 16px' }}>
-                        {/* <Breadcrumb style={{ margin: '16px 0' }} items={[{ title: 'admin/user' }]} /> */}
-                        <Breadcrumb style={{ margin: "16px 0" }} items={breadcrumbItems} />
+                        <Breadcrumb style={{ margin: '16px 0' }} items={[{ title: breadcrumbText }]} />
+                        {/* <Breadcrumb style={{ margin: "16px 0" }} items={breadcrumbText} /> */}
                         <div
                             style={{
                                 padding: 24,

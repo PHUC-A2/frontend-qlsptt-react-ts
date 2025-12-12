@@ -1,6 +1,7 @@
 import type { IRegisterReq } from "../types/auth";
 import type { ICreatePermissionReq, IUpdatePermissionReq } from "../types/permission";
 import type { ICreateProductReq, IUpdateProductReq } from "../types/product";
+import type { ICreateRoleReq, IUpdateRoleReq } from "../types/role";
 import type { IUploadFile, IUploadResponse } from "../types/upload";
 import type { ICreateUserReq, IUpdateUserReq } from "../types/user";
 import instance from "./customAxios";
@@ -34,6 +35,13 @@ export const createPermission = (data: ICreatePermissionReq) => instance.post(`a
 export const updatePermission = (id: number, data: IUpdatePermissionReq) => instance.put(`api/v1/permissions/${id}`, data);
 export const deletePermission = (id: number) => instance.delete(`api/v1/permissions/${id}`);
 export const getPermissionById = (id: number) => instance.get(`api/v1/permissions/${id}`);
+
+/* api role */
+export const getAllRoles = () => instance.get(`api/v1/roles`);
+export const createRole = (data: ICreateRoleReq) => instance.post(`api/v1/roles`, data);
+export const updateRole = (id: number, data: IUpdateRoleReq) => instance.put(`api/v1/roles/${id}`, data);
+export const deleteRole = (id: number) => instance.delete(`api/v1/roles/${id}`);
+export const getRoleById = (id: number) => instance.get(`api/v1/roles/${id}`);
 
 
 /* upload */

@@ -34,9 +34,9 @@ const Footer = () => {
                         Liên hệ
                     </Title>
                     <Space orientation="vertical" size="small">
-                        <Text style={{ color: "wheat" }}>📍 123 Đường ABC, Sơn La</Text>
+                        <Text style={{ color: "wheat" }}>📍 Đường Đặng Thai Mai, Phường Tô Hiệu, Tỉnh Sơn La.</Text>
                         <Text style={{ color: "wheat" }}>📞 0123 456 789</Text>
-                        <Text style={{ color: "wheat" }}>✉️ contact@email.com</Text>
+                        <Text style={{ color: "wheat" }}>✉️ nhom03@email.com</Text>
                     </Space>
                 </Col>
 
@@ -80,7 +80,7 @@ const Footer = () => {
 
             <div style={{ textAlign: "center", color: "#faad14" }}>
                 © {new Date().getFullYear()} Nhom 03.
-                <span style={{ color: "#faad14" }}> All rights reserved.</span>
+                <span style={{ color: "#faad14" }}> Tất cả quyền được bảo lưu.</span>
             </div>
         </AntFooter>
     );

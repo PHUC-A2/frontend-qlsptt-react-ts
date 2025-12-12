@@ -4,6 +4,7 @@ import userReducer from './features/userSlice'
 import productReducer from './features/productSlice'
 import profileReducer from './features/profileSlice'
 import searchReducer from './features/searchSlice'
+import roleReducer from './features/roleSlice'
 import permissionReducer from './features/permissionSlice'
 export const store = configureStore({
     reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
         profile: profileReducer,
         user: userReducer,
         product: productReducer,
+        role: roleReducer,
         permission: permissionReducer,
         search: searchReducer,
     }

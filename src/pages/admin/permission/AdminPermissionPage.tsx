@@ -15,7 +15,7 @@ import { permissionSelectors } from "../../../redux/selectors/permissionSelector
 import { fetchPermissions, handleFindPermissionById, handleRemovePermissison } from "../../../redux/thunks/permissionThunks";
 const { TextArea } = Input;
 
-const AdminUserPage = () => {
+const AdminPermissionPage = () => {
 
     const listPermissions = useAppSelector(permissionSelectors.selectAll);
     const [openModalAddPermission, setOpenModalAddPermission] = useState<boolean>(false);
@@ -25,7 +25,6 @@ const AdminUserPage = () => {
     const [permissionUpdate, setPermissionUpdate] = useState<IPermission | null>(null);
     const dispatch = useAppDispatch();
 
-    // tìm kiếm
     // tìm kiếm
     const [searchTerm, setSearchTerm] = useState("");
     const term = searchTerm.toLowerCase();
@@ -92,7 +91,7 @@ const AdminUserPage = () => {
                     <tr>
                         <th colSpan={5}>
                             <div className="d-flex justify-content-between align-items-center">
-                                <h2>Bảng Người Quyền Hạn</h2>
+                                <h2>Danh sách quyền hạn</h2>
                                 <div>
                                     <Button className="d-flex align-items-center"
                                         variant="outline-primary"
@@ -188,4 +187,4 @@ const AdminUserPage = () => {
     )
 }
 
-export default AdminUserPage;
+export default AdminPermissionPage;

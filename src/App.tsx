@@ -5,6 +5,7 @@ import { useUserInit } from "./hooks/init/useUserInit";
 import { useProductInit } from "./hooks/init/useProductInit";
 import { useProfileInit } from "./hooks/init/useProfileInit";
 import { usePermissionInit } from "./hooks/init/usePermissionInit";
+import { useRoleInit } from "./hooks/init/useRoleInit";
 
 const App = () => {
 
@@ -14,6 +15,7 @@ const App = () => {
   useUserInit();// xử lý khi F5 với user (userSlice)
   useProductInit()// xử lý khi F5 với product (productSlice)
   usePermissionInit()// xử lý khi F5 với permisison (permisisonSlice)
+  useRoleInit()// xử lý khi F5 với role (roleSlice)
 
 
   return (

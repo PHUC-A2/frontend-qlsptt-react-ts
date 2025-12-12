@@ -91,7 +91,7 @@ const AdminProductPage = () => {
                     <tr>
                         <th colSpan={8}>
                             <div className="d-flex justify-content-between align-items-center">
-                                <h2>Bảng Sản Phẩm</h2>
+                                <h2>Danh sách sản phẩm</h2>
                                 <div>
                                     <Button className="d-flex align-items-center"
                                         variant="outline-primary"

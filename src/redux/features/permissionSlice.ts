@@ -30,7 +30,7 @@ const permissionSlice = createSlice({
 
             // --- CREATE PERMISSION ---
             .addCase(handleCreatePermission.fulfilled, (state, action) => {
-                permissionsAdapter.addOne(state, action.payload); // thêm product mới vào state
+                permissionsAdapter.addOne(state, action.payload); // thêm permission mới vào state
             })
             .addCase(handleCreatePermission.rejected, (state, action) => {
                 state.error = action.payload as string ?? "Tạo permission thất bại";
@@ -38,7 +38,7 @@ const permissionSlice = createSlice({
 
             // --- REMOVE PERMISSISON ---
             .addCase(handleRemovePermissison.fulfilled, (state, action) => {
-                permissionsAdapter.removeOne(state, action.payload); // action.payload = id của product
+                permissionsAdapter.removeOne(state, action.payload); // action.payload = id của permission
             })
             .addCase(handleRemovePermissison.rejected, (state, action) => {
                 state.error = action.payload as string ?? "Xóa permission thất bại";

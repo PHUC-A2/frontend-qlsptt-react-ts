@@ -1,16 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createPermission, deletePermission,  getAllPermissions, getPermissionById, updatePermission } from "../../config/Api";
-import type { ICreatePermissionReq, IUpdatePermissionReq } from "../../types/permission";
+import { createRole, deleteRole, getAllRoles, getRoleById, updateRole } from "../../config/Api";
+import type { ICreateRoleReq, IUpdateRoleReq } from "../../types/role";
 
-export const fetchPermissions = createAsyncThunk(
-    'permission/fetchPermission',
+export const fetchRoles = createAsyncThunk(
+    'role/fetchRole',
     async (_, { rejectWithValue }) => {
         try {
-            const res = await getAllPermissions();
+            const res = await getAllRoles();
             if (res.data?.status === 200) {
                 return res.data?.data || [];
             }
-            return rejectWithValue("Lấy permission thất bại");
+            return rejectWithValue("Lấy role thất bại");
         } catch (error: any) {
             console.log("Lỗi hệ thống: ", error);
             return rejectWithValue(error?.response?.data?.message || "Lỗi hệ thống");
@@ -18,15 +18,15 @@ export const fetchPermissions = createAsyncThunk(
     }
 )
 
-export const handleCreatePermission = createAsyncThunk(
-    'permission/createPermisison',
-    async (data: ICreatePermissionReq, { rejectWithValue }) => {
+export const handleCreateRole = createAsyncThunk(
+    'role/createRole',
+    async (data: ICreateRoleReq, { rejectWithValue }) => {
         try {
-            const res = await createPermission(data);
+            const res = await createRole(data);
             if (res.data?.status === 201) {
                 return res.data?.data;
             }
-            return rejectWithValue("Tạo permission thất bại");
+            return rejectWithValue("Tạo role thất bại");
         } catch (error: any) {
             console.log("Lỗi hệ thống: ", error);
             return rejectWithValue(error?.response?.data?.message || "Lỗi hệ thống");
@@ -35,15 +35,15 @@ export const handleCreatePermission = createAsyncThunk(
 )
 
 
-export const handleRemovePermissison = createAsyncThunk(
-    'permission/deletePermission',
+export const handleRemoveRole = createAsyncThunk(
+    'role/deleteRole',
     async (id: number, { rejectWithValue }) => {
         try {
-            const res = await deletePermission(id);
+            const res = await deleteRole(id);
             if (res.data?.status === 200) {
                 return id;;
             }
-            return rejectWithValue("Xóa permission thất bại");
+            return rejectWithValue("Xóa role thất bại");
         } catch (error: any) {
             console.log("Lỗi hệ thống: ", error);
             return rejectWithValue(error?.response?.data?.message || "Lỗi hệ thống");
@@ -51,15 +51,15 @@ export const handleRemovePermissison = createAsyncThunk(
     }
 )
 
-export const handleFindPermissionById = createAsyncThunk(
-    'permission/findPermissionById',
+export const handleFindRoleById = createAsyncThunk(
+    'role/findRoleById',
     async (id: number, { rejectWithValue }) => {
         try {
-            const res = await getPermissionById(id);
+            const res = await getRoleById(id);
             if (res.data?.status === 200) {
                 return res.data?.data;
             }
-            return rejectWithValue("Lấy permission thất bại");
+            return rejectWithValue("Lấy role thất bại");
         } catch (error: any) {
             console.log("Lỗi hệ thống: ", error);
             return rejectWithValue(error?.response?.data?.message || "Lỗi hệ thống");
@@ -67,15 +67,15 @@ export const handleFindPermissionById = createAsyncThunk(
     }
 )
 
-export const handleUpdatePermission = createAsyncThunk(
-    'permission/updatePermission',
-    async ({ id, data }: { id: number; data: IUpdatePermissionReq }, { rejectWithValue }) => {
+export const handleUpdateRole = createAsyncThunk(
+    'role/updateRole',
+    async ({ id, data }: { id: number; data: IUpdateRoleReq }, { rejectWithValue }) => {
         try {
-            const res = await updatePermission(id, data);
+            const res = await updateRole(id, data);
             if (res.data?.status === 200) {
                 return res.data?.data;
             }
-            return rejectWithValue("Cập nhật permission thất bại");
+            return rejectWithValue("Cập nhật role thất bại");
         } catch (error: any) {
             console.log("Lỗi hệ thống: ", error);
             return rejectWithValue(error?.response?.data?.message || "Lỗi hệ thống");

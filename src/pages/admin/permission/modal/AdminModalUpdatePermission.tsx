@@ -92,7 +92,7 @@ const AdminModalUpdatePermission = (props: IProps) => {
     // ====================== UI ======================
     return (
         <Modal
-            title="Tạo mới quyền hạn"
+            title="Cập nhật quyền hạn"
             maskClosable={false}
             closable={true}
             open={openModalUpdatePermission}

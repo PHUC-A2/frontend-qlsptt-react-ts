@@ -61,7 +61,7 @@ const AdminModalAddPermission = (props: IProps) => {
     const handleAddPermission = async (data: ICreatePermissionReq) => {
         try {
 
-            await dispatch(handleCreatePermission(data))
+            await dispatch(handleCreatePermission(data)).unwrap();
             toast.success("Tạo mới permission thành công");
             setOpenModalAddPermission(false);
             form.resetFields();

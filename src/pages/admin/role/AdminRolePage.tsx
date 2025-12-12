@@ -4,83 +4,82 @@ import { AiOutlineUserAdd } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { FaRegEye } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { fetchUsers, handleFindUserById, handleRemoveUser } from "../../../redux/thunks/userThunks";
 import { useEffect, useState } from "react";
-import AdminModalAddUser from "./modal/AdminModalAddUser";
-import { userSelectors } from "../../../redux/selectors/userSelectors";
 import { toast } from "react-toastify";
-import AdminModalGetUserDetails from "./modal/AdminModalGetUserDetails";
-import type { IUser } from "../../../types/user";
-import AdminModalUpdateUser from "./modal/AdminModalUpdateUser";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { roleSelectors } from "../../../redux/selectors/roleSelectors";
+import type { IRole } from "../../../types/role";
+import { fetchRoles, handleFindRoleById, handleRemoveRole } from "../../../redux/thunks/roleThunks";
+import AdminModalGetRoleDetails from "./modal/AdminModalGetRoleDetails";
+import AdminModalAddRole from "./modal/AdminModalAddRole";
+import AdminModalUpdateRole from "./modal/AdminModalUpdateRole";
 const { TextArea } = Input;
 
-const AdminUserPage = () => {
-    const listUsers = useAppSelector(userSelectors.selectAll);
-    const dispatch = useAppDispatch();
-    const [openModalAddUser, setOpenModalAddUser] = useState<boolean>(false);
-    const [openModalUpdateUser, setOpenModalUpdateUser] = useState<boolean>(false);
-    const [openModalGetUserDetails, setOpenModalGetUserDetails] = useState<boolean>(false);
-    const [user, setUser] = useState<IUser | null>(null);
-    const [userUpdate, setUserUpdate] = useState<IUser | null>(null);
+const AdminRolePage = () => {
 
-    // tìm kiếm
+    const listRoles = useAppSelector(roleSelectors.selectAll);
+    const [openModalAddRole, setOpenModalAddRole] = useState<boolean>(false);
+    const [openModalUpdateRole, setOpenModalUpdateRole] = useState<boolean>(false);
+    const [openModalGetRoleDetails, setOpenModalGetRoleDetails] = useState<boolean>(false);
+    const [role, setRole] = useState<IRole | null>(null);
+    const [roleUpdate, setRoleUpdate] = useState<IRole | null>(null);
+    const dispatch = useAppDispatch();
+
     // tìm kiếm
     const [searchTerm, setSearchTerm] = useState("");
     const term = searchTerm.toLowerCase();
 
-    const filteredUsers = listUsers.filter((u: IUser) => {
+    const filteredRoles = listRoles.filter((u: IRole) => {
         return (
-            (u.name ?? "").toLowerCase().includes(term) ||
-            (u.email ?? "").toLowerCase().includes(term)
-
+            (u.name ?? "").toLowerCase().includes(term)
         );
     });
-
-    useEffect(() => {
-        dispatch(fetchUsers());
-    }, []);
-
-    // xóa user
-    const handleDeleteUser = async (id: number) => {
-        try {
-            await dispatch(handleRemoveUser(id)).unwrap();
-            toast.success("Xóa người dùng thành công")
-        } catch (error: any) {
-            toast.error(error || "Lỗi khi xóa người dùng")
-        }
-    }
-
-    // lấy user 
-    const handleGetUserDetails = async (id: number) => {
-        try {
-            setOpenModalGetUserDetails(true);
-            const data = await dispatch(handleFindUserById(id)).unwrap();
-            setUser(data);
-            // console.log("User vừa lấy:", data);
-        } catch (error: any) {
-            toast.error(error || "Lỗi khi lấy người dùng")
-            console.error("Lấy user thất bại:", error);
-        }
-    }
-
-    const handleEditUser = (data: IUser) => {
-        setUserUpdate(data);
-        setOpenModalUpdateUser(true);
-    }
 
     const cancel: PopconfirmProps['onCancel'] = () => {
         message.error('Hủy thao tác');
     };
 
+    // detail
+    const handleGetRoleDetails = async (id: number) => {
+        try {
+            setOpenModalGetRoleDetails(true);
+            const data = await dispatch(handleFindRoleById(id)).unwrap();
+            setRole(data);
+        } catch (error: any) {
+            toast.error(error || "Lỗi khi lấy role")
+            console.error("Lấy user thất bại:", error);
+        }
+    }
+
+    // delete
+    const handleDeleteRole = async (id: number) => {
+        try {
+            await dispatch(handleRemoveRole(id)).unwrap();
+            toast.success("Xóa role thành công")
+        } catch (error: any) {
+            toast.error(error || "Lỗi khi xóa role")
+        }
+    }
+
+    // update
+    const handleEditRole = (data: IRole) => {
+        setOpenModalUpdateRole(true);
+        setRoleUpdate(data);
+    }
+
+    useEffect(() => {
+        dispatch(fetchRoles());
+    }, []);
+
     return (
         <>
+
             <Table striped bordered hover size="sm">
                 <thead>
                     <tr>
                         <th colSpan={5}>
                             <TextArea
-                                placeholder="Tìm kiếm theo name,email..."
+                                placeholder="Tìm kiếm theo tên..."
                                 autoSize
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -90,11 +89,11 @@ const AdminUserPage = () => {
                     <tr>
                         <th colSpan={5}>
                             <div className="d-flex justify-content-between align-items-center">
-                                <h2>Danh sách người dùng</h2>
+                                <h2>Danh sách vai trò</h2>
                                 <div>
                                     <Button className="d-flex align-items-center"
                                         variant="outline-primary"
-                                        onClick={() => setOpenModalAddUser(true)}
+                                        onClick={() => setOpenModalAddRole(true)}
                                     >
                                         <AiOutlineUserAdd /> Thêm mới
                                     </Button>
@@ -106,38 +105,36 @@ const AdminUserPage = () => {
                     <tr>
                         <th>STT</th>
                         <th>ID</th>
-                        <th>Tên</th>
-                        <th>Email</th>
+                        <th>Tên Role</th>
                         <th>Hành Động</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredUsers.length > 0 ?
+                    {filteredRoles.length > 0 ?
                         (
-                            filteredUsers.map((item: IUser, index: number) => (
+                            filteredRoles.map((item: IRole, index: number) => (
                                 <tr key={item.id + 1}>
                                     <th>{index}</th>
                                     <td>{item.id}</td>
                                     <td>{item.name}</td>
-                                    <td>{item.email}</td>
                                     <td>
                                         <div className="d-flex justify-content-evenly">
                                             <Button
                                                 variant="outline-success"
-                                                onClick={() => handleGetUserDetails(item.id)}
+                                                onClick={() => handleGetRoleDetails(item.id)}
                                             >
                                                 <FaRegEye />
                                             </Button>
                                             <Button
                                                 variant="outline-dark"
-                                                onClick={() => handleEditUser(item)}
+                                                onClick={() => handleEditRole(item)}
                                             >
                                                 <CiEdit />
                                             </Button>
                                             <Popconfirm
-                                                title="Xóa người dùng"
-                                                description="Bạn có chắc muốn xóa người dùng này không?"
-                                                onConfirm={() => handleDeleteUser(item.id)}
+                                                title="Xóa vai trò"
+                                                description="Bạn có chắc muốn xóa vai trò này không?"
+                                                onConfirm={() => handleDeleteRole(item.id)}
                                                 onCancel={cancel}
                                                 okText="Yes"
                                                 cancelText="No"
@@ -154,7 +151,7 @@ const AdminUserPage = () => {
                         : (
                             <tr>
                                 <td colSpan={5} style={{ textAlign: "center", fontStyle: "italic" }}>
-                                    <Empty description="Không có người dùng nào" />
+                                    <Empty description="Không role nào" />
                                 </td>
                             </tr>
                         )}
@@ -163,24 +160,27 @@ const AdminUserPage = () => {
             </Table>
 
             {/* add */}
-            <AdminModalAddUser
-                openModalAddUser={openModalAddUser}
-                setOpenModalAddUser={setOpenModalAddUser}
-            />
-            {/* details */}
-            <AdminModalGetUserDetails
-                openModalGetUserDetails={openModalGetUserDetails}
-                setOpenModalGetUserDetails={setOpenModalGetUserDetails}
-                user={user}
+
+            <AdminModalAddRole
+                openModalAddRole={openModalAddRole}
+                setOpenModalAddRole={setOpenModalAddRole}
             />
 
-            <AdminModalUpdateUser
-                openModalUpdateUser={openModalUpdateUser}
-                setOpenModalUpdateUser={setOpenModalUpdateUser}
-                userUpdate={userUpdate}
+            <AdminModalUpdateRole
+                openModalUpdateRole={openModalUpdateRole}
+                setOpenModalUpdateRole={setOpenModalUpdateRole}
+                roleUpdate={roleUpdate}
+            />
+
+            {/* detail */}
+            <AdminModalGetRoleDetails
+                openModalGetRoleDetails={openModalGetRoleDetails}
+                setOpenModalGetRoleDetails={setOpenModalGetRoleDetails}
+                role={role}
+                setRole={setRole}
             />
         </>
     )
 }
 
-export default AdminUserPage;
+export default AdminRolePage;
