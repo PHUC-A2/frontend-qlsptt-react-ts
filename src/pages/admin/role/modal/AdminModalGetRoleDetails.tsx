@@ -1,4 +1,4 @@
-import { Descriptions, Drawer } from "antd";
+import { Descriptions, Drawer, Tag } from "antd";
 import dayjs from "dayjs";
 import type { IRole } from "../../../../types/role";
 interface IProps {
@@ -26,6 +26,17 @@ const AdminModalGetRoleDetails = (props: IProps) => {
             <Descriptions bordered column={1} size="small">
                 <Descriptions.Item label="ID">{role?.id}</Descriptions.Item>
                 <Descriptions.Item label="Tên">{role?.name ?? "N/A"}</Descriptions.Item>
+                <Descriptions.Item label="Quyền">
+                    {role?.permissions?.length ? (
+                        role.permissions.map((p) => (
+                            <Tag color="blue" key={p}>
+                                {p}
+                            </Tag>
+                        ))
+                    ) : (
+                        "N/A"
+                    )}
+                </Descriptions.Item>
                 <Descriptions.Item label="Ngày tạo">
                     {role?.created_at ? dayjs(role.created_at).format("DD/MM/YYYY HH:mm:ss") : "N/A"}
                 </Descriptions.Item>

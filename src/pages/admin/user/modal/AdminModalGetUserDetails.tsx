@@ -1,4 +1,4 @@
-import { Descriptions, Drawer } from "antd";
+import { Descriptions, Drawer, Tag } from "antd";
 import type { IUser } from "../../../../types/user";
 import dayjs from "dayjs";
 interface IProps {
@@ -22,6 +22,28 @@ const AdminModalGetUserDetails = (props: IProps) => {
                 <Descriptions.Item label="ID">{user?.id}</Descriptions.Item>
                 <Descriptions.Item label="Tên">{user?.name ?? "N/A"}</Descriptions.Item>
                 <Descriptions.Item label="Email">{user?.email ?? "N/A"}</Descriptions.Item>
+                <Descriptions.Item label="Vai trò">
+                    {user?.roles?.length ? (
+                        user?.roles.map((r) => (
+                            <Tag color="orange" key={r}>
+                                {r}
+                            </Tag>
+                        ))
+                    ) : (
+                        "N/A"
+                    )}
+                </Descriptions.Item>
+                <Descriptions.Item label="Quyền">
+                    {user?.permissions?.length ? (
+                        user.permissions.map((p) => (
+                            <Tag color="blue" key={p}>
+                                {p}
+                            </Tag>
+                        ))
+                    ) : (
+                        "N/A"
+                    )}
+                </Descriptions.Item>
                 <Descriptions.Item label="Ngày tạo">
                     {user?.created_at ? dayjs(user.created_at).format("DD/MM/YYYY HH:mm:ss") : "N/A"}
                 </Descriptions.Item>

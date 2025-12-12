@@ -1,9 +1,9 @@
 import type { IRegisterReq } from "../types/auth";
 import type { ICreatePermissionReq, IUpdatePermissionReq } from "../types/permission";
 import type { ICreateProductReq, IUpdateProductReq } from "../types/product";
-import type { ICreateRoleReq, IUpdateRoleReq } from "../types/role";
+import type { IAssignPermissionReq, ICreateRoleReq, IUpdateRoleReq } from "../types/role";
 import type { IUploadFile, IUploadResponse } from "../types/upload";
-import type { ICreateUserReq, IUpdateUserReq } from "../types/user";
+import type { IAssignRoleReq, ICreateUserReq, IUpdateUserReq } from "../types/user";
 import instance from "./customAxios";
 
 /* api auth  */
@@ -42,6 +42,16 @@ export const createRole = (data: ICreateRoleReq) => instance.post(`api/v1/roles`
 export const updateRole = (id: number, data: IUpdateRoleReq) => instance.put(`api/v1/roles/${id}`, data);
 export const deleteRole = (id: number) => instance.delete(`api/v1/roles/${id}`);
 export const getRoleById = (id: number) => instance.get(`api/v1/roles/${id}`);
+
+/* api gắn permission cho role */
+// /api/v1/roles/roleId/assign-permissions
+export const assignPermission = (id: number, data: IAssignPermissionReq) => instance.post(`api/v1/roles/${id}/assign-permissions`, data);
+
+/* api gắn role cho user */
+// /api/v1/users/userId/assign-roles
+export const assignRole = (id: number, data: IAssignRoleReq) => instance.put(`api/v1/users/${id}/assign-roles`, data);
+
+
 
 
 /* upload */

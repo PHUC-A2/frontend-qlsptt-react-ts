@@ -13,6 +13,8 @@ import { toast } from "react-toastify";
 import AdminModalGetUserDetails from "./modal/AdminModalGetUserDetails";
 import type { IUser } from "../../../types/user";
 import AdminModalUpdateUser from "./modal/AdminModalUpdateUser";
+import { CgAdd } from "react-icons/cg";
+import AdminModalAssignRole from "./modal/AdminModalAssignRole";
 const { TextArea } = Input;
 
 const AdminUserPage = () => {
@@ -21,10 +23,17 @@ const AdminUserPage = () => {
     const [openModalAddUser, setOpenModalAddUser] = useState<boolean>(false);
     const [openModalUpdateUser, setOpenModalUpdateUser] = useState<boolean>(false);
     const [openModalGetUserDetails, setOpenModalGetUserDetails] = useState<boolean>(false);
+    const [openModalAssignRole, setOpenModalAssignRole] = useState<boolean>(false);
     const [user, setUser] = useState<IUser | null>(null);
     const [userUpdate, setUserUpdate] = useState<IUser | null>(null);
+    const [roleAssignRole, setRoleAssignRole] = useState<IUser | null>(null);
 
-    // tìm kiếm
+    // assign role
+    const handleAssignRole = (data: IUser) => {
+        setRoleAssignRole(data);
+        setOpenModalAssignRole(true);
+    }
+
     // tìm kiếm
     const [searchTerm, setSearchTerm] = useState("");
     const term = searchTerm.toLowerCase();
@@ -146,6 +155,12 @@ const AdminUserPage = () => {
                                                     <MdDelete />
                                                 </Button>
                                             </Popconfirm>
+                                            <Button
+                                                variant="outline-dark"
+                                                onClick={() => handleAssignRole(item)}
+                                            >
+                                                <CgAdd /> Gắn quyền
+                                            </Button>
                                         </div>
                                     </td>
                                 </tr>
@@ -178,6 +193,12 @@ const AdminUserPage = () => {
                 openModalUpdateUser={openModalUpdateUser}
                 setOpenModalUpdateUser={setOpenModalUpdateUser}
                 userUpdate={userUpdate}
+            />
+
+            <AdminModalAssignRole
+                openModalAssignRole={openModalAssignRole}
+                setOpenModalAssignRole={setOpenModalAssignRole}
+                roleAssignRole={roleAssignRole}
             />
         </>
     )

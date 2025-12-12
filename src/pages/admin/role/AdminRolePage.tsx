@@ -13,6 +13,8 @@ import { fetchRoles, handleFindRoleById, handleRemoveRole } from "../../../redux
 import AdminModalGetRoleDetails from "./modal/AdminModalGetRoleDetails";
 import AdminModalAddRole from "./modal/AdminModalAddRole";
 import AdminModalUpdateRole from "./modal/AdminModalUpdateRole";
+import AdminModalAssignPermission from "./modal/AdminModalAssignPermisison";
+import { CgAdd } from "react-icons/cg";
 const { TextArea } = Input;
 
 const AdminRolePage = () => {
@@ -21,8 +23,10 @@ const AdminRolePage = () => {
     const [openModalAddRole, setOpenModalAddRole] = useState<boolean>(false);
     const [openModalUpdateRole, setOpenModalUpdateRole] = useState<boolean>(false);
     const [openModalGetRoleDetails, setOpenModalGetRoleDetails] = useState<boolean>(false);
+    const [openModalAssignPermisison, setOpenModalAssignPermisison] = useState<boolean>(false);
     const [role, setRole] = useState<IRole | null>(null);
     const [roleUpdate, setRoleUpdate] = useState<IRole | null>(null);
+    const [roleAssignPermission, setRoleAssignPermission] = useState<IRole | null>(null);
     const dispatch = useAppDispatch();
 
     // tìm kiếm
@@ -38,6 +42,12 @@ const AdminRolePage = () => {
     const cancel: PopconfirmProps['onCancel'] = () => {
         message.error('Hủy thao tác');
     };
+
+    // assign permission
+    const handleAssignPermisison = (data: IRole) => {
+        setRoleAssignPermission(data);
+        setOpenModalAssignPermisison(true);
+    }
 
     // detail
     const handleGetRoleDetails = async (id: number) => {
@@ -143,6 +153,12 @@ const AdminRolePage = () => {
                                                     <MdDelete />
                                                 </Button>
                                             </Popconfirm>
+                                            <Button
+                                                variant="outline-dark"
+                                                onClick={() => handleAssignPermisison(item)}
+                                            >
+                                                <CgAdd /> Gắn quyền
+                                            </Button>
                                         </div>
                                     </td>
                                 </tr>
@@ -178,6 +194,14 @@ const AdminRolePage = () => {
                 setOpenModalGetRoleDetails={setOpenModalGetRoleDetails}
                 role={role}
                 setRole={setRole}
+            />
+
+            {/* assign permission */}
+
+            <AdminModalAssignPermission
+                openModalAssignPermisison={openModalAssignPermisison}
+                setOpenModalAssignPermisison={setOpenModalAssignPermisison}
+                roleAssignPermission={roleAssignPermission}
             />
         </>
     )

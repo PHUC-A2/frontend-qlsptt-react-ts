@@ -4,6 +4,8 @@ export interface IUser {
     name: string;
     email: string;
     email_verified_at: string | null;
+    roles?: string[];
+    permissions?: string[];
     created_at: string;
     updated_at: string;
 }
@@ -19,4 +21,8 @@ export interface ICreateUserReq {
 export interface IUpdateUserReq {
     name: string;
     email: string;
+}
+
+export interface IAssignRoleReq {
+    role_ids: number[];
 }
