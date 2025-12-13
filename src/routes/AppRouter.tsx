@@ -13,6 +13,7 @@ import ProductPage from "../pages/client/product/ProductPage";
 import AboutPage from "../pages/client/about/AboutPage";
 import AdminPermissionPage from "../pages/admin/permission/AdminPermissionPage";
 import AdminRolePage from "../pages/admin/role/AdminRolePage";
+import ProductPageDetails from "../pages/client/details/ProductDetails";
 
 const router = createBrowserRouter([
     // client
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
         children: [
             { index: true, element: <HomePage /> },
             { path: "/product", element: <ProductPage /> },
+            { path: "/product-details/:id", element: <ProductPageDetails /> },
             { path: "/about", element: <AboutPage /> },
             { path: "/feedback", element: "" },
             { path: "/cart", element: "" },

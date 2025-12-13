@@ -242,6 +242,15 @@ const HomePage = () => {
                                                                 }}>
                                                                     {product.price.toLocaleString()} ₫
                                                                 </span>
+                                                                <div style={{ marginTop: 8 }}>
+                                                                    <span style={{
+                                                                        color: TITLE_COLOR,
+                                                                        fontSize: "18px",
+                                                                        // fontWeight: "bold"
+                                                                    }}>
+                                                                        Còn lại: {product.quantity}
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                         }
                                                     />

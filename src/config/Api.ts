@@ -51,7 +51,8 @@ export const assignPermission = (id: number, data: IAssignPermissionReq) => inst
 // /api/v1/users/userId/assign-roles
 export const assignRole = (id: number, data: IAssignRoleReq) => instance.put(`api/v1/users/${id}/assign-roles`, data);
 
-
+// client
+export const getProductDetails = (id: number) => instance.get(`api/v1/products/${id}`);
 
 
 /* upload */
