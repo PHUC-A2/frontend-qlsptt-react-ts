@@ -5,7 +5,7 @@ const AdminPage = () => {
         <>
             <div>
                 {/* Nút Thêm sản phẩm chỉ hiển thị nếu user có quyền CREATE_PRODUCT */}
-                <PermissionWrapper required="CREATE_PRODUCT">
+                <PermissionWrapper required="POST_PRODUCT">
                     <button className="btn btn-primary">Thêm sản phẩm</button>
                 </PermissionWrapper>
 

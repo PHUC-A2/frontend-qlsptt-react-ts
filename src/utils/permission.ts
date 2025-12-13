@@ -1,14 +1,14 @@
-// utils/permission.ts
 import type { IProfile } from "../types/profile";
+import type { PermissionKey } from "./constants/permissions.constants";
 
 export const hasPermission = (
     profile: IProfile | null,
-    required: string | string[]
+    required: PermissionKey | PermissionKey[]
 ): boolean => {
 
     if (!profile) return false;
 
-    //ADMIN hoặc SUPER_ADMIN → full quyền từ backend
+    // ADMIN hoặc SUPER_ADMIN → full quyền từ backend
     if (profile.is_full_access) return true;
 
     const requiredPerms = Array.isArray(required) ? required : [required];

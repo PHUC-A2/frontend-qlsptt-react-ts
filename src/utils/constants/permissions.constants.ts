@@ -1,7 +1,6 @@
-// src/util/constants/permissions.constants.ts
+// src/utils/constants/permissions.constants.ts
 
 export const LIST_PERMISSION = [
-    // ================= USERS =================
     {
         group: "Users",
         items: [
@@ -10,16 +9,9 @@ export const LIST_PERMISSION = [
             { name: "POST_USER", description: "Tạo user mới" },
             { name: "PUT_USER", description: "Cập nhật user" },
             { name: "DELETE_USER", description: "Xóa user" },
-
-            // Gán role cho user
-            {
-                name: "PUT_ASSIGN_ROLE",
-                description: "Gán role cho user"
-            },
-        ]
+            { name: "PUT_ASSIGN_ROLE", description: "Gán role cho user" },
+        ],
     },
-
-    // ================= ROLES =================
     {
         group: "Roles",
         items: [
@@ -28,16 +20,9 @@ export const LIST_PERMISSION = [
             { name: "POST_ROLE", description: "Tạo role mới" },
             { name: "PUT_ROLE", description: "Cập nhật role" },
             { name: "DELETE_ROLE", description: "Xóa role" },
-
-            // Gán permission cho role
-            {
-                name: "POST_ASSIGN_PERMISSION",
-                description: "Gán permission cho role"
-            },
-        ]
+            { name: "POST_ASSIGN_PERMISSION", description: "Gán permission cho role" },
+        ],
     },
-
-    // ================= PERMISSIONS =================
     {
         group: "Permissions",
         items: [
@@ -46,10 +31,8 @@ export const LIST_PERMISSION = [
             { name: "POST_PERMISSION", description: "Tạo permission mới" },
             { name: "PUT_PERMISSION", description: "Cập nhật permission" },
             { name: "DELETE_PERMISSION", description: "Xóa permission" },
-        ]
+        ],
     },
-
-    // ================= PRODUCTS =================
     {
         group: "Products",
         items: [
@@ -58,6 +41,16 @@ export const LIST_PERMISSION = [
             { name: "POST_PRODUCT", description: "Tạo sản phẩm mới" },
             { name: "PUT_PRODUCT", description: "Cập nhật sản phẩm" },
             { name: "DELETE_PRODUCT", description: "Xóa sản phẩm" },
-        ]
+        ],
     },
-];
+] as const;
+
+// Tạo type-safe PermissionKey từ LIST_PERMISSION
+export type PermissionKey =
+    typeof LIST_PERMISSION[number]['items'][number]['name'];
+
+// Optional: helper lấy permission theo group
+export const getPermissionsByGroup = (
+    group: typeof LIST_PERMISSION[number]['group']
+): PermissionKey[] =>
+    LIST_PERMISSION.find(g => g.group === group)?.items.map(i => i.name) ?? [];
