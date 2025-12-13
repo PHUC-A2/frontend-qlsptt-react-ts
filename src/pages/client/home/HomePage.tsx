@@ -67,6 +67,14 @@ const cardVariants: Variants = {
     },
 };
 
+// giá
+const formatPrice = (price?: number): string => {
+    if (price == null) return '';
+    return Math.round(price)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
+};
+
 const HomePage = () => {
     const dispatch = useAppDispatch();
     const listProducts = useAppSelector(productSelectors.selectAll);
@@ -240,7 +248,7 @@ const HomePage = () => {
                                                                     fontSize: "18px",
                                                                     fontWeight: "bold"
                                                                 }}>
-                                                                    {product.price.toLocaleString()} ₫
+                                                                    {formatPrice(product.price)} ₫
                                                                 </span>
                                                                 <div style={{ marginTop: 8 }}>
                                                                     <span style={{

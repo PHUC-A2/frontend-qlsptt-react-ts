@@ -50,6 +50,13 @@ const ProductPageDetails = () => {
         fetchProductDetails();
     }, [id]);
 
+    const formatPrice = (price?: number): string => {
+        if (price == null) return '';
+        return Math.round(price)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
+    };
+
     return (
         <>
             <div className="product-details-container">
@@ -102,19 +109,19 @@ const ProductPageDetails = () => {
                                         {product?.name}
                                     </Title>
 
-                                    <Title level={4} style={{ color: "#d4380d", marginBottom: "12px" }}>
-                                        {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(product?.price ?? 0)}
+                                    <Title level={4} style={{ color: "#faad14", marginBottom: "12px" }}>
+                                        {formatPrice(product?.price)}
                                     </Title>
 
                                     {/* Đánh giá sao */}
-                                    <Space direction="horizontal" size="middle">
+                                    <Space orientation="horizontal" size="middle">
                                         <Rate defaultValue={4} character={<StarFilled />} style={{ color: "#faad14" }} />
                                         <Text type="secondary">(128 đánh giá)</Text>
                                     </Space>
 
                                     <Divider />
 
-                                    <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+                                    <Space orientation="vertical" size="middle" style={{ width: "100%" }}>
                                         <Text>
                                             <AppstoreAddOutlined style={{ color: "#faad14" }} />{" "}
                                             <strong>Loại:</strong> {product?.type || "Không xác định"}
@@ -147,7 +154,7 @@ const ProductPageDetails = () => {
                                     <Space size="large" wrap>
                                         <motion.div whileHover={{ scale: 1.05 }}>
                                             <Button
-                                                onClick={() => toast.info("Thêm vào giỏ hàng thành công")}
+                                                onClick={() => toast.success("Thêm vào giỏ hàng thành công")}
                                                 variant="dark"
                                                 style={{
                                                     padding: "10px 24px",

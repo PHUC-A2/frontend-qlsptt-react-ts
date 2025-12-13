@@ -134,9 +134,11 @@ const ProductPage = () => {
 
     // Hàm format giá cho hiển thị
     const formatPrice = (price?: number): string => {
-        if (price === undefined || price === null) return '';
-        return price.toLocaleString('vi-VN') + ' ₫';
-    }
+        if (price == null) return '';
+        return Math.round(price)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
+    };
 
 
     // --- LOGIC LỌC (Cập nhật sử dụng selectedPriceRange) ---
@@ -362,7 +364,7 @@ const ProductPage = () => {
                                                                     fontSize: "18px",
                                                                     fontWeight: "bold"
                                                                 }}>
-                                                                    {product.price?.toLocaleString()} ₫
+                                                                    {formatPrice(product.price)}
                                                                 </span>
                                                                 <div style={{ marginTop: 8 }}>
                                                                     <span style={{
