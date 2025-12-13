@@ -41,8 +41,11 @@ const AboutPage = () => {
     // --- Dữ liệu thành viên và công nghệ ---
     const teamMembers = [
         { id: 1, name: "Bàn Văn Phúc", role: "Nhóm trưởng, Full-stack Developer", icon: <UserOutlined /> },
-        { id: 2, name: "Điêu Chính Sim", role: "Full-stack Developer", icon: <UserOutlined /> },
-        { id: 3, name: "Tóc Ly Phôm Phon", role: "Full-stack Developer", icon: <UserOutlined /> },
+        { id: 2, name: "Tòng Văn Đại", role: "Full-stack Developer", icon: <UserOutlined /> },
+        { id: 3, name: "Nguyễn Minh Đức", role: "Full-stack Developer", icon: <UserOutlined /> },
+        { id: 4, name: "Vừ A Viện", role: "Full-stack Developer", icon: <UserOutlined /> },
+        { id: 5, name: "Lường Văn Thành", role: "Full-stack Developer", icon: <UserOutlined /> },
+        { id: 6, name: "Kao Xồng Lị Vẳng Sở", role: "Full-stack Developer", icon: <UserOutlined /> },
     ];
 
     const techStack = [
@@ -69,7 +72,7 @@ const AboutPage = () => {
                     style={{ textAlign: "center", marginBottom: 48 }}
                 >
                     <Title level={1} style={{ color: COLORS.HEADING, fontSize: 48, letterSpacing: 2 }}>
-                        GIỚI THIỆU NHÓM 03
+                        GIỚI THIỆU NHÓM 06
                     </Title>
                     <Paragraph style={{ fontSize: 20, color: COLORS.TEXT, opacity: 0.8 }}>
                         Dự án: Xây dựng Hệ thống Sản phẩm Thời trang

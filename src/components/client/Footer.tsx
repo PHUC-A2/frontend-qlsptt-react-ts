@@ -79,7 +79,7 @@ const Footer = () => {
             <hr style={{ borderColor: "#faad14", margin: "30px 0" }} />
 
             <div style={{ textAlign: "center", color: "#faad14" }}>
-                © {new Date().getFullYear()} Nhom 03.
+                © {new Date().getFullYear()} Nhom 06.
                 <span style={{ color: "#faad14" }}> Tất cả quyền được bảo lưu.</span>
             </div>
         </AntFooter>
