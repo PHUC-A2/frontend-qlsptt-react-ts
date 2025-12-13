@@ -4,6 +4,7 @@ import { Form, Input } from 'antd';
 import type { ICreatePermissionReq } from '../../../../types/permission';
 import { useAppDispatch } from '../../../../redux/hooks';
 import { handleCreatePermission } from '../../../../redux/thunks/permissionThunks';
+import { LIST_PERMISSION } from '../../../../utils/constants/permissions.constants';
 
 interface IProps {
     openModalAddPermission: boolean;
@@ -14,30 +15,6 @@ const AdminModalAddPermission = (props: IProps) => {
     const { openModalAddPermission, setOpenModalAddPermission } = props;
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
-
-    // ====================== PERMISSION LIST ======================
-    const LIST_PERMISSION = [
-        {
-            group: "Users",
-            items: [
-                { name: "GET_USER", description: "Xem tất cả user" },
-                { name: "GET_USER_DETAIL", description: "Xem chi tiết user" },
-                { name: "POST_USER", description: "Tạo user mới" },
-                { name: "PUT_USER", description: "Cập nhật user" },
-                { name: "DELETE_USER", description: "Xóa user" },
-            ]
-        },
-        {
-            group: "Products",
-            items: [
-                { name: "GET_PRODUCT", description: "Xem danh sách sản phẩm" },
-                { name: "GET_PRODUCT_DETAIL", description: "Xem chi tiết sản phẩm" },
-                { name: "POST_PRODUCT", description: "Tạo sản phẩm mới" },
-                { name: "PUT_PRODUCT", description: "Cập nhật sản phẩm" },
-                { name: "DELETE_PRODUCT", description: "Xóa sản phẩm" },
-            ]
-        },
-    ];
 
     // ====================== AUTO FILL DESCRIPTION ======================
     const findPermissionByName = (name: string) => {

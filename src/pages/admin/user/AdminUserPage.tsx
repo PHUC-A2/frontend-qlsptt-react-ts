@@ -16,6 +16,8 @@ import AdminModalUpdateUser from "./modal/AdminModalUpdateUser";
 import { CgAdd } from "react-icons/cg";
 import AdminModalAssignRole from "./modal/AdminModalAssignRole";
 import { fetchRoles } from "../../../redux/thunks/roleThunks";
+import PermissionWrapper from "../../../components/wrapper/PermissionWrapper";
+import { usePermission } from "../../../hooks/common/usePermission";
 const { TextArea } = Input;
 
 const AdminUserPage = () => {
@@ -28,6 +30,8 @@ const AdminUserPage = () => {
     const [user, setUser] = useState<IUser | null>(null);
     const [userUpdate, setUserUpdate] = useState<IUser | null>(null);
     const [roleAssignRole, setRoleAssignRole] = useState<IUser | null>(null);
+    const canPostUser = usePermission("POST_USER");
+    const canGetUser = usePermission("GET_USER");
 
     // assign role
     const handleAssignRole = async (data: IUser) => {
@@ -47,10 +51,6 @@ const AdminUserPage = () => {
 
         );
     });
-
-    useEffect(() => {
-        dispatch(fetchUsers());
-    }, []);
 
     // xóa user
     const handleDeleteUser = async (id: number) => {
@@ -84,100 +84,110 @@ const AdminUserPage = () => {
         message.error('Hủy thao tác');
     };
 
+    useEffect(() => {
+        if (canGetUser) {
+            dispatch(fetchUsers());
+        }
+    }, [canGetUser]);
     return (
         <>
-            <Table striped bordered hover size="sm">
-                <thead>
-                    <tr>
-                        <th colSpan={5}>
-                            <TextArea
-                                placeholder="Tìm kiếm theo name,email..."
-                                autoSize
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colSpan={5}>
-                            <div className="d-flex justify-content-between align-items-center">
-                                <h2>Danh sách người dùng</h2>
-                                <div>
-                                    <Button className="d-flex align-items-center"
-                                        variant="outline-primary"
-                                        onClick={() => setOpenModalAddUser(true)}
-                                    >
-                                        <AiOutlineUserAdd /> Thêm mới
-                                    </Button>
+            <PermissionWrapper required={"GET_USER"}>
+                <Table striped bordered hover size="sm">
+                    <thead>
+                        <tr>
+                            <th colSpan={5}>
+                                <TextArea
+                                    placeholder="Tìm kiếm theo name,email..."
+                                    autoSize
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colSpan={5}>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <h2>Danh sách người dùng</h2>
+                                    <div>
+                                        {
+                                            canPostUser &&
+                                            <Button className="d-flex align-items-center"
+                                                variant="outline-primary"
+                                                onClick={() => setOpenModalAddUser(true)}
+                                            >
+                                                <AiOutlineUserAdd /> Thêm mới
+                                            </Button>
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                            <hr />
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>STT</th>
-                        <th>ID</th>
-                        <th>Tên</th>
-                        <th>Email</th>
-                        <th>Hành Động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredUsers.length > 0 ?
-                        (
-                            filteredUsers.map((item: IUser, index: number) => (
-                                <tr key={item.id + 1}>
-                                    <th>{index}</th>
-                                    <td>{item.id}</td>
-                                    <td>{item.name}</td>
-                                    <td>{item.email}</td>
-                                    <td>
-                                        <div className="d-flex justify-content-evenly">
-                                            <Button
-                                                variant="outline-success"
-                                                onClick={() => handleGetUserDetails(item.id)}
-                                            >
-                                                <FaRegEye />
-                                            </Button>
-                                            <Button
-                                                variant="outline-dark"
-                                                onClick={() => handleEditUser(item)}
-                                            >
-                                                <CiEdit />
-                                            </Button>
-                                            <Popconfirm
-                                                title="Xóa người dùng"
-                                                description="Bạn có chắc muốn xóa người dùng này không?"
-                                                onConfirm={() => handleDeleteUser(item.id)}
-                                                onCancel={cancel}
-                                                okText="Yes"
-                                                cancelText="No"
-                                            >
-                                                <Button variant="outline-danger">
-                                                    <MdDelete />
+                                <hr />
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>STT</th>
+                            <th>ID</th>
+                            <th>Tên</th>
+                            <th>Email</th>
+                            <th>Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredUsers.length > 0 ?
+                            (
+                                filteredUsers.map((item: IUser, index: number) => (
+                                    <tr key={item.id + 1}>
+                                        <th>{index}</th>
+                                        <td>{item.id}</td>
+                                        <td>{item.name}</td>
+                                        <td>{item.email}</td>
+                                        <td>
+                                            <div className="d-flex justify-content-evenly">
+                                                <Button
+                                                    variant="outline-success"
+                                                    onClick={() => handleGetUserDetails(item.id)}
+                                                >
+                                                    <FaRegEye />
                                                 </Button>
-                                            </Popconfirm>
-                                            <Button
-                                                variant="outline-dark"
-                                                onClick={() => handleAssignRole(item)}
-                                            >
-                                                <CgAdd /> Gắn quyền
-                                            </Button>
-                                        </div>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    onClick={() => handleEditUser(item)}
+                                                >
+                                                    <CiEdit />
+                                                </Button>
+                                                <Popconfirm
+                                                    title="Xóa người dùng"
+                                                    description="Bạn có chắc muốn xóa người dùng này không?"
+                                                    onConfirm={() => handleDeleteUser(item.id)}
+                                                    onCancel={cancel}
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                >
+                                                    <Button variant="outline-danger">
+                                                        <MdDelete />
+                                                    </Button>
+                                                </Popconfirm>
+                                                <Button
+                                                    variant="outline-dark"
+                                                    onClick={() => handleAssignRole(item)}
+                                                >
+                                                    <CgAdd /> Gắn quyền
+                                                </Button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )
+                            : (
+                                <tr>
+                                    <td colSpan={5} style={{ textAlign: "center", fontStyle: "italic" }}>
+                                        <Empty description="Không có người dùng nào" />
                                     </td>
                                 </tr>
-                            ))
-                        )
-                        : (
-                            <tr>
-                                <td colSpan={5} style={{ textAlign: "center", fontStyle: "italic" }}>
-                                    <Empty description="Không có người dùng nào" />
-                                </td>
-                            </tr>
-                        )}
+                            )}
 
-                </tbody>
-            </Table>
+                    </tbody>
+                </Table>
+            </PermissionWrapper>
 
             {/* add */}
             <AdminModalAddUser

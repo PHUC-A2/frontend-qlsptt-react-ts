@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { fetchRoles } from "../../redux/thunks/roleThunks";
 import { usePermission } from "../common/usePermission";
+import { setClearRolesInfo } from "../../redux/features/roleSlice";
 
 export const useRoleInit = () => {
     const dispatch = useAppDispatch();
@@ -13,17 +14,15 @@ export const useRoleInit = () => {
 
             try {
                 // nếu đã login
-                if (isAuthenticated) {
-                    // nếu có quyền GET_ROLE mới fetch
-                    if (canGetRole) {
-                        await dispatch(fetchRoles()).unwrap();
-                    }
+                // nếu có quyền GET_ROLE mới fetch
+                if (isAuthenticated && canGetRole) {
+                    await dispatch(fetchRoles()).unwrap();
                 }
 
                 // nếu logout thì xóa role
-                // if (!isAuthenticated) {
-                //     dispatch(setClearRolesInfo());
-                // }
+                if (!isAuthenticated) {
+                    dispatch(setClearRolesInfo());
+                }
 
             } catch (error: any) {
                 toast.error('Chưa đăng nhập')
@@ -32,5 +31,5 @@ export const useRoleInit = () => {
 
         // gọi hàm
         init();
-    }, [dispatch, isAuthenticated])
+    }, [dispatch, isAuthenticated, canGetRole]);
 }

@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { fetchPermissions } from "../../redux/thunks/permissionThunks";
 import { usePermission } from "../common/usePermission";
+import { setClearPermissionsInfo } from "../../redux/features/permissionSlice";
 
 export const usePermissionInit = () => {
     const dispatch = useAppDispatch();
@@ -14,17 +15,15 @@ export const usePermissionInit = () => {
 
             try {
                 // nếu đã login
-                if (isAuthenticated) {
-                    // nêu có quyền GET_PERMISSION mới fetch
-                    if (canGetPermission) {
-                        await dispatch(fetchPermissions()).unwrap();
-                    }
+                // nêu có quyền GET_PERMISSION mới fetch
+                if (isAuthenticated && canGetPermission) {
+                    await dispatch(fetchPermissions()).unwrap();
                 }
 
                 // nếu logout thì xóa permission
-                // if (!isAuthenticated) {
-                //     dispatch(setClearPermissionsInfo());
-                // }
+                if (!isAuthenticated) {
+                    dispatch(setClearPermissionsInfo());
+                }
 
             } catch (error: any) {
                 toast.error('Chưa đăng nhập')
@@ -33,5 +32,5 @@ export const usePermissionInit = () => {
 
         // gọi hàm
         init();
-    }, [dispatch, isAuthenticated])
+    }, [dispatch, isAuthenticated, canGetPermission]);
 }
