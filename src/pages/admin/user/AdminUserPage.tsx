@@ -30,8 +30,12 @@ const AdminUserPage = () => {
     const [user, setUser] = useState<IUser | null>(null);
     const [userUpdate, setUserUpdate] = useState<IUser | null>(null);
     const [roleAssignRole, setRoleAssignRole] = useState<IUser | null>(null);
-    const canPostUser = usePermission("POST_USER");
     const canGetUser = usePermission("GET_USER");
+    const canGetUserDetail = usePermission("GET_USER_DETAIL");
+    const canPostUser = usePermission("POST_USER");
+    const canPutUser = usePermission("PUT_USER");
+    const canDeleteUser = usePermission("DELETE_USER");
+    const canAssignRole = usePermission("PUT_ASSIGN_ROLE");
 
     // assign role
     const handleAssignRole = async (data: IUser) => {
@@ -91,6 +95,7 @@ const AdminUserPage = () => {
     }, [canGetUser]);
     return (
         <>
+            {/* <PermissionWrapper required={["GET_USER","POST_USER"]}> */}
             <PermissionWrapper required={"GET_USER"}>
                 <Table striped bordered hover size="sm">
                     <thead>
@@ -142,36 +147,48 @@ const AdminUserPage = () => {
                                         <td>{item.email}</td>
                                         <td>
                                             <div className="d-flex justify-content-evenly">
-                                                <Button
-                                                    variant="outline-success"
-                                                    onClick={() => handleGetUserDetails(item.id)}
-                                                >
-                                                    <FaRegEye />
-                                                </Button>
-                                                <Button
-                                                    variant="outline-dark"
-                                                    onClick={() => handleEditUser(item)}
-                                                >
-                                                    <CiEdit />
-                                                </Button>
-                                                <Popconfirm
-                                                    title="Xóa người dùng"
-                                                    description="Bạn có chắc muốn xóa người dùng này không?"
-                                                    onConfirm={() => handleDeleteUser(item.id)}
-                                                    onCancel={cancel}
-                                                    okText="Yes"
-                                                    cancelText="No"
-                                                >
-                                                    <Button variant="outline-danger">
-                                                        <MdDelete />
+                                                {
+                                                    canGetUserDetail &&
+                                                    <Button
+                                                        variant="outline-success"
+                                                        onClick={() => handleGetUserDetails(item.id)}
+                                                    >
+                                                        <FaRegEye />
                                                     </Button>
-                                                </Popconfirm>
-                                                <Button
-                                                    variant="outline-dark"
-                                                    onClick={() => handleAssignRole(item)}
-                                                >
-                                                    <CgAdd /> Gắn quyền
-                                                </Button>
+                                                }
+                                                {
+                                                    canPutUser &&
+                                                    <Button
+                                                        variant="outline-dark"
+                                                        onClick={() => handleEditUser(item)}
+                                                    >
+                                                        <CiEdit />
+                                                    </Button>
+                                                }
+                                                {
+                                                    canDeleteUser &&
+                                                    <Popconfirm
+                                                        title="Xóa người dùng"
+                                                        description="Bạn có chắc muốn xóa người dùng này không?"
+                                                        onConfirm={() => handleDeleteUser(item.id)}
+                                                        onCancel={cancel}
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                    >
+                                                        <Button variant="outline-danger">
+                                                            <MdDelete />
+                                                        </Button>
+                                                    </Popconfirm>
+                                                }
+                                                {
+                                                    canAssignRole &&
+                                                    <Button
+                                                        variant="outline-dark"
+                                                        onClick={() => handleAssignRole(item)}
+                                                    >
+                                                        <CgAdd /> Gắn quyền
+                                                    </Button>
+                                                }
                                             </div>
                                         </td>
                                     </tr>

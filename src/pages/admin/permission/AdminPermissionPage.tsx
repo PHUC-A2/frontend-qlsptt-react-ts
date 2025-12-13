@@ -13,6 +13,8 @@ import AdminModalGetPermissionDetails from "./modal/AdminModalGetPermissionDetai
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { permissionSelectors } from "../../../redux/selectors/permissionSelectors";
 import { fetchPermissions, handleFindPermissionById, handleRemovePermissison } from "../../../redux/thunks/permissionThunks";
+import { usePermission } from "../../../hooks/common/usePermission";
+import PermissionWrapper from "../../../components/wrapper/PermissionWrapper";
 const { TextArea } = Input;
 
 const AdminPermissionPage = () => {
@@ -24,6 +26,11 @@ const AdminPermissionPage = () => {
     const [permission, setPermission] = useState<IPermission | null>(null);
     const [permissionUpdate, setPermissionUpdate] = useState<IPermission | null>(null);
     const dispatch = useAppDispatch();
+    const canGetPermission = usePermission("GET_PERMISSION");
+    const canGetPermissionDetail = usePermission("GET_PERMISSION_DETAIL");
+    const canPostPermission = usePermission("POST_PERMISSION");
+    const canPutPermission = usePermission("PUT_PERMISSION");
+    const canDeletePermission = usePermission("DELETE_PERMISSION");
 
     // tìm kiếm
     const [searchTerm, setSearchTerm] = useState("");
@@ -70,98 +77,114 @@ const AdminPermissionPage = () => {
     }
 
     useEffect(() => {
-        dispatch(fetchPermissions());
-    }, []);
+        if (canGetPermission) {
+            dispatch(fetchPermissions());
+        }
+    }, [canGetPermission]);
 
     return (
         <>
 
-            <Table striped bordered hover size="sm">
-                <thead>
-                    <tr>
-                        <th colSpan={5}>
-                            <TextArea
-                                placeholder="Tìm kiếm theo tên,mô tả..."
-                                autoSize
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colSpan={5}>
-                            <div className="d-flex justify-content-between align-items-center">
-                                <h2>Danh sách quyền hạn</h2>
-                                <div>
-                                    <Button className="d-flex align-items-center"
-                                        variant="outline-primary"
-                                        onClick={() => setOpenModalAddPermission(true)}
-                                    >
-                                        <AiOutlineUserAdd /> Thêm mới
-                                    </Button>
+            <PermissionWrapper required={"GET_PERMISSION"}>
+                <Table striped bordered hover size="sm">
+                    <thead>
+                        <tr>
+                            <th colSpan={5}>
+                                <TextArea
+                                    placeholder="Tìm kiếm theo tên,mô tả..."
+                                    autoSize
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colSpan={5}>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <h2>Danh sách quyền hạn</h2>
+                                    <div>
+                                        {
+                                            canPostPermission &&
+                                            <Button className="d-flex align-items-center"
+                                                variant="outline-primary"
+                                                onClick={() => setOpenModalAddPermission(true)}
+                                            >
+                                                <AiOutlineUserAdd /> Thêm mới
+                                            </Button>
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                            <hr />
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>STT</th>
-                        <th>ID</th>
-                        <th>Tên Permission</th>
-                        <th>Mô tả</th>
-                        <th>Hành Động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredPermissisons.length > 0 ?
-                        (
-                            filteredPermissisons.map((item: IPermission, index: number) => (
-                                <tr key={item.id + 1}>
-                                    <th>{index}</th>
-                                    <td>{item.id}</td>
-                                    <td>{item.name}</td>
-                                    <td>{item.description}</td>
-                                    <td>
-                                        <div className="d-flex justify-content-evenly">
-                                            <Button
-                                                variant="outline-success"
-                                                onClick={() => handleGetPermissionDetails(item.id)}
-                                            >
-                                                <FaRegEye />
-                                            </Button>
-                                            <Button
-                                                variant="outline-dark"
-                                                onClick={() => handleEditPermission(item)}
-                                            >
-                                                <CiEdit />
-                                            </Button>
-                                            <Popconfirm
-                                                title="Xóa quyền hạn"
-                                                description="Bạn có chắc muốn xóa quyền hạn này không?"
-                                                onConfirm={() => handleDeletePermission(item.id)}
-                                                onCancel={cancel}
-                                                okText="Yes"
-                                                cancelText="No"
-                                            >
-                                                <Button variant="outline-danger">
-                                                    <MdDelete />
-                                                </Button>
-                                            </Popconfirm>
-                                        </div>
+                                <hr />
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>STT</th>
+                            <th>ID</th>
+                            <th>Tên Permission</th>
+                            <th>Mô tả</th>
+                            <th>Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredPermissisons.length > 0 ?
+                            (
+                                filteredPermissisons.map((item: IPermission, index: number) => (
+                                    <tr key={item.id + 1}>
+                                        <th>{index}</th>
+                                        <td>{item.id}</td>
+                                        <td>{item.name}</td>
+                                        <td>{item.description}</td>
+                                        <td>
+                                            <div className="d-flex justify-content-evenly">
+                                                {
+                                                    canGetPermissionDetail &&
+                                                    <Button
+                                                        variant="outline-success"
+                                                        onClick={() => handleGetPermissionDetails(item.id)}
+                                                    >
+                                                        <FaRegEye />
+                                                    </Button>
+                                                }
+                                                {
+                                                    canPutPermission &&
+                                                    <Button
+                                                        variant="outline-dark"
+                                                        onClick={() => handleEditPermission(item)}
+                                                    >
+                                                        <CiEdit />
+                                                    </Button>
+                                                }
+                                                {
+                                                    canDeletePermission &&
+                                                    <Popconfirm
+                                                        title="Xóa quyền hạn"
+                                                        description="Bạn có chắc muốn xóa quyền hạn này không?"
+                                                        onConfirm={() => handleDeletePermission(item.id)}
+                                                        onCancel={cancel}
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                    >
+                                                        <Button variant="outline-danger">
+                                                            <MdDelete />
+                                                        </Button>
+                                                    </Popconfirm>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )
+                            : (
+                                <tr>
+                                    <td colSpan={5} style={{ textAlign: "center", fontStyle: "italic" }}>
+                                        <Empty description="Không permission nào" />
                                     </td>
                                 </tr>
-                            ))
-                        )
-                        : (
-                            <tr>
-                                <td colSpan={5} style={{ textAlign: "center", fontStyle: "italic" }}>
-                                    <Empty description="Không permission nào" />
-                                </td>
-                            </tr>
-                        )}
+                            )}
 
-                </tbody>
-            </Table>
+                    </tbody>
+                </Table>
+            </PermissionWrapper>
 
             {/* add */}
 

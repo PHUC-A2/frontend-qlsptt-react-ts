@@ -13,6 +13,8 @@ import { toast } from "react-toastify";
 import AdminModalGetProductDetails from "./modal/AdminModalGetProductDetails";
 import type { IProduct } from "../../../types/product";
 import AdminModalUpdateProduct from "./modal/AdminModalUpdateProduct";
+import PermissionWrapper from "../../../components/wrapper/PermissionWrapper";
+import { usePermission } from "../../../hooks/common/usePermission";
 const { TextArea } = Input;
 
 const AdminProductPage = () => {
@@ -23,6 +25,12 @@ const AdminProductPage = () => {
     const [openModalUpdateProduct, setOpenModalUpdateProduct] = useState<boolean>(false);
     const [product, setProduct] = useState<IProduct | null>(null);
     const [productUpdate, setProductUpdate] = useState<IProduct | null>(null);
+    const canGetProduct = usePermission("GET_PRODUCT");
+    const canGetProductDetail = usePermission("GET_PRODUCT_DETAIL");
+    const canPostProduct = usePermission("POST_PRODUCT");
+    const canPutProduct = usePermission("PUT_PRODUCT");
+    const canDeleteProduct = usePermission("DELETE_PRODUCT");
+
 
     // tìm kiếm
     const [searchTerm, setSearchTerm] = useState("");
@@ -36,11 +44,6 @@ const AdminProductPage = () => {
             p.quantity?.toString().includes(term)
         );
     });
-
-
-    useEffect(() => {
-        dispatch(fetchProducts());
-    }, []);
 
     // xóa product
     const handleDeleteProduct = async (id: number) => {
@@ -73,118 +76,137 @@ const AdminProductPage = () => {
         message.error('Hủy thao tác');
     };
 
+    useEffect(() => {
+        if (canGetProduct) {
+            dispatch(fetchProducts());
+        }
+    }, [canGetProduct]);
 
     return (
         <>
-            <Table striped bordered hover size="sm">
-                <thead>
-                    <tr>
-                        <th colSpan={8}>
-                            <TextArea
-                                placeholder="Tìm kiếm theo name, type, price, quantity..."
-                                autoSize
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colSpan={8}>
-                            <div className="d-flex justify-content-between align-items-center">
-                                <h2>Danh sách sản phẩm</h2>
-                                <div>
-                                    <Button className="d-flex align-items-center"
-                                        variant="outline-primary"
-                                        onClick={() => setOpenModalAddProduct(true)}
-                                    >
-                                        <AiOutlineUserAdd /> Thêm mới
-                                    </Button>
+            <PermissionWrapper required={"GET_PRODUCT"}>
+                <Table striped bordered hover size="sm">
+                    <thead>
+                        <tr>
+                            <th colSpan={8}>
+                                <TextArea
+                                    placeholder="Tìm kiếm theo name, type, price, quantity..."
+                                    autoSize
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colSpan={8}>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <h2>Danh sách sản phẩm</h2>
+                                    <div>
+                                        {
+                                            canPostProduct &&
+                                            <Button className="d-flex align-items-center"
+                                                variant="outline-primary"
+                                                onClick={() => setOpenModalAddProduct(true)}
+                                            >
+                                                <AiOutlineUserAdd /> Thêm mới
+                                            </Button>
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                            <hr />
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>STT</th>
-                        <th>ID</th>
-                        <th>Tên Sản Phẩm</th>
-                        <th>Ảnh</th>
-                        <th>Loại</th>
-                        <th>Giá</th>
-                        <th>Số Lượng</th>
-                        <th>Hành Động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredProducts.length > 0 ?
-                        (
-                            filteredProducts.map((item: IProduct, index: number) => (
-                                <tr key={item.id}>
-                                    <th>{index + 1}</th>
-                                    <td>{item.id}</td>
-                                    <td>{item.name}</td>
-                                    <td>
-                                        {item?.image_url ? (
-                                            <Image
-                                                src={item?.image_url}
-                                                alt={item.name}
-                                                width={60}
-                                                height={60}
-                                                style={{ objectFit: "cover", borderRadius: 8 }}
-                                            />
-                                        ) : (
-                                            "N/A"
-                                        )}
-                                    </td>
-                                    <td>{item.type}</td>
-                                    <td>
-                                        {new Intl.NumberFormat("vi-VN", {
-                                            style: "currency",
-                                            currency: "VND",
-                                        }).format(item.price)}
-                                    </td>
-                                    <td>{item.quantity}</td>
-                                    <td>
-                                        <div className="d-flex justify-content-evenly">
-                                            <Button
-                                                variant="outline-success"
-                                                onClick={() => handleGetProductDetails(item.id)}
-                                            >
-                                                <FaRegEye />
-                                            </Button>
-                                            <Button
-                                                variant="outline-dark"
-                                                onClick={() => handleEditProduct(item)}
-                                            >
-                                                <CiEdit />
-                                            </Button>
-                                            <Popconfirm
-                                                title="Xóa sản phẩm"
-                                                description="Bạn có chắc muốn xóa sản phẩm này không?"
-                                                onConfirm={() => handleDeleteProduct(item.id)}
-                                                onCancel={cancel}
-                                                okText="Yes"
-                                                cancelText="No"
-                                            >
-                                                <Button variant="outline-danger">
-                                                    <MdDelete />
-                                                </Button>
-                                            </Popconfirm>
-                                        </div>
+                                <hr />
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>STT</th>
+                            <th>ID</th>
+                            <th>Tên Sản Phẩm</th>
+                            <th>Ảnh</th>
+                            <th>Loại</th>
+                            <th>Giá</th>
+                            <th>Số Lượng</th>
+                            <th>Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredProducts.length > 0 ?
+                            (
+                                filteredProducts.map((item: IProduct, index: number) => (
+                                    <tr key={item.id}>
+                                        <th>{index + 1}</th>
+                                        <td>{item.id}</td>
+                                        <td>{item.name}</td>
+                                        <td>
+                                            {item?.image_url ? (
+                                                <Image
+                                                    src={item?.image_url}
+                                                    alt={item.name}
+                                                    width={60}
+                                                    height={60}
+                                                    style={{ objectFit: "cover", borderRadius: 8 }}
+                                                />
+                                            ) : (
+                                                "N/A"
+                                            )}
+                                        </td>
+                                        <td>{item.type}</td>
+                                        <td>
+                                            {new Intl.NumberFormat("vi-VN", {
+                                                style: "currency",
+                                                currency: "VND",
+                                            }).format(item.price)}
+                                        </td>
+                                        <td>{item.quantity}</td>
+                                        <td>
+                                            <div className="d-flex justify-content-evenly">
+                                                {
+                                                    canGetProductDetail &&
+                                                    <Button
+                                                        variant="outline-success"
+                                                        onClick={() => handleGetProductDetails(item.id)}
+                                                    >
+                                                        <FaRegEye />
+                                                    </Button>
+                                                }
+                                                {
+                                                    canPutProduct &&
+                                                    <Button
+                                                        variant="outline-dark"
+                                                        onClick={() => handleEditProduct(item)}
+                                                    >
+                                                        <CiEdit />
+                                                    </Button>
+                                                }
+                                                {
+                                                    canDeleteProduct &&
+                                                    <Popconfirm
+                                                        title="Xóa sản phẩm"
+                                                        description="Bạn có chắc muốn xóa sản phẩm này không?"
+                                                        onConfirm={() => handleDeleteProduct(item.id)}
+                                                        onCancel={cancel}
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                    >
+                                                        <Button variant="outline-danger">
+                                                            <MdDelete />
+                                                        </Button>
+                                                    </Popconfirm>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )
+                            : (
+                                <tr>
+                                    <td colSpan={8} style={{ textAlign: "center", fontStyle: "italic" }}>
+                                        <Empty description="Không có người dùng nào" />
                                     </td>
                                 </tr>
-                            ))
-                        )
-                        : (
-                            <tr>
-                                <td colSpan={8} style={{ textAlign: "center", fontStyle: "italic" }}>
-                                    <Empty description="Không có người dùng nào" />
-                                </td>
-                            </tr>
-                        )}
+                            )}
 
-                </tbody>
-            </Table>
+                    </tbody>
+                </Table>
+            </PermissionWrapper>
 
             {/* add */}
             <AdminModalAddProduct
