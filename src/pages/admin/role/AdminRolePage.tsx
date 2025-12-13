@@ -37,6 +37,7 @@ const AdminRolePage = () => {
     const canPutRole = usePermission("PUT_ROLE");
     const canDeleteRole = usePermission("DELETE_ROLE");
     const canAssignPermission = usePermission("POST_ASSIGN_PERMISSION");
+    const [loading, setLoading] = useState<boolean>(false);
 
     // tìm kiếm
     const [searchTerm, setSearchTerm] = useState("");
@@ -62,12 +63,16 @@ const AdminRolePage = () => {
     // detail
     const handleGetRoleDetails = async (id: number) => {
         try {
+            setLoading(true)
+            setRole(null);
             setOpenModalGetRoleDetails(true);
             const data = await dispatch(handleFindRoleById(id)).unwrap();
             setRole(data);
         } catch (error: any) {
             toast.error(error || "Lỗi khi lấy role")
             console.error("Lấy user thất bại:", error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -222,7 +227,7 @@ const AdminRolePage = () => {
                 openModalGetRoleDetails={openModalGetRoleDetails}
                 setOpenModalGetRoleDetails={setOpenModalGetRoleDetails}
                 role={role}
-                setRole={setRole}
+                loading={loading}
             />
 
             {/* assign permission */}

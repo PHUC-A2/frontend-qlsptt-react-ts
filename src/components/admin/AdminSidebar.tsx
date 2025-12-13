@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import { FaUserCog } from 'react-icons/fa';
 import { AiOutlineProduct } from 'react-icons/ai';
 import ModalProfile from '../../pages/auth/modal/ModalProfile';
+import { usePermission } from '../../hooks/common/usePermission';
 
 const AdminSidebar = () => {
 
@@ -24,6 +25,10 @@ const AdminSidebar = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [openModalProfile, setOpenModalProfile] = useState<boolean>(false);
+    const canGetUser = usePermission("GET_USER");
+    const canGetProduct = usePermission("GET_PRODUCT");
+    const canGetRole = usePermission("GET_ROLE");
+    const canGetPermission = usePermission("GET_PERMISSION");
 
     const handleLogout = async () => {
         try {
@@ -65,10 +70,10 @@ const AdminSidebar = () => {
     const items: MenuItem[] = [
         getItem(<Link to="/admin" style={{ color: "white", textDecoration: "none" }}>Dashboard</Link>, '1', <DashboardOutlined />),
         getItem('Feature', 'sub1', <MdFeaturedPlayList />, [
-            getItem(<Link to="/admin/user" style={{ color: "white", textDecoration: "none" }}>QL Người Dùng</Link>, '2', <UserOutlined />),
-            getItem(<Link to="/admin/product" style={{ color: "white", textDecoration: "none" }}>QL Sản Phẩm</Link>, '3', <AiOutlineProduct />),
-            getItem(<Link to="/admin/role" style={{ color: "white", textDecoration: "none" }}>QL Vai Trò</Link>, '4', <FaUserCog />),
-            getItem(<Link to="/admin/permission" style={{ color: "white", textDecoration: "none" }}>QL Quyền Hạn</Link>, '5', <MdOutlineSecurity />),
+            canGetUser ? getItem(<Link to="/admin/user" style={{ color: "white", textDecoration: "none" }}>QL Người Dùng</Link>, '2', <UserOutlined />) : null,
+            canGetProduct ? getItem(<Link to="/admin/product" style={{ color: "white", textDecoration: "none" }}>QL Sản Phẩm</Link>, '3', <AiOutlineProduct />) : null,
+            canGetRole ? getItem(<Link to="/admin/role" style={{ color: "white", textDecoration: "none" }}>QL Vai Trò</Link>, '4', <FaUserCog />) : null,
+            canGetPermission ? getItem(<Link to="/admin/permission" style={{ color: "white", textDecoration: "none" }}>QL Quyền Hạn</Link>, '5', <MdOutlineSecurity />) : null,
 
         ]),
         getItem('Settings', 'sub2', <SettingOutlined />, [
@@ -124,7 +129,7 @@ const AdminSidebar = () => {
                         </div>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>
-                        Ant Design ©{new Date().getFullYear()} Created by Ant UED
+                        Trang quản trị ©{new Date().getFullYear()}. Mọi quyền được bảo lưu
                     </Footer>
                 </Layout>
             </Layout>

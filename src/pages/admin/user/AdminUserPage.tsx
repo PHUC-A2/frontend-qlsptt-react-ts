@@ -36,6 +36,7 @@ const AdminUserPage = () => {
     const canPutUser = usePermission("PUT_USER");
     const canDeleteUser = usePermission("DELETE_USER");
     const canAssignRole = usePermission("PUT_ASSIGN_ROLE");
+    const [loading, setLoading] = useState<boolean>(false);
 
     // assign role
     const handleAssignRole = async (data: IUser) => {
@@ -69,6 +70,8 @@ const AdminUserPage = () => {
     // lấy user 
     const handleGetUserDetails = async (id: number) => {
         try {
+            setUser(null);
+            setLoading(true);
             setOpenModalGetUserDetails(true);
             const data = await dispatch(handleFindUserById(id)).unwrap();
             setUser(data);
@@ -76,6 +79,8 @@ const AdminUserPage = () => {
         } catch (error: any) {
             toast.error(error || "Lỗi khi lấy người dùng")
             console.error("Lấy user thất bại:", error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -216,6 +221,7 @@ const AdminUserPage = () => {
                 openModalGetUserDetails={openModalGetUserDetails}
                 setOpenModalGetUserDetails={setOpenModalGetUserDetails}
                 user={user}
+                loading={loading}
             />
 
             <AdminModalUpdateUser

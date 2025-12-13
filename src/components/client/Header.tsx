@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {  useState } from 'react';
 import {
     LogoutOutlined,
     SearchOutlined,
@@ -31,6 +31,10 @@ const Header = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [openModalProfile, setOpenModalProfile] = useState<boolean>(false);
+    const profile = useAppSelector(state => state.profile.profile);
+    const canShowAdmin = profile?.roles && !profile.roles.includes("VIEW");
+
+
 
     const onSearch: SearchProps['onSearch'] = () => {
         const targetPath = location.pathname === '/product' ? '/product' : '/';
@@ -123,17 +127,38 @@ const Header = () => {
                 {
                     type: 'group',
                     children: [
-                        ...(isAuthenticated ?
-                            [
-                                { label: <Link to={'/admin'} className='text-decoration-none'>Trang quản trị</Link>, key: 'admin', icon: <AiFillDashboard /> },
-                                { label: <span onClick={() => setOpenModalProfile(true)}>Tài khoản</span>, key: 'profile', icon: <FaCircleUser /> },
-                                { label: <span onClick={handleLogout}>Đăng xuất</span>, key: 'logout', icon: <LogoutOutlined /> },
+                        ...(isAuthenticated
+                            ? [
+                                // Trang quản trị chỉ hiện khi profile load xong và user không có role VIEW
+                                ...(canShowAdmin
+                                    ? [{
+                                        label: <Link to={'/admin'} className='text-decoration-none'>Trang quản trị</Link>,
+                                        key: 'admin',
+                                        icon: <AiFillDashboard />
+                                    }]
+                                    : []),
+                                {
+                                    label: <span onClick={() => setOpenModalProfile(true)}>Tài khoản</span>,
+                                    key: 'profile',
+                                    icon: <FaCircleUser />
+                                },
+                                {
+                                    label: <span onClick={handleLogout}>Đăng xuất</span>,
+                                    key: 'logout',
+                                    icon: <LogoutOutlined />
+                                },
                             ]
-                            :
-                            [
-                                { label: <Link to={'/login'} className='text-decoration-none'>Đăng nhập</Link>, key: 'signin', icon: <IoMdLogIn /> },
-                                { label: <Link to={'/register'} className='text-decoration-none'>Đăng ký</Link>, key: 'signup', icon: < FaUserPlus /> },
-
+                            : [
+                                {
+                                    label: <Link to={'/login'} className='text-decoration-none'>Đăng nhập</Link>,
+                                    key: 'signin',
+                                    icon: <IoMdLogIn />
+                                },
+                                {
+                                    label: <Link to={'/register'} className='text-decoration-none'>Đăng ký</Link>,
+                                    key: 'signup',
+                                    icon: <FaUserPlus />
+                                },
                             ])
 
                     ],

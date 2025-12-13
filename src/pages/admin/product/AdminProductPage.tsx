@@ -30,6 +30,7 @@ const AdminProductPage = () => {
     const canPostProduct = usePermission("POST_PRODUCT");
     const canPutProduct = usePermission("PUT_PRODUCT");
     const canDeleteProduct = usePermission("DELETE_PRODUCT");
+    const [loading, setLoading] = useState<boolean>(false);
 
 
     // tìm kiếm
@@ -58,12 +59,16 @@ const AdminProductPage = () => {
     // lấy product 
     const handleGetProductDetails = async (id: number) => {
         try {
+            setLoading(true);
+            setProduct(null);
             setOpenModalGetProductDetails(true);
             const data = await dispatch(handleFindProductById(id)).unwrap();
             setProduct(data);
         } catch (error: any) {
             toast.error(error || "Lỗi khi lấy sản phẩm")
             console.error("Lấy sản phẩm thất bại:", error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -219,6 +224,7 @@ const AdminProductPage = () => {
                 openModalGetProductDetails={openModalGetProductDetails}
                 setOpenModalGetProductDetails={setOpenModalGetProductDetails}
                 product={product}
+                loading={loading}
             />
 
             {/* update */}

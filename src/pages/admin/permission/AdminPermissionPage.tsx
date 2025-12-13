@@ -31,6 +31,7 @@ const AdminPermissionPage = () => {
     const canPostPermission = usePermission("POST_PERMISSION");
     const canPutPermission = usePermission("PUT_PERMISSION");
     const canDeletePermission = usePermission("DELETE_PERMISSION");
+    const [loading, setLoading] = useState<boolean>(false);
 
     // tìm kiếm
     const [searchTerm, setSearchTerm] = useState("");
@@ -51,12 +52,16 @@ const AdminPermissionPage = () => {
     // detail
     const handleGetPermissionDetails = async (id: number) => {
         try {
+            setLoading(true);
+            setPermission(null);
             setOpenModalGetPermissionDetails(true);
             const data = await dispatch(handleFindPermissionById(id)).unwrap();
             setPermission(data);
         } catch (error: any) {
             toast.error(error || "Lỗi khi lấy permission")
             console.error("Lấy user thất bại:", error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -204,7 +209,7 @@ const AdminPermissionPage = () => {
                 openModalGetPermissionDetails={openModalGetPermissionDetails}
                 setOpenModalGetPermissionDetails={setOpenModalGetPermissionDetails}
                 permission={permission}
-                setPermission={setPermission}
+                loading={loading}
             />
         </>
     )

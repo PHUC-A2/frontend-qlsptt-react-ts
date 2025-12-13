@@ -1,11 +1,66 @@
+// src/pages/admin/AdminPage.tsx
+import { Card, Col, Row, Statistic } from "antd";
+import { FiUsers, FiPackage, FiShoppingCart } from "react-icons/fi";
+import CountUp from "react-countup";
+import { useAppSelector } from "../../redux/hooks";
+import { productSelectors } from "../../redux/selectors/productSelectors";
 
 const AdminPage = () => {
+    const products = useAppSelector(productSelectors.selectAll);
+    const productCount = products.length;
+
+    const formatter = (value: number | string) => (
+        <CountUp end={Number(value)} separator="," duration={1.2} />
+    );
+
+    // Card data config để dễ quản lý
+    const cards = [
+        {
+            title: "Người dùng",
+            value: 112893,
+            icon: <FiUsers size={28} color="#1890ff" />,
+            color: "#e6f7ff",
+        },
+        {
+            title: "Sản phẩm",
+            value: productCount,
+            icon: <FiPackage size={28} color="#faad14" />,
+            color: "#fffbe6",
+        },
+        {
+            title: "Sản phẩm đã bán",
+            value: 112893,
+            icon: <FiShoppingCart size={28} color="#f5222d" />,
+            color: "#fff1f0",
+        },
+    ];
+
     return (
-        <>
-            <div>
-                <h1>Hello Admin</h1>
-            </div>
-        </>
-    )
-}
+        <div style={{ padding: 16 }}>
+            <Row gutter={[16, 16]}>
+                {cards.map((card) => (
+                    <Col key={card.title} xs={24} sm={12} md={12} lg={8}>
+                        <Card
+                            hoverable
+                            variant="borderless" // Thay cho bordered={false}
+                            style={{
+                                borderRadius: 12,
+                                boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+                            }}
+                            styles={{
+                                body: { padding: 24, backgroundColor: card.color }, // Thay bodyStyle
+                            }}
+                        >
+                            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                                {card.icon}
+                                <Statistic title={card.title} value={card.value} formatter={formatter} />
+                            </div>
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
+        </div>
+    );
+};
+
 export default AdminPage;
