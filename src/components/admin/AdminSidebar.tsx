@@ -68,18 +68,18 @@ const AdminSidebar = () => {
     }
 
     const items: MenuItem[] = [
-        getItem(<Link to="/admin" style={{ color: "white", textDecoration: "none" }}>Dashboard</Link>, '1', <DashboardOutlined />),
-        getItem('Feature', 'sub1', <MdFeaturedPlayList />, [
+        getItem(<Link to="/admin" style={{ color: "white", textDecoration: "none" }}>Bảng điều khiển</Link>, '1', <DashboardOutlined />),
+        getItem('Tính năng', 'sub1', <MdFeaturedPlayList />, [
             canGetUser ? getItem(<Link to="/admin/user" style={{ color: "white", textDecoration: "none" }}>QL Người Dùng</Link>, '2', <UserOutlined />) : null,
             canGetProduct ? getItem(<Link to="/admin/product" style={{ color: "white", textDecoration: "none" }}>QL Sản Phẩm</Link>, '3', <AiOutlineProduct />) : null,
             canGetRole ? getItem(<Link to="/admin/role" style={{ color: "white", textDecoration: "none" }}>QL Vai Trò</Link>, '4', <FaUserCog />) : null,
             canGetPermission ? getItem(<Link to="/admin/permission" style={{ color: "white", textDecoration: "none" }}>QL Quyền Hạn</Link>, '5', <MdOutlineSecurity />) : null,
 
         ]),
-        getItem('Settings', 'sub2', <SettingOutlined />, [
-            getItem(<Link to="/" style={{ color: "white", textDecoration: "none" }}>Client</Link>, '8', <UserOutlined />),
-            getItem(<span onClick={() => setOpenModalProfile(true)}>Profile</span>, '9', <FaCircleUser />),
-            getItem(<span onClick={handleLogout}>Log out</span>, '10', <LogoutOutlined />),
+        getItem('Cài đặt', 'sub2', <SettingOutlined />, [
+            getItem(<Link to="/" style={{ color: "white", textDecoration: "none" }}>Trang khách</Link>, '8', <UserOutlined />),
+            getItem(<span onClick={() => setOpenModalProfile(true)}>Tài khoản</span>, '9', <FaCircleUser />),
+            getItem(<span onClick={handleLogout}>Đăng xuất</span>, '10', <LogoutOutlined />),
         ]),
     ];
 

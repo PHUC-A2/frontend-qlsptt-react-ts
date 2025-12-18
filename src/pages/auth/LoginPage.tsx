@@ -74,7 +74,7 @@ const LoginPage = () => {
                     onFinish={handleLogin}
                     layout="vertical"
                 >
-                    <h1 className="login-title">Sign in</h1>
+                    <h1 className="login-title">ĐĂNG NHẬP</h1>
 
                     <Form.Item
                         name="email"
@@ -99,7 +99,7 @@ const LoginPage = () => {
                         <Input.Password
                             size="large"
                             prefix={<LockOutlined />}
-                            placeholder="Password"
+                            placeholder="Mật khẩu"
                         />
                     </Form.Item>
 
@@ -112,11 +112,11 @@ const LoginPage = () => {
                             className="btn-login"
                             loading={loading}
                         >
-                            <span>Log in</span>
+                            <span>Đăng nhập</span>
                         </Button>
                         <Flex className="mt-2" justify="space-between" align="center">
-                            <Link to="/register">Sign up now!</Link>
-                            <Link to="#">Forgot password?</Link>
+                            <Link to="/register">Tạo tài khoản!</Link>
+                            <Link to="#">Quên mật khẩu?</Link>
                         </Flex>
                     </Form.Item>
                 </Form>

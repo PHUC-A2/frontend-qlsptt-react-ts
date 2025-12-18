@@ -72,24 +72,24 @@ const RegisterPage = () => {
             >
                 <Form.Item>
                     <Flex justify='center'>
-                        <h1 className="register-title">Sign up</h1>
+                        <h1 className="register-title">ĐĂNG KÝ</h1>
                     </Flex>
                 </Form.Item>
 
                 <Form.Item
                     name="name"
                     // normalize={(v) => v.trim()}
-                    rules={[{ required: true, message: 'Please input your name!' }]}
+                    rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}
                 >
-                    <Input prefix={<UserOutlined />} placeholder="Name" />
+                    <Input prefix={<UserOutlined />} placeholder="Họ và tên" />
                 </Form.Item>
 
                 <Form.Item
                     name="email"
                     normalize={(v) => v.trim()}
                     rules={[
-                        { type: "email", message: 'The input is not valid E-mail!' },
-                        { required: true, message: 'Please input your Email!' }
+                        { type: "email", message: 'Email không hợp lệ!' },
+                        { required: true, message: 'Vui lòng nhập email!' }
                     ]}
                 >
                     <Input prefix={<UserOutlined />} placeholder="Email" />
@@ -97,9 +97,9 @@ const RegisterPage = () => {
 
                 <Form.Item
                     name="password"
-                    rules={[{ required: true, message: 'Please input your Password!' }]}
+                    rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
                 >
-                    <Input.Password prefix={<LockOutlined />} type="password" placeholder="Password" />
+                    <Input.Password prefix={<LockOutlined />} type="password" placeholder="Mật khẩu" />
                 </Form.Item>
 
                 <Form.Item>
@@ -110,11 +110,11 @@ const RegisterPage = () => {
                         loading={isLoading}
                         className="btn-register"
                     >
-                        Register
+                        Đăng ký
                     </Button>
                     <Flex className='mt-2' justify='space-between' align='center'>
-                        <Link to={"/login"}>Sign in now!</Link>
-                        <Link to={"#"}>Forgot password</Link>
+                        <Link to={"/login"}>Đăng nhập nhanh!</Link>
+                        <Link to={"#"}>Quên mật khẩu</Link>
                     </Flex>
                 </Form.Item>
             </Form>
