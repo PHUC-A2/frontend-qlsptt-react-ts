@@ -6,6 +6,7 @@ import { useProductInit } from "./hooks/init/useProductInit";
 import { useProfileInit } from "./hooks/init/useProfileInit";
 import { usePermissionInit } from "./hooks/init/usePermissionInit";
 import { useRoleInit } from "./hooks/init/useRoleInit";
+import MessageButton from "./pages/chat/MessageButton";
 
 const App = () => {
 
@@ -20,6 +21,7 @@ const App = () => {
 
   return (
     <>
+      <MessageButton />
       <AppRouter />
       <ToastContainer
         position="top-right"
