@@ -41,11 +41,9 @@ const AboutPage = () => {
     // --- Dữ liệu thành viên và công nghệ ---
     const teamMembers = [
         { id: 1, name: "Bàn Văn Phúc", role: "Nhóm trưởng, Full-stack Developer", icon: <UserOutlined /> },
-        { id: 2, name: "Tòng Văn Đại", role: "Full-stack Developer", icon: <UserOutlined /> },
-        { id: 3, name: "Nguyễn Minh Đức", role: "Full-stack Developer", icon: <UserOutlined /> },
-        { id: 4, name: "Vừ A Viện", role: "Full-stack Developer", icon: <UserOutlined /> },
-        { id: 5, name: "Lường Văn Thành", role: "Full-stack Developer", icon: <UserOutlined /> },
-        { id: 6, name: "Kao Xồng Lị Vẳng Sở", role: "Full-stack Developer", icon: <UserOutlined /> },
+        { id: 2, name: "Đinh Công thế Tài", role: "Full-stack Developer", icon: <UserOutlined /> },
+        { id: 3, name: "Sổm Phon Đuông Si Văn", role: "Full-stack Developer", icon: <UserOutlined /> },
+        { id: 4, name: "Mon Khăm Thạ Vi", role: "Full-stack Developer", icon: <UserOutlined /> },
     ];
 
     const techStack = [
