@@ -136,7 +136,7 @@ const HomePage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <Carousel autoplay arrows autoplaySpeed={2500} style={{ marginBottom: 24 }}>
+                    <Carousel autoplay arrows autoplaySpeed={1500} style={{ marginBottom: 24 }}>
                         {randomCarouselIndexes.map((i) => (
                             <div key={i}>
                                 <img
