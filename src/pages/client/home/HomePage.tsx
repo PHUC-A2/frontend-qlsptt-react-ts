@@ -222,6 +222,7 @@ const HomePage = () => {
                                                             width={"100%"}
                                                             style={{
                                                                 objectFit: "contain",
+                                                                background: "#ede9e9ff",
                                                             }}
                                                         />
                                                     </div>
@@ -248,7 +249,7 @@ const HomePage = () => {
                                                                     fontSize: "18px",
                                                                     fontWeight: "bold"
                                                                 }}>
-                                                                    {formatPrice(product.price)} ₫
+                                                                    {formatPrice(product.price)}
                                                                 </span>
                                                                 <div style={{ marginTop: 8 }}>
                                                                     <span style={{

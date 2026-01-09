@@ -80,14 +80,17 @@ const ProductPageDetails = () => {
                                     <Image
                                         src={product?.image_url || "https://picsum.photos/400/300?random=1"}
                                         preview={true}
-                                        width={"100%"}
+                                        width="100%"
                                         style={{
-                                            borderRadius: "12px",
-                                            objectFit: "cover",
                                             height: 400,
+                                            borderRadius: 12,
+                                            objectFit: "contain",
+                                            background: "#ede9e9ff",
+                                            padding: 12
                                         }}
                                         alt={product?.name}
                                     />
+
                                 </motion.div>
                                 <Row style={{ marginTop: "12px" }}>
                                     <Text strong>

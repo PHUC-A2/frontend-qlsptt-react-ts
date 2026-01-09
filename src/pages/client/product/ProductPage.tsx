@@ -338,7 +338,10 @@ const ProductPage = () => {
                                                             preview={{ mask: "Xem chi tiết" }}
                                                             height={"100%"}
                                                             width={"100%"}
-                                                            style={{ objectFit: "contain" }}
+                                                            style={{ 
+                                                                objectFit: "contain",
+                                                                background: "#ede9e9ff",
+                                                             }}
                                                         />
                                                     </div>
                                                 }
